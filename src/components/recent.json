@@ -1,0 +1,248 @@
+{
+  "accountId": 39008507,
+  "games": {
+    "gameBeginDate": "",
+    "gameCount": 21,
+    "gameEndDate": "",
+    "gameIndexBegin": 0,
+    "gameIndexEnd": 20,
+    "games": [
+      {
+        "gameCreation": 1653078323000,
+        "gameCreationDate": "2022-05-20T20:25:23.000Z",
+        "gameDuration": 1811,
+        "gameId": 4314151888,
+        "gameMode": "CLASSIC",
+        "gameType": "MATCHED_GAME",
+        "gameVersion": "12.9.439.127",
+        "mapId": 11,
+        "participantIdentities": [
+          {
+            "participantId": 9,
+            "player": {
+              "accountId": 0,
+              "currentAccountId": 0,
+              "currentPlatformId": "NA1",
+              "matchHistoryUri": "",
+              "platformId": "NA1",
+              "profileIcon": 595,
+              "summonerId": 24629707,
+              "summonerName": "Cropster"
+            }
+          }
+        ],
+        "participants": [
+          {
+            "championId": 31,
+            "highestAchievedSeasonTier": "",
+            "participantId": 9,
+            "spell1Id": 12,
+            "spell2Id": 4,
+            "stats": {
+              "assists": 8,
+              "causedEarlySurrender": false,
+              "champLevel": 16,
+              "combatPlayerScore": 0,
+              "damageDealtToObjectives": 7013,
+              "damageDealtToTurrets": 949,
+              "damageSelfMitigated": 31626,
+              "deaths": 6,
+              "doubleKills": 0,
+              "earlySurrenderAccomplice": false,
+              "firstBloodAssist": false,
+              "firstBloodKill": false,
+              "firstInhibitorAssist": false,
+              "firstInhibitorKill": false,
+              "firstTowerAssist": false,
+              "firstTowerKill": false,
+              "gameEndedInEarlySurrender": false,
+              "gameEndedInSurrender": false,
+              "goldEarned": 11732,
+              "goldSpent": 10475,
+              "inhibitorKills": 1,
+              "item0": 3047,
+              "item1": 6656,
+              "item2": 4637,
+              "item3": 3075,
+              "item4": 1029,
+              "item5": 1054,
+              "item6": 3340,
+              "killingSprees": 2,
+              "kills": 6,
+              "largestCriticalStrike": 12,
+              "largestKillingSpree": 2,
+              "largestMultiKill": 1,
+              "longestTimeSpentLiving": 663,
+              "magicDamageDealt": 95246,
+              "magicDamageDealtToChampions": 13586,
+              "magicalDamageTaken": 15413,
+              "neutralMinionsKilled": 8,
+              "neutralMinionsKilledEnemyJungle": 0,
+              "neutralMinionsKilledTeamJungle": 0,
+              "objectivePlayerScore": 0,
+              "participantId": 9,
+              "pentaKills": 0,
+              "perk0": 8124,
+              "perk0Var1": 526,
+              "perk0Var2": 0,
+              "perk0Var3": 0,
+              "perk1": 8139,
+              "perk1Var1": 985,
+              "perk1Var2": 0,
+              "perk1Var3": 0,
+              "perk2": 8138,
+              "perk2Var1": 30,
+              "perk2Var2": 0,
+              "perk2Var3": 0,
+              "perk3": 8135,
+              "perk3Var1": 400,
+              "perk3Var2": 5,
+              "perk3Var3": 0,
+              "perk4": 8233,
+              "perk4Var1": 16,
+              "perk4Var2": 10,
+              "perk4Var3": 0,
+              "perk5": 8236,
+              "perk5Var1": 48,
+              "perk5Var2": 0,
+              "perk5Var3": 0,
+              "perkPrimaryStyle": 8100,
+              "perkSubStyle": 8200,
+              "physicalDamageDealt": 18325,
+              "physicalDamageDealtToChampions": 2042,
+              "physicalDamageTaken": 24056,
+              "playerScore0": 0,
+              "playerScore1": 0,
+              "playerScore2": 0,
+              "playerScore3": 0,
+              "playerScore4": 0,
+              "playerScore5": 0,
+              "playerScore6": 0,
+              "playerScore7": 0,
+              "playerScore8": 0,
+              "playerScore9": 0,
+              "quadraKills": 0,
+              "sightWardsBoughtInGame": 0,
+              "teamEarlySurrendered": false,
+              "timeCCingOthers": 70,
+              "totalDamageDealt": 132526,
+              "totalDamageDealtToChampions": 20162,
+              "totalDamageTaken": 43301,
+              "totalHeal": 12443,
+              "totalMinionsKilled": 152,
+              "totalPlayerScore": 0,
+              "totalScoreRank": 0,
+              "totalTimeCrowdControlDealt": 661,
+              "totalUnitsHealed": 1,
+              "tripleKills": 0,
+              "trueDamageDealt": 18954,
+              "trueDamageDealtToChampions": 4533,
+              "trueDamageTaken": 3831,
+              "turretKills": 0,
+              "unrealKills": 0,
+              "visionScore": 19,
+              "visionWardsBoughtInGame": 1,
+              "wardsKilled": 0,
+              "wardsPlaced": 10,
+              "win": true
+            },
+            "teamId": 200,
+            "timeline": {
+              "creepsPerMinDeltas": {},
+              "csDiffPerMinDeltas": {},
+              "damageTakenDiffPerMinDeltas": {},
+              "damageTakenPerMinDeltas": {},
+              "goldPerMinDeltas": {},
+              "lane": "TOP",
+              "participantId": 9,
+              "role": "CARRY",
+              "xpDiffPerMinDeltas": {},
+              "xpPerMinDeltas": {}
+            }
+          }
+        ],
+        "platformId": "NA1",
+        "queueId": 420,
+        "seasonId": 0,
+        "teams": [
+          {
+            "bans": [
+              {
+                "championId": 106,
+                "pickTurn": 1
+              },
+              {
+                "championId": 236,
+                "pickTurn": 2
+              },
+              {
+                "championId": -1,
+                "pickTurn": 3
+              },
+              {
+                "championId": 420,
+                "pickTurn": 4
+              },
+              {
+                "championId": 53,
+                "pickTurn": 5
+              }
+            ],
+            "baronKills": 0,
+            "dominionVictoryScore": 0,
+            "dragonKills": 0,
+            "firstBaron": false,
+            "firstBlood": false,
+            "firstDargon": false,
+            "firstInhibitor": false,
+            "firstTower": false,
+            "inhibitorKills": 0,
+            "riftHeraldKills": 0,
+            "teamId": 100,
+            "towerKills": 4,
+            "vilemawKills": 0,
+            "win": "Fail"
+          },
+          {
+            "bans": [
+              {
+                "championId": -1,
+                "pickTurn": 6
+              },
+              {
+                "championId": 238,
+                "pickTurn": 7
+              },
+              {
+                "championId": 234,
+                "pickTurn": 8
+              },
+              {
+                "championId": 28,
+                "pickTurn": 9
+              },
+              {
+                "championId": 360,
+                "pickTurn": 10
+              }
+            ],
+            "baronKills": 1,
+            "dominionVictoryScore": 0,
+            "dragonKills": 4,
+            "firstBaron": true,
+            "firstBlood": true,
+            "firstDargon": true,
+            "firstInhibitor": true,
+            "firstTower": true,
+            "inhibitorKills": 2,
+            "riftHeraldKills": 1,
+            "teamId": 200,
+            "towerKills": 9,
+            "vilemawKills": 0,
+            "win": "Win"
+          }
+        ]
+      }
+    ]
+  }
+}
