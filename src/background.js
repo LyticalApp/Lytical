@@ -18,7 +18,7 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 800,
+    width: 1150,
     height: 600,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -98,6 +98,7 @@ function createReply(data, id) {
 
 function errorHandler(errorCode, event) {
   console.log("ERRORCODE: ", errorCode)
+  errorCode = String(errorCode)
   switch (errorCode) {
     case "ECONNREFUSED":
     case "0": {
@@ -118,8 +119,7 @@ function errorHandler(errorCode, event) {
     case "404": {
       // GOOD REQUEST. BAD RESPONSE
       // e.g. checking lobby status when
-      // no lobby exists.
-
+      // no lobby exists. Just do nothing..
       break
     }
     default: {
@@ -132,81 +132,83 @@ function errorHandler(errorCode, event) {
 }
 
 
-ipcMain.on('asynchronous-message', (event, obj) => {
-  switch (obj.id) {
-    case "current-summoner": {
-      lcu.getLCUAuth().then(auth => {
-        ///lol-match-history/v1/products/lol/current-summoner/matches?begIndex=0&endIndex=5
-        ///lol-summoner/v1/current-summoner
+// Used to get PUUID for many differet requests.
+function getPlayerDataByName(name, auth) {
+  name = name.replace(/\s/g, '')
+  return new Promise((resolve, reject) => {
+    request.requestURL(
+      auth,
+      `/lol-summoner/v1/summoners?name=${name}`
+    ).then(userData => {
+      resolve(JSON.parse(userData))
+    })
+  })
+}
+
+ipcMain.on('asynchronous-message', (event, req) => {
+  lcu.getLCUAuth().then(auth => {
+    switch (req.id) {
+      case "current-summoner": {
         request.requestURL(
           auth,
           "/lol-match-history/v1/products/lol/current-summoner/matches?begIndex=0&endIndex=5"
         ).then((data) => {
-          event.reply('asynchronous-reply', createReply(data, obj.id))
+          event.reply('asynchronous-reply', createReply(data, req.id))
         }).catch(error => errorHandler(error, event))
-      })
-      break;
-    }
-    case "get-auth-token": {
-      lcu.getLCUAuth().then(auth => {
-        var start = performance.now();
+        break;
+      }
+      case "get-auth-token": {
+        // Used for keepalive / check the status of auth data
+        // because it's a fast request.
         request.requestURL(
           auth,
           "/riotclient/auth-token"
-        ).then((data) => {
-          var end = performance.now();
-          var time = end - start;
-          console.log('Execution time: ' + time);
-          //event.reply('asynchronous-reply', createReply(data,obj.id))
-        }).catch(error => errorHandler(error, event))
-      })
-      break;
-    }
-    case "lol-champ-select": {
-      lcu.getLCUAuth().then(auth => {
+        ).catch(error => errorHandler(error, event))
+        break;
+      }
+      case "lol-champ-select": {
         request.requestURL(
           auth,
           "/lol-champ-select/v1/session"
         ).then((data) => {
-          event.reply('asynchronous-reply', createReply(data, obj.id))
+          event.reply('asynchronous-reply', createReply(data, req.id))
         }).catch(error => errorHandler(error, event))
-      })
-      break;
-    }
-    case "lol-summoner-names": {
-      lcu.getLCUAuth().then(auth => {
-        request.requestURL(
-          auth,
-          "/lol-summoner/v2/summoners/names",
-          '["'+obj.user+'"]'
-        ).then(
-          data => event.reply('asynchronous-reply', createReply(data, obj.id))
+        break;
+      }
+      case "lol-summoner-name": {
+        getPlayerDataByName(req.user, auth).then(
+          data => event.reply('asynchronous-reply', createReply(data, req.id))
         ).catch(error => errorHandler(error, event))
-      })
-      break;
-    }
-    case "lol-ranked-stats": {
-      lcu.getLCUAuth().then(auth => {
-        request.requestURL(
-          auth,
-          "/lol-summoner/v2/summoners/names",
-          '["'+obj.user+'"]'
-        ).then((data) => {
+        break;
+      }
+      case "lol-ranked-stats": {
+        getPlayerDataByName(req.user, auth).then(summoner => {
           request.requestURL(
             auth,
-            "/lol-ranked/v1/ranked-stats/" + JSON.parse(data)[0].puuid
+            `/lol-ranked/v1/ranked-stats/${summoner.puuid}`
           ).then(
             (rankData) => {
-              rankData = createReply(rankData, obj.id)
-              rankData.username = obj.user
+              rankData = createReply(rankData, req.id)
+              rankData.username = summoner.displayName
               event.reply('asynchronous-reply', rankData)
             })
         }).catch(error => errorHandler(error, event))
-      })
-      break;
+        break;
+      }
+      case "lol-match-history": {
+        getPlayerDataByName(req.user, auth).then(summoner => {
+          request.requestURL(
+            auth,
+            `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`
+          ).then(
+            (matchHistory) => {
+              event.reply('asynchronous-reply', createReply(matchHistory, req.id))
+            })
+        }).catch(error => errorHandler(error, event))
+        break;
+      }
     }
-
-  }
+  })
 })
 
 /*

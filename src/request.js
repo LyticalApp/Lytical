@@ -29,7 +29,7 @@ exports.requestURL = async (auth, path, postData = null) => {
         const req = https.request(options, (res) => {
             // Error code handling
             if (badStatusCodes.indexOf(res.statusCode) > -1){
-                reject(res.statusCode.toString)
+                reject(res.statusCode)
             }
 
             res.on('data', function (chunk) {
