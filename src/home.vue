@@ -6,10 +6,8 @@
     <input v-model=summonerSearch placeholder="Search Summoner">
     <input type="submit" value="Submit">
     </form>
-  <button @click="refreshMatches()">Refresh Matches</button>
-  <button @click="refreshCard()">Refresh PlayerCard</button>
-  <button @click="changeRoute()">Change Route</button>
-  <router-link to="/about">Go to test</router-link>
+  <button @click="searchSummoner()">Refresh</button>
+  <button @click="changeRoute('/pregame')">pregame</button>
   <table class="container">
     <td>
     <PlayerCard :data=playerCardInfo />
@@ -40,6 +38,8 @@ export default {
   },
   data(){
     return{
+      polling: null,
+      ondata: null,
       summonerSearch: '',
       showError: false,
       playerCardInfo: {},
@@ -293,30 +293,22 @@ export default {
     }
     }
   },
+
   methods: {
-    changeRoute(){
-      this.$router.push('/about')
-    },
-    updateMatches(m){
-      this.matches = m.games.games
+    changeRoute(route){
+      // Unregister the listener..
+      ipcRenderer.removeListener('asynchronous-reply',this.ondata)
+      clearInterval(this.polling)
+      this.$router.push(route)
     },
     searchSummoner(){
       ipcRenderer.send('asynchronous-message', {id:'lol-ranked-stats', user: this.summonerSearch})
       ipcRenderer.send('asynchronous-message', {id:'lol-match-history', user: this.summonerSearch, begIndex: 0, endIndex: 5})
-    },
-    refreshMatches(){
-        ipcRenderer.send('asynchronous-message', 
-        {id:'current-summoner'})
-    },
-    refreshCard(){
-        ipcRenderer.send('asynchronous-message', 
-        {id:'lol-ranked-stats', user: "Cropster"})
     }
   },
   created: function () {
-    // Register ipc messaging
-    const { ipcRenderer } = require('electron')
-    ipcRenderer.on('asynchronous-reply', (event, data) => {
+    // First run only
+    this.ondata = (event, data) => {
 
       // Dug
       console.log("DEBUG: Async Reply: ",data)
@@ -353,6 +345,7 @@ export default {
           // We switch to the other view for
           // pregame lobbies which will
           // display player cards for each player
+          this.changeRoute('/pregame')
           break
         }
         default: {
@@ -360,23 +353,18 @@ export default {
           break
         }
       }
-    })
+    }
 
+    ipcRenderer.on('asynchronous-reply', this.ondata)
 
-    //ipcRenderer.send('asynchronous-message', {id:'get-auth-token'})
-    ipcRenderer.send('asynchronous-message', {id:'lol-ranked-stats', user: "Cropster"})
-    ipcRenderer.send('asynchronous-message', {id:'lol-match-history', user: "Cropster", begIndex: 0, endIndex: 5})
-    
-
+    this.summonerSearch = "Cropster"
+    this.searchSummoner()
 
     // Poll for champion select state
-    setInterval(function() {
+    this.polling = setInterval(function() {
       ipcRenderer.send('asynchronous-message', {id:'lol-champ-select'})
     }, 15000)
-    
-    
-
-    }
+  }
 }
 </script>
 

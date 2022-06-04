@@ -91,7 +91,11 @@ if (isDevelopment) {
 // In main process.
 
 function createReply(data, id) {
-  data = JSON.parse(data)
+  try{
+    data = JSON.parse(data)
+  } catch {
+    console.log("Data is already JSON")
+  }
   data.reply_type = id
   return data
 }
@@ -157,6 +161,18 @@ ipcMain.on('asynchronous-message', (event, req) => {
         }).catch(error => errorHandler(error, event))
         break;
       }
+      case "lol-lobby-playercard": {
+        request.requestURL(
+          auth,
+          `/lol-summoner/v1/summoners/${req.summonerId}`
+        ).then((data) => {
+          getPlayerDataByName(JSON.parse(data).displayName,auth).then((player) => {
+            event.reply('asynchronous-reply', createReply(player, req.id))
+          })
+        }).catch(error => errorHandler(error, event))
+        break;
+      }
+
       case "get-auth-token": {
         // Used for keepalive / check the status of auth data
         // because it's a fast request.
