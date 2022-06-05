@@ -11,7 +11,7 @@
     <br>
     <span>{{data.queueMap.RANKED_SOLO_5x5.tier}}  {{data.queueMap.RANKED_SOLO_5x5.division}}</span>
     <br>
-    <span>{{data.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP / {{data.queueMap.RANKED_SOLO_5x5.wins}}W {{data.queueMap.RANKED_SOLO_5x5.losses}}L</span>
+    <span>{{data.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP / {{data.queueMap.RANKED_SOLO_5x5.wins}}W {{data.queueMap.RANKED_SOLO_5x5.losses}}L</span>    
     </td>
     </table>
   </div>

@@ -162,13 +162,28 @@ ipcMain.on('asynchronous-message', (event, req) => {
         break;
       }
       case "lol-lobby-playercard": {
+        let rankedData = null
         request.requestURL(
           auth,
           `/lol-summoner/v1/summoners/${req.summonerId}`
-        ).then((data) => {
-          getPlayerDataByName(JSON.parse(data).displayName,auth).then((player) => {
-            event.reply('asynchronous-reply', createReply(player, req.id))
-          })
+        ).then(summoner => {
+          summoner = JSON.parse(summoner)
+          request.requestURL(
+            auth,
+            `/lol-ranked/v1/ranked-stats/${summoner.puuid}`
+          ).then(
+            (rankedD) => {
+              rankedData = JSON.parse(rankedD)
+              rankedData.username = summoner.displayName
+              request.requestURL(
+                auth,
+                `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=9`
+              ).then(
+                (matchHistory) => {
+                  rankedData.matchHistory = JSON.parse(matchHistory)
+                  event.reply('asynchronous-reply', createReply(rankedData, req.id))
+                })
+            })
         }).catch(error => errorHandler(error, event))
         break;
       }
