@@ -3,13 +3,11 @@ import { createRouter,createWebHashHistory } from 'vue-router'
 
 
 import App from './App.vue'
-import HomeView from './home.vue'
-import About from './about.vue'
-import PregameLobby from './pregamelobby.vue'
+import HomeView from './Home.vue'
+import PregameLobby from './Pregame.vue'
 
 const routes = [
     { path: '/', Name: "Home", component: HomeView},
-    { path: '/about', Name: "About", component: About},
     { path: '/pregame', Name: "Pregame", component: PregameLobby},
 ]
 

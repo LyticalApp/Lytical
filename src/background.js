@@ -6,9 +6,10 @@ import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const { performance } = require('perf_hooks');
 const { ipcMain } = require('electron')
+
 // My exports
-const lcu = require('./lcu')
-const request = require('./request')
+const lcu = require('./res/lcu')
+const request = require('./res/request')
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([

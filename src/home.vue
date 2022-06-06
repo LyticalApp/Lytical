@@ -29,7 +29,7 @@
 import MatchHistoryItem from './components/MatchHistoryItem.vue'
 import PlayerCard from './components/PlayerCard.vue'
 const { ipcRenderer } = require('electron')
-import { queueIds, championIds } from './common.js'
+import { queueIds, championIds } from './res/common.js'
 
 export default {
   name: 'HomeView',

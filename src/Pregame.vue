@@ -27,7 +27,7 @@
 <script>
 
 const { ipcRenderer } = require('electron')
-import { championIds } from './common.js'
+import { championIds } from './res/common.js'
 
 
 export default {
@@ -37,6 +37,7 @@ export default {
         championIds: championIds,
       polling: null,
       ondata: null,
+      lobbyPlayers2: [],
       lobbyPlayers: [
     {
         "earnedRegaliaRewardIds": [],
@@ -13005,7 +13006,8 @@ export default {
         "reply_type": "lol-lobby-playercard"
     }
 ],
-      lobbyData: {
+lobbyData: {},
+      lobbyData2: {
     "actions": [
         [
             {
@@ -13422,7 +13424,7 @@ export default {
       // Valid reply handlers
       switch(data.reply_type){
         case "lol-champ-select": {
-            // Init the 
+            //this.lobbyData = data
             if(!this.lobbyPlayers.length){
                 for(let player of this.lobbyData['myTeam']){
                     this.getSummonerById(player.summonerId)
@@ -13432,7 +13434,6 @@ export default {
         }
         case "lol-lobby-playercard": {
             this.lobbyPlayers.push(data)
-            console.log(this.lobbyPlayers)
             break
         }
         default: {
