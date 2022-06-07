@@ -2,12 +2,6 @@
   <div v-show='showError' style="background-color:red">
     <h1>LCU Disconnected</h1>
   </div>
-  <form @submit.prevent="searchSummoner()">
-    <input v-model=summonerSearch placeholder="Search Summoner">
-    <input type="submit" value="Submit">
-    </form>
-  <button @click="searchSummoner()">Refresh</button>
-  <button @click="changeRoute('/pregame')">pregame</button>
   <table class="container" style="vertical-align: top;">
     <td>
       <div id="leftSideBar">
@@ -47,23 +41,23 @@ export default {
       championIds: championIds,
       polling: null,
       ondata: null,
-      summonerSearch: '',
       showError: false,
       playerCardInfo: {},
       matches: {},
     }
   },
-
+  watch:{
+      $route (){
+        // Unregister the listener..
+        console.log("Unregistering Listeners on Home")
+        ipcRenderer.removeListener('asynchronous-reply',this.ondata)
+        clearInterval(this.polling)
+      }
+  },
   methods: {
-    changeRoute(route){
-      // Unregister the listener..
-      ipcRenderer.removeListener('asynchronous-reply',this.ondata)
-      clearInterval(this.polling)
-      this.$router.push(route)
-    },
-    searchSummoner(){
-      ipcRenderer.send('asynchronous-message', {id:'lol-ranked-stats', user: this.summonerSearch})
-      ipcRenderer.send('asynchronous-message', {id:'lol-match-history', user: this.summonerSearch, begIndex: 0, endIndex: 9})
+    searchSummoner(summonerName){
+      ipcRenderer.send('asynchronous-message', {id:'lol-ranked-stats', user: summonerName})
+      ipcRenderer.send('asynchronous-message', {id:'lol-match-history', user: summonerName, begIndex: 0, endIndex: 9})
     }
   },
   created: function () {
@@ -115,10 +109,14 @@ export default {
       }
     }
 
-    ipcRenderer.on('asynchronous-reply', this.ondata)
 
-    this.summonerSearch = "Cropster"
-    this.searchSummoner()
+    if(this.$route.params.summonerSearch == undefined || this.$route.params.summonerSearch == ""){
+      this.searchSummoner("Cropster")
+    } else if(this.$route.params.submitSearch == "true"){
+      this.searchSummoner(this.$route.params.summonerSearch)
+    }
+
+    ipcRenderer.on('asynchronous-reply', this.ondata)
 
     // Poll for champion select state
     this.polling = setInterval(function() {

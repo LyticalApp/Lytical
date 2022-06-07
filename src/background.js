@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcRenderer } from 'electron'
+import { app, protocol, Menu, BrowserWindow, ipcRenderer } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -39,6 +39,8 @@ async function createWindow() {
     win.loadURL('app://./index.html')
   }
 }
+
+Menu.setApplicationMenu(null);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

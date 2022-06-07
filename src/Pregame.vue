@@ -13393,6 +13393,14 @@ lobbyData: {},
 }
     }
   },
+watch:{
+      $route (){
+        // Unregister the listener..
+        console.log("Unregistering Listeners on Pregame")
+        ipcRenderer.removeListener('asynchronous-reply',this.ondata)
+        clearInterval(this.polling)
+      }
+    },
   methods: {
     changeRoute(route){
       // Unregister the listener..
