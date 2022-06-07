@@ -220,9 +220,10 @@ ipcMain.on('asynchronous-message', (event, req) => {
             `/lol-ranked/v1/ranked-stats/${summoner.puuid}`
           ).then(
             (rankData) => {
-              rankData = createReply(rankData, req.id)
+              rankData = JSON.parse(rankData)
+              rankData.summonerData = summoner
               rankData.username = summoner.displayName
-              event.reply('asynchronous-reply', rankData)
+              event.reply('asynchronous-reply', createReply(rankData, req.id))
             })
         }).catch(error => errorHandler(error, event))
         break;

@@ -8,26 +8,29 @@
     </form>
   <button @click="searchSummoner()">Refresh</button>
   <button @click="changeRoute('/pregame')">pregame</button>
-  <table class="container">
+  <table class="container" style="vertical-align: top;">
     <td>
-    <PlayerCard :data=playerCardInfo />
+      <div id="leftSideBar">
+        <PlayerCard :data=playerCardInfo />
+        <PlayerRank :data=playerCardInfo />
+      </div>
     </td>
     <td>
-    <MatchHistoryItem v-for="match in matches"
-      :key=match.gameId
-      :data=match 
-      :champion_name=championIds[match.participants[0].championId]
-      :queue=queueIds[match.queueId]
-      />
+      <MatchHistoryItem v-for="match in matches"
+        :key=match.gameId
+        :data=match 
+        :champion_name=championIds[match.participants[0].championId]
+        :queue=queueIds[match.queueId]
+        />
     </td>
     </table>
 </template>
 
 <script>
-// PUUID 74701d6a-61f7-51d7-8746-948ce4a23f81
 
 import MatchHistoryItem from './components/MatchHistoryItem.vue'
 import PlayerCard from './components/PlayerCard.vue'
+import PlayerRank from './components/PlayerRank.vue'
 const { ipcRenderer } = require('electron')
 import { queueIds, championIds } from './res/common.js'
 
@@ -35,7 +38,8 @@ export default {
   name: 'HomeView',
   components: {
     MatchHistoryItem,
-    PlayerCard
+    PlayerCard,
+    PlayerRank,
   },
   data(){
     return{
@@ -125,6 +129,23 @@ export default {
 </script>
 
 <style>
+body{
+  background-color:#080808;
+}
+
+body::-webkit-scrollbar {
+    width: 5px !important;
+    height: 5px !important;
+}
+body::-webkit-scrollbar-track {
+    background: #080808 !important;
+}
+body::-webkit-scrollbar-thumb {
+    background-color: #787878 !important;
+    border: none;
+    border-radius: 10px !important;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -132,5 +153,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+#leftSideBar {
+  width: 300px;
 }
 </style>

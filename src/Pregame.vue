@@ -13459,7 +13459,7 @@ lobbyData: {},
 }
 </script>
 
-<style>
+<style scoped>
 .Victory {
   background-color: #42f56c;
 }

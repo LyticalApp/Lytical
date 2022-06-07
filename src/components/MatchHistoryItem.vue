@@ -6,7 +6,7 @@
           <td>
             <div>
               <!-- Gamemode and Preview -->
-              <span>{{queue}}</span>
+              <span><b>{{queue}}</b></span>
               <span>{{sinceGame(Date.now()-data.gameCreation)}}</span>
               <hr style="width:10px;">
               <span>{{data.participants[0].stats.win ? "Victory" : "Defeat"}}</span>
@@ -154,10 +154,12 @@ span {
 }
 
 .matchItem {
+  background-color:#020202;
+  color: #9a96a4;
   border-radius: 5px;
   width:fit-content;
   min-width:600px;
-  margin-bottom:10px;
+  margin-bottom:8px;
 }
 
 h3 {
@@ -179,9 +181,18 @@ a {
   height:20px;
 }
 .Victory {
-  background-color: #42f56c;
+  filter: drop-shadow(0 0 0.05rem #5cd7e4);
 }
 .Defeat {
-  background-color: #f5427e;
+  filter: drop-shadow(0 0 0.05rem #ba4b45);
+}
+
+.Victory b{
+  font-weight: normal;
+  color: #5cd7e4;
+}
+.Defeat b{
+  font-weight: normal;
+  color: #ba4b45;
 }
 </style>
