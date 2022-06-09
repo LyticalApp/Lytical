@@ -1,12 +1,12 @@
 <template>
-    <div class="wrapper">
-        <div class="item">
-            <router-link :to="{ name: 'Home', params: { summonerSearch: summonerSearch, submitSearch: true }}">
+    <div class="navWrapper">
+        <div :class='`item ${ underlineHome ? "underlined" : ""}`'>
+            <router-link @click="setUnderlineHome()" :to="{ name: 'Home', params: { summonerSearch: summonerSearch, submitSearch: true }}">
                 Profile
             </router-link>
         </div>
-        <div class="item">
-            <router-link to="pregame">
+        <div :class='`item ${ underlineLobby ? "underlined" : ""}`'>
+            <router-link to="pregame" @click="setUnderlineLobby()">
                 Lobby
             </router-link>
         </div>
@@ -24,6 +24,8 @@ const { ipcRenderer } = require('electron')
         name: "NavBar",
         data() {
             return {
+                underlineHome: true,
+                underlineLobby: false,
                 summonerSearch: "",
             }
         },
@@ -34,6 +36,14 @@ const { ipcRenderer } = require('electron')
                 }
                 ipcRenderer.send('asynchronous-message', {id:'lol-ranked-stats', user: this.summonerSearch})
                 ipcRenderer.send('asynchronous-message', {id:'lol-match-history', user: this.summonerSearch, begIndex: 0, endIndex: 9})
+            },
+            setUnderlineHome(){
+                this.underlineLobby = false;
+                this.underlineHome = true;
+            },
+            setUnderlineLobby(){
+                this.underlineLobby = true;
+                this.underlineHome = false;
             }
         }
     }
@@ -49,7 +59,7 @@ input[type=text], select {
   box-sizing: border-box;
 }
 
-.wrapper {
+.navWrapper {
     z-index:100;
     display: flex;
     top:0px;
@@ -60,6 +70,13 @@ input[type=text], select {
     width: 100%;
     margin-bottom:10px;
 }
+
+.underlined a{
+    text-underline-offset: 10px;
+    text-decoration: underline !important;
+    text-decoration-color: #5a4656 !important;
+    transition: all .2s linear;
+}
 .inputbox {
     color:#f2ecff;
     height:20px;
@@ -67,11 +84,15 @@ input[type=text], select {
     background-color: #161818;
 }
 .item {
+    font-weight: lighter;
     padding:10px;
+    padding-right:25px;
     font-size: 20px;
     display: flex;
 }
 .item a{
+    font-family: 'Open Sans', sans-serif;
+    font-weight: light;
     text-decoration:none;
     color:#f2ecff;
 }

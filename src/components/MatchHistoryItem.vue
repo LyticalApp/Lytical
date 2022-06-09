@@ -181,10 +181,10 @@ a {
   height:20px;
 }
 .Victory {
-  filter: drop-shadow(0 0 0.05rem #5cd7e4);
+  filter: drop-shadow(0 0 0.1rem #5cd7e4);
 }
 .Defeat {
-  filter: drop-shadow(0 0 0.05rem #ba4b45);
+  filter: drop-shadow(0 0 0.1rem #ba4b45);
 }
 
 .Victory b{

@@ -40,6 +40,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #playerCard {
+  margin:auto;
+  width: 70%;
   text-align: left;
   vertical-align:top;
   padding:10px;

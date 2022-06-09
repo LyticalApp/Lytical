@@ -1,22 +1,21 @@
 <template>
-    <button @click="changeRoute('/')">Home</button>
-    <h1>Wow we are in the pregame lobby!</h1>
-    <div class="cardWrapper">
+    <div class="wrapper">
         <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
         <div class="miniCard">
-            <img :src='`assets/Emblem_${teammate.queueMap.RANKED_SOLO_5x5.tier}.png`' style="height:60px;">
+            <img :src='`assets/Emblem_${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`' style="height:80px;">
             <br>
             <span>{{teammate.username}}</span>
             <br>
-            <span>{{teammate.queueMap.RANKED_SOLO_5x5.tier}}  {{teammate.queueMap.RANKED_SOLO_5x5.division}}</span>
+            <span>{{teammate.queueMap.RANKED_SOLO_5x5.tier}}  {{teammate.queueMap.RANKED_SOLO_5x5.division}} ({{teammate.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP)</span>
             <br>
-            <span>{{teammate.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP / {{teammate.queueMap.RANKED_SOLO_5x5.wins}}W {{teammate.queueMap.RANKED_SOLO_5x5.losses}}L</span>
+            <span>{{teammate.queueMap.RANKED_SOLO_5x5.wins}}W {{teammate.queueMap.RANKED_SOLO_5x5.losses}}L</span>
             <br>
             <br>
-            <div v-for="match in teammate.matchHistory.games.games" :key="match.gameId">
-                <div :class='`matchItem ${match.participants[0].stats.win ? "Victory" : "Defeat"}`'>
-                <img :src="'http://ddragon.leagueoflegends.com/cdn/12.9.1/img/champion/'+championIds[match.participants[0].championId]+'.png'" style="width:20px;height:20px">
-                <span style="padding-left:10px;">{{match.participants[0].stats.kills}}/{{match.participants[0].stats.deaths}}/{{match.participants[0].stats.assists}}</span>
+            <div v-for="match in teammate.matchHistory.games.games" :key="match.gameId" :class='`matchItem`'>
+                <img :src="'http://ddragon.leagueoflegends.com/cdn/12.9.1/img/champion/'+championIds[match.participants[0].championId]+'.png'" style="border-radius:10px;width:20px;height:20px;">
+                <div :class='`kda ${match.participants[0].stats.win ? "Victory" : "Defeat"}`'>
+
+                    <span>{{match.participants[0].stats.kills}}/{{match.participants[0].stats.deaths}}/{{match.participants[0].stats.assists}}</span>
                 </div>
             </div>
         </div>
@@ -13468,21 +13467,43 @@ watch:{
 </script>
 
 <style scoped>
+.kda {
+    margin-left:10px;
+    padding:0 10px 0px 10px;
+    font-size:15px;
+    color:#080808;
+    text-align:center !important;
+    display:inline-block;
+    width:44px;
+    border-radius:4px;
+    font-weight: 400;
+}
 .Victory {
-  background-color: #42f56c;
+    color:#5cd7e4;
+    background-color:rgba(92, 215, 228, 0.5)
 }
 .Defeat {
-  background-color: #f5427e;
+    color:#ba4b45;
+    background-color:rgb(186, 75, 69, 0.5);
+}
+.matchItem {
+    width:100px;
+    text-align:left;
 }
 .miniCard {
+    width:140px;
     margin: 10px;
-    width: fit-content;
-    background-color: wheat;
-    align-self: auto;
+    padding:10px;
+    color: #9a96a4;
+    border-radius: 5px;
+    background-color: #020202;
+    filter: drop-shadow(0 0 0.1rem #5cd7e4);
 }
-.cardWrapper {
-    width: fit-content;
+.wrapper {
+    margin:auto;
+    width:50%;
     display: flex;
-    align-items: center;
+    display: flex;
+    justify-content: center;
 }
 </style>
