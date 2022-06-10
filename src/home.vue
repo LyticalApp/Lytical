@@ -30,8 +30,8 @@
 import MatchHistoryItem from './components/MatchHistoryItem.vue'
 import PlayerCard from './components/PlayerCard.vue'
 import PlayerRank from './components/PlayerRank.vue'
-const { ipcRenderer } = require('electron')
 import { queueIds, championIds } from './res/common.js'
+const { ipcRenderer } = require('electron')
 
 export default {
   name: 'HomeView',
@@ -104,7 +104,7 @@ export default {
           // We switch to the other view for
           // pregame lobbies which will
           // display player cards for each player
-          this.changeRoute('/pregame')
+          this.$router.push("pregame")
           break
         }
         default: {
@@ -162,7 +162,7 @@ body::-webkit-scrollbar-thumb {
 }
 .loadingFrame{
   margin:auto;
-  width:500px;
+  width:605px;
   position:relative;
 }
 .lds-ellipsis {
@@ -220,7 +220,6 @@ body::-webkit-scrollbar-thumb {
     transform: translate(24px, 0);
   }
 }
-
 .wrapper {
     margin:auto;
     width:50%;

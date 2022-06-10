@@ -1,5 +1,5 @@
 <template>
-  <div :class='`matchItem ${data.participants[0].stats.win ? "Victory" : "Defeat"}`'>
+  <div :onclick="function(){getGameDetails()}" :class='`matchItem ${data.participants[0].stats.win ? "Victory" : "Defeat"}`'>
     <table>
       <tbody>
         <tr>
@@ -54,14 +54,14 @@
           <td>
             <!-- Items -->
             <table>
-              <td style="padding:0px;"><img :src="`${itemURL}${data.participants[0].stats.item0}.png`" class='thumbicon'></td>
-              <td style="padding:0px;"><img :src="`${itemURL}${data.participants[0].stats.item1}.png`" class='thumbicon'></td>
-              <td style="padding:0px;"><img :src="`${itemURL}${data.participants[0].stats.item2}.png`" class='thumbicon'></td>
-              <td style="padding:0px;"><img :src="`${itemURL}${data.participants[0].stats.item3}.png`" class='thumbicon'></td>
+              <td style="padding:0px;"><img :src="data.participants[0].stats.item0 > 0 ? itemURL+data.participants[0].stats.item0+'.png' : './assets/0.png'" class='thumbicon'></td>
+              <td style="padding:0px;"><img :src="data.participants[0].stats.item1 > 0 ? itemURL+data.participants[0].stats.item1+'.png' : './assets/0.png'" class='thumbicon'></td>
+              <td style="padding:0px;"><img :src="data.participants[0].stats.item2 > 0 ? itemURL+data.participants[0].stats.item2+'.png' : './assets/0.png'" class='thumbicon'></td>
+              <td style="padding:0px;"><img :src="data.participants[0].stats.item3 > 0 ? itemURL+data.participants[0].stats.item3+'.png' : './assets/0.png'" class='thumbicon'></td>
               <tr>
-              <td style="padding:0px;"><img :src="`${itemURL}${data.participants[0].stats.item4}.png`" class='thumbicon'></td>
-              <td style="padding:0px;"><img :src="`${itemURL}${data.participants[0].stats.item5}.png`" class='thumbicon'></td>
-              <td style="padding:0px;"><img :src="`${itemURL}${data.participants[0].stats.item6}.png`" class='thumbicon'></td>
+              <td style="padding:0px;"><img :src="data.participants[0].stats.item4 > 0 ? itemURL+data.participants[0].stats.item4+'.png' : './assets/0.png'" class='thumbicon'></td>
+              <td style="padding:0px;"><img :src="data.participants[0].stats.item5 > 0 ? itemURL+data.participants[0].stats.item5+'.png' : './assets/0.png'" class='thumbicon'></td>
+              <td style="padding:0px;"><img :src="data.participants[0].stats.item6 > 0 ? itemURL+data.participants[0].stats.item6+'.png' : './assets/0.png'" class='thumbicon'></td>
               </tr>
             </table>
             <span style="font-size:8px;">Control Wards {{data.participants[0].stats.visionWardsBoughtInGame}}</span>
@@ -69,12 +69,21 @@
         </tr>
       </tbody>
     </table>
-  </div>
+    
+
+    <!-- Begin Detailed Match History Item -->
+    <DetailedMatchInfo :matchDetails=matchDetails />
+    </div>
 </template>
 
 <script>
+const { ipcRenderer } = require('electron')
+import DetailedMatchInfo from './DetailedMatchInfo.vue'
 export default {
   name: 'MatchHistoryItem',
+  components: {
+    DetailedMatchInfo
+  },
   props: {
     data: {
         type: Object
@@ -86,9 +95,32 @@ export default {
     queue: {
       type: String,
       default: "Undefined"
+    },
+    CHAMPIONICONURL: {
+        type: String,
+        default: "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/"
+    },
+    ITEMICONURL: {
+      type: String,
+      default: "http://ddragon.leagueoflegends.com/cdn/12.6.1/img/item/"
     }
   },
   methods:{
+    getGameDetails(){
+      ipcRenderer.send('asynchronous-message', {id:'lol-match-details', gameId: this.data.gameId})
+      // Add the Listener for the reply which will be destroyed
+      this.matchListener = (event, data) => {
+        switch(data.reply_type){
+          case "lol-match-details": {
+            if(data.gameId == this.data.gameId) {
+              this.matchDetails = data
+              ipcRenderer.removeListener('asynchronous-reply',this.matchListener)
+            }
+          }
+        }
+      }
+      ipcRenderer.on('asynchronous-reply', this.matchListener)
+    },
     totalCS() {
       return this.data.participants[0].stats.totalMinionsKilled + this.data.participants[0].stats.neutralMinionsKilled
     },
@@ -117,6 +149,7 @@ export default {
   },
   data(){
     return {
+      matchListener: null,
       summonerSpells: {
           1: "Cleanse",
           3: "Exhaust",
@@ -135,6 +168,7 @@ export default {
       },
       itemURL: "http://ddragon.leagueoflegends.com/cdn/12.9.1/img/item/",
       spellURL: "http://ddragon.leagueoflegends.com/cdn/12.9.1/img/spell/",
+      matchDetails: null,
     }
   }
 }

@@ -1,12 +1,12 @@
 <template>
     <div class="navWrapper">
         <div :class='`item ${ underlineHome ? "underlined" : ""}`'>
-            <router-link @click="setUnderlineHome()" :to="{ name: 'Home', params: { summonerSearch: summonerSearch, submitSearch: true }}">
+            <router-link :to="{ name: 'Home', params: { summonerSearch: summonerSearch, submitSearch: true }}">
                 Profile
             </router-link>
         </div>
         <div :class='`item ${ underlineLobby ? "underlined" : ""}`'>
-            <router-link to="pregame" @click="setUnderlineLobby()">
+            <router-link to="pregame">
                 Lobby
             </router-link>
         </div>
@@ -37,15 +37,23 @@ const { ipcRenderer } = require('electron')
                 ipcRenderer.send('asynchronous-message', {id:'lol-ranked-stats', user: this.summonerSearch})
                 ipcRenderer.send('asynchronous-message', {id:'lol-match-history', user: this.summonerSearch, begIndex: 0, endIndex: 9})
             },
-            setUnderlineHome(){
-                this.underlineLobby = false;
-                this.underlineHome = true;
-            },
-            setUnderlineLobby(){
-                this.underlineLobby = true;
-                this.underlineHome = false;
+        },
+        watch:{
+            $route (){
+                switch(this.$route.path){
+                    case "/": { 
+                        this.underlineLobby = false;
+                        this.underlineHome = true;
+                        break
+                    }
+                    case "/pregame": {
+                        this.underlineLobby = true;
+                        this.underlineHome = false;
+                        break
+                    }
+                }
             }
-        }
+        },
     }
 </script>
 

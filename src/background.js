@@ -209,6 +209,15 @@ ipcMain.on('asynchronous-message', (event, req) => {
         }).catch(error => errorHandler(error, event))
         break;
       }
+      case "lol-match-details": {
+        request.requestURL(
+          auth,
+          `/lol-match-history/v1/games/${req.gameId}`
+        ).then((data) => {
+          event.reply('asynchronous-reply', createReply(data, req.id))
+        }).catch(error => errorHandler(error, event))
+        break;
+      }
       case "lol-summoner-name": {
         getPlayerDataByName(req.user, auth).then(
           data => event.reply('asynchronous-reply', createReply(data, req.id))

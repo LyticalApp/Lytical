@@ -36,8 +36,8 @@ export default {
         championIds: championIds,
       polling: null,
       ondata: null,
-      lobbyPlayers2: [],
-      lobbyPlayers: [
+      lobbyPlayers: [],
+      lobbyPlayers2: [
     {
         "earnedRegaliaRewardIds": [],
         "highestPreviousSeasonAchievedDivision": "NA",
@@ -13431,7 +13431,7 @@ watch:{
       // Valid reply handlers
       switch(data.reply_type){
         case "lol-champ-select": {
-            //this.lobbyData = data
+            this.lobbyData = data
             if(!this.lobbyPlayers.length){
                 for(let player of this.lobbyData['myTeam']){
                     this.getSummonerById(player.summonerId)
