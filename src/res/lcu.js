@@ -6,7 +6,7 @@ exports.getLeagueDirectory = async () => {
     const { exec } = require('child_process')
     return new Promise(function (resolve, reject) {
         exec('Get-CimInstance Win32_Process -Filter "name = \'LeagueClient.exe\'" | Select-Object -Property CommandLine | ft -HideTableHeaders',
-            { 'shell': 'powershell.exe' }, (error, stdout, stderr) => {
+            { 'shell': 'powershell.exe' }, (error, stdout) => {
                 if (error) {
                     reject(error)
                 }

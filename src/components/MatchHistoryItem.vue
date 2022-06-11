@@ -1,5 +1,5 @@
 <template>
-  <div :onclick="function(){getGameDetails()}" :class='`matchItem ${data.participants[0].stats.win ? "Victory" : "Defeat"}`'>
+  <div :class='`matchItem ${data.participants[0].stats.win ? "Victory" : "Defeat"}`'>
     <table>
       <tbody>
         <tr>
@@ -69,10 +69,11 @@
         </tr>
       </tbody>
     </table>
-    
-
+    <div class="showDetailsTip" @click="function(){getGameDetails()}">
+      Expand Details
+    </div>
     <!-- Begin Detailed Match History Item -->
-    <DetailedMatchInfo :matchDetails=matchDetails />
+    <DetailedMatchInfo :matchDetails=matchDetails :style="`display: ${showDetails ? 'inline' : 'none'};`"/>
     </div>
 </template>
 
@@ -107,19 +108,22 @@ export default {
   },
   methods:{
     getGameDetails(){
-      ipcRenderer.send('asynchronous-message', {id:'lol-match-details', gameId: this.data.gameId})
-      // Add the Listener for the reply which will be destroyed
-      this.matchListener = (event, data) => {
-        switch(data.reply_type){
-          case "lol-match-details": {
-            if(data.gameId == this.data.gameId) {
-              this.matchDetails = data
-              ipcRenderer.removeListener('asynchronous-reply',this.matchListener)
+      if(this.matchDetails == null){
+        ipcRenderer.send('asynchronous-message', {id:'lol-match-details', gameId: this.data.gameId})
+        // Add the Listener for the reply which will be destroyed
+        this.matchListener = (event, data) => {
+          switch(data.reply_type){
+            case "lol-match-details": {
+              if(data.gameId == this.data.gameId) {
+                this.matchDetails = data
+                ipcRenderer.removeListener('asynchronous-reply',this.matchListener)
+              }
             }
           }
         }
+        ipcRenderer.on('asynchronous-reply', this.matchListener)
       }
-      ipcRenderer.on('asynchronous-reply', this.matchListener)
+      this.showDetails = !this.showDetails
     },
     totalCS() {
       return this.data.participants[0].stats.totalMinionsKilled + this.data.participants[0].stats.neutralMinionsKilled
@@ -149,6 +153,7 @@ export default {
   },
   data(){
     return {
+      showDetails: false,
       matchListener: null,
       summonerSpells: {
           1: "Cleanse",
@@ -180,7 +185,7 @@ export default {
 <style scoped>
 
 td {
-  padding: 10px;
+  padding: 10px 10px 0px 10px;
 }
 
 span {
@@ -228,5 +233,20 @@ a {
 .Defeat b{
   font-weight: normal;
   color: #ba4b45;
+}
+.showDetailsTip {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width:100%;
+    font-size:12px;
+    text-align:center;
+}
+
+.showDetailsTip:hover {
+  visibility: visible;
 }
 </style>

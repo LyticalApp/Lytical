@@ -1,10 +1,9 @@
 'use strict'
 
-import { app, protocol, Menu, BrowserWindow, ipcRenderer } from 'electron'
+import { app, protocol, Menu, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
-const { performance } = require('perf_hooks');
 const { ipcMain } = require('electron')
 
 // My exports
@@ -148,7 +147,7 @@ function getPlayerDataByName(name, auth) {
       `/lol-summoner/v1/summoners?name=${name}`
     ).then(userData => {
       resolve(JSON.parse(userData))
-    })
+    }).catch(error => {reject(error)})
   })
 }
 
@@ -254,10 +253,3 @@ ipcMain.on('asynchronous-message', (event, req) => {
     }
   })
 })
-
-/*
-ipcMain.on('synchronous-message', (event, id) => {
-  console.log(id) // prints "ping"
-  event.returnValue = 'pong'
-})
-*/
