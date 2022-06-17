@@ -160,6 +160,14 @@ export const championIds = {
     143: "Zyra"
 }
 
+export const romanNumbers = {
+    I: 1,
+    II: 2,
+    III: 3,
+    IV: 4,
+    V: 5,
+  };
+
 export const queueIds = {
     0: "",
     2: "Blind Pick",

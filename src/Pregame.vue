@@ -6,7 +6,7 @@
             <br>
             <span>{{teammate.username}}</span>
             <br>
-            <span>{{teammate.queueMap.RANKED_SOLO_5x5.tier}}  {{teammate.queueMap.RANKED_SOLO_5x5.division}} ({{teammate.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP)</span>
+            <span style="font-size:12px;">{{capitalize(teammate.queueMap.RANKED_SOLO_5x5.tier)}}  {{romanNumbers[teammate.queueMap.RANKED_SOLO_5x5.division]}} ({{teammate.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP)</span>
             <br>
             <span>{{teammate.queueMap.RANKED_SOLO_5x5.wins}}W {{teammate.queueMap.RANKED_SOLO_5x5.losses}}L</span>
             <br>
@@ -26,7 +26,7 @@
 <script>
 
 const { ipcRenderer } = require('electron')
-import { championIds } from './res/common.js'
+import { championIds,romanNumbers } from './res/common.js'
 
 
 export default {
@@ -36,8 +36,9 @@ export default {
         championIds: championIds,
       polling: null,
       ondata: null,
-      lobbyPlayers: [],
-      lobbyPlayers2: [
+      romanNumbers: romanNumbers,
+      lobbyPlayers2: [],
+      lobbyPlayers: [
     {
         "earnedRegaliaRewardIds": [],
         "highestPreviousSeasonAchievedDivision": "NA",
@@ -13409,6 +13410,10 @@ watch:{
     },
     getSummonerById(id){
       ipcRenderer.send('asynchronous-message', {id:'lol-lobby-playercard',summonerId: id})
+    },
+    capitalize(s) {
+        if (typeof s !== 'string') return ''
+        return s.charAt(0).toUpperCase() + s.slice(1).toLocaleLowerCase()
     }
   },
   created: function () {
@@ -13487,7 +13492,8 @@ watch:{
     background-color:rgb(186, 75, 69, 0.5);
 }
 .matchItem {
-    width:100px;
+    margin:auto;
+    width:120px;
     text-align:left;
 }
 .miniCard {

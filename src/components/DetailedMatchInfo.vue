@@ -24,14 +24,16 @@
                <td>
                   <progress style="width:40px;"
                      :title="participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')"
-                     :value="participant.stats.totalDamageDealtToChampions/calcTotalDamage(i)*1.5">
+                     :value="participant.stats.totalDamageDealtToChampions/calcTotalDamage(index)*1.5">
                   </progress>
-                  <span style="padding:10px;">{{(participant.stats.totalDamageDealtToChampions/calcTotalDamage(i)*100).toFixed(0)}}%</span>
+                  <span style="padding:10px;">{{(participant.stats.totalDamageDealtToChampions/calcTotalDamage(index)*100).toFixed(0)}}%</span>
                </td>
                <td>
-                  {{participant.stats.visionWardsBoughtInGame}}
-                  <br>
-                  {{participant.stats.wardsPlaced}} / {{participant.stats.wardsKilled}}
+                  <div class="wardText">
+                     {{participant.stats.visionWardsBoughtInGame}}
+                     <br>
+                     {{participant.stats.wardsPlaced}} / {{participant.stats.wardsKilled}}
+                  </div>
                </td>
                <td>
                   {{participant.stats.totalMinionsKilled + participant.stats.neutralMinionsKilled}}
@@ -101,6 +103,11 @@ table {
 td{
   padding:0px;
 }
+.wardText {
+   padding:4px;
+   font-size:12px;
+   line-height:.9;
+}
 .Victory {
   background-color:#3b485e;
 }
@@ -139,5 +146,9 @@ tr:last-child td:first-child {
     -webkit-border-radius: 0 0 0 6px;
     border-radius: 0 0 0 6px;
     border-radius: 0 0 0 6px;
+}
+progress {
+   margin-left: 10px;
+   float:left;
 }
 </style>

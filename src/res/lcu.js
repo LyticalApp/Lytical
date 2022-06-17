@@ -23,7 +23,7 @@ exports.getLeagueDirectory = async () => {
     })
 }
 
-// Expose auth setter for errors aka lcu auth needs to re-enable
+// Expose auth setter for errors aka lcu needs to reauthenticate
 exports.setAuth = function(d){
     auth = d
 }

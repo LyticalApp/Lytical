@@ -70,7 +70,7 @@
       </tbody>
     </table>
     <div class="showDetailsTip" @click="function(){getGameDetails()}">
-      Expand Details
+      <i class="fa-solid fa-angle-down"></i>
     </div>
     <!-- Begin Detailed Match History Item -->
     <DetailedMatchInfo :matchDetails=matchDetails :style="`display: ${showDetails ? 'inline' : 'none'};`"/>
@@ -235,18 +235,18 @@ a {
   color: #ba4b45;
 }
 .showDetailsTip {
+    position: absolute;
+    z-index: 0;
+    width: fit-content;
+    right: 18px;
+    top: 85px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    width:100%;
     font-size:12px;
     text-align:center;
-}
-
-.showDetailsTip:hover {
-  visibility: visible;
 }
 </style>

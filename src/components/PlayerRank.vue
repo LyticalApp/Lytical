@@ -8,7 +8,7 @@
         <img :src='`assets/Emblem_${data.queueMap.RANKED_SOLO_5x5.tier}.webp`' class="backgroundImg" style="height:60px;">
       </td>
       <td style="vertical-align:middle; text-align:left;">
-        <span style="color:#f2ecff;"><b>{{data.queueMap.RANKED_SOLO_5x5.tier}} {{data.queueMap.RANKED_SOLO_5x5.division}}</b></span>
+        <span style="color:#f2ecff;"><b>{{capitalize(data.queueMap.RANKED_SOLO_5x5.tier)}} {{romanNumbers[data.queueMap.RANKED_SOLO_5x5.division]}}</b></span>
         <br>
         <span>{{data.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP </span>
         </td>
@@ -22,12 +22,26 @@
 </template> 
 
 <script>
+
+import { romanNumbers } from '../res/common.js'
+
 export default {
   name: 'PlayerRank',
   props: {
     data: {
         type: Object
       }
+  },
+  data(){
+    return {
+      romanNumbers: romanNumbers
+    }
+  },
+  methods: {
+    capitalize(s) {
+      if (typeof s !== 'string') return ''
+      return s.charAt(0).toUpperCase() + s.slice(1).toLocaleLowerCase()
+    }
   }
 }
 </script>

@@ -25,7 +25,8 @@ async function createWindow() {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: true,
       contextIsolation: false
-    }
+    },
+    icon: './public/favicon.ico',
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
