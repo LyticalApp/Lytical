@@ -76,7 +76,6 @@ input[type=text], select {
     position:fixed;
     background-color:#191a1d;
     width: 100%;
-    margin-bottom:10px;
 }
 
 .underlined a{

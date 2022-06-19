@@ -1,4 +1,5 @@
 <template>
+<div class="bumper"></div>
 <div class="wrapper">
   <div v-show='showError' style="background-color:red">
     <h1>LCU Disconnected</h1>
@@ -22,7 +23,7 @@
         />
     </td>
     </table>
-    </div>
+</div>
 </template>
 
 <script>
@@ -132,30 +133,40 @@ export default {
 </script>
 
 <style>
-body{
+html{
   background-color:#080808;
 }
 
-body::-webkit-scrollbar {
+body {
+  margin:0px;
+  margin-top:55px;
+  overflow:hidden;
+}
+
+.wrapper::-webkit-scrollbar {
     width: 5px !important;
     height: 5px !important;
 }
-body::-webkit-scrollbar-track {
+.wrapper::-webkit-scrollbar-track {
     background: #080808 !important;
 }
-body::-webkit-scrollbar-thumb {
+.wrapper::-webkit-scrollbar-thumb {
     background-color: #787878 !important;
     border: none;
     border-radius: 10px !important;
 }
 
+.imground {
+  border-radius: 50%;
+}
+
 #app {
+  width:100%;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 #leftSideBar {
   width: 300px;
@@ -222,9 +233,10 @@ body::-webkit-scrollbar-thumb {
 }
 .wrapper {
     margin:auto;
-    width:50%;
     display: flex;
     justify-content: center;
+    overflow:scroll;
+    height:calc(100vh - 55px);
 }
 
 </style>

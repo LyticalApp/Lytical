@@ -14,9 +14,9 @@
             <div v-for="match in teammate.matchHistory.games.games" :key="match.gameId" :class='`matchItem`'>
                 <img :src="'http://ddragon.leagueoflegends.com/cdn/12.9.1/img/champion/'+championIds[match.participants[0].championId]+'.png'" style="border-radius:10px;width:20px;height:20px;">
                 <div :class='`kda ${match.participants[0].stats.win ? "Victory" : "Defeat"}`'>
-
                     <span>{{match.participants[0].stats.kills}}/{{match.participants[0].stats.deaths}}/{{match.participants[0].stats.assists}}</span>
                 </div>
+                <span style="font-size:15px;margin-left:4px;background-color:#5d4e73;border-radius:4px;padding-left:4px;padding-right:4px;">{{sinceGame(Date.now()-match.gameCreation)}}</span>
             </div>
         </div>
     </div>
@@ -37,8 +37,8 @@ export default {
       polling: null,
       ondata: null,
       romanNumbers: romanNumbers,
-      lobbyPlayers2: [],
-      lobbyPlayers: [
+      lobbyPlayers: [],
+      lobbyPlayers2: [
     {
         "earnedRegaliaRewardIds": [],
         "highestPreviousSeasonAchievedDivision": "NA",
@@ -13414,6 +13414,15 @@ watch:{
     capitalize(s) {
         if (typeof s !== 'string') return ''
         return s.charAt(0).toUpperCase() + s.slice(1).toLocaleLowerCase()
+    },
+    sinceGame(seconds) {
+      seconds = Number(seconds/1000);
+      const d = Math.floor(seconds / (3600 * 24));
+      const h = Math.floor(seconds % (3600 * 24) / 3600);
+      const m = Math.floor(seconds % 3600 / 60);
+      if (d > 0) return (d+"d")
+      if (h > 0) return (h+"h")
+      return (m+"m")
     }
   },
   created: function () {
@@ -13493,11 +13502,10 @@ watch:{
 }
 .matchItem {
     margin:auto;
-    width:120px;
+    width:140px;
     text-align:left;
 }
 .miniCard {
-    width:140px;
     margin: 10px;
     padding:10px;
     color: #9a96a4;
@@ -13507,7 +13515,6 @@ watch:{
 }
 .wrapper {
     margin:auto;
-    width:50%;
     display: flex;
     display: flex;
     justify-content: center;

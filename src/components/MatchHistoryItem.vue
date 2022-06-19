@@ -3,7 +3,7 @@
     <table>
       <tbody>
         <tr>
-          <td>
+          <td style="width:100px;">
             <div>
               <!-- Gamemode and Preview -->
               <span><b>{{queue}}</b></span>
@@ -20,19 +20,19 @@
                 <!-- 2x2 -->
                 <table style="display:inline;">
                   <td style="padding:0px;vertical-align:bottom;">
-                    <img :src="'http://ddragon.leagueoflegends.com/cdn/12.9.1/img/champion/'+champion_name+'.png'" style="width:50px;height:50px">
+                    <img :src="'http://ddragon.leagueoflegends.com/cdn/12.9.1/img/champion/'+champion_name+'.png'" style="width:50px;height:50px;border-radius:50%;">
                     </td>
                    <td style="padding:0px;">
                      <!-- Summoner Spells -->
-                      <img :src='`assets/${summonerSpells[data.participants[0].spell1Id]}.webp`' class='thumbicon'>
+                      <img :src='`assets/${summonerSpells[data.participants[0].spell1Id]}.webp`' class='thumbicon thumbround'>
                       <br>
-                      <img :src='`assets/${summonerSpells[data.participants[0].spell2Id]}.webp`' class='thumbicon'>
+                      <img :src='`assets/${summonerSpells[data.participants[0].spell2Id]}.webp`' class='thumbicon thumbround'>
                     </td>
                     <td style="padding:0px;">
-                      <!-- Runes -->
-                     <img src="https://pbs.twimg.com/profile_images/1523868254514515970/5CnAiD-0_400x400.jpg" class='thumbicon'>
+                      <!-- Runes games.games[0].participants[0].stats.perkPrimaryStyle-->
+                     <img :src="'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/'+runeMap[data.participants[0].stats.perk0]" class='thumbicon thumbround'>
                      <br>
-                     <img src="https://pbs.twimg.com/profile_images/1523868254514515970/5CnAiD-0_400x400.jpg" class='thumbicon'>
+                     <img :src="'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/'+runeMap[data.participants[0].stats.perk1]" class='thumbicon thumbround'>
                    </td>
                 </table>
                 <br>
@@ -155,6 +155,76 @@ export default {
     return {
       showDetails: false,
       matchListener: null,
+      runeMap: {
+          8100 : 'perk-images/Styles/7200_Domination.png',
+          8112 : 'perk-images/styles/domination/electrocute/electrocute.png',
+          8124 : 'perk-images/styles/domination/predator/predator.png',
+          8128 : 'perk-images/styles/domination/darkharvest/darkharvest.png',
+          9923 : 'perk-images/styles/domination/hailofblades/hailofblades.png',
+          8126 : 'perk-images/styles/domination/cheapshot/cheapshot.png',
+          8139 : 'perk-images/styles/domination/tasteofblood/greenterror_tasteofblood.png',
+          8143 : 'perk-images/styles/domination/suddenimpact/suddenimpact.png',
+          8136 : 'perk-images/styles/domination/zombieward/zombieward.png',
+          8120 : 'perk-images/styles/domination/ghostporo/ghostporo.png',
+          8138 : 'perk-images/styles/domination/eyeballcollection/eyeballcollection.png',
+          8135 : 'perk-images/styles/domination/treasurehunter/treasurehunter.png',
+          8134 : 'perk-images/styles/domination/ingenioushunter/ingenioushunter.png',
+          8105 : 'perk-images/styles/domination/relentlesshunter/relentlesshunter.png',
+          8106 : 'perk-images/styles/domination/ultimatehunter/ultimatehunter.png',
+          8300 : 'perk-images/Styles/7203_Whimsy.png',
+          8351 : 'perk-images/styles/inspiration/glacialaugment/glacialaugment.png',
+          8360 : 'perk-images/styles/inspiration/unsealedspellbook/unsealedspellbook.png',
+          8369 : 'perk-images/styles/inspiration/firststrike/firststrike.png',
+          8306 : 'perk-images/styles/inspiration/hextechflashtraption/hextechflashtraption.png',
+          8304 : 'perk-images/styles/inspiration/magicalfootwear/magicalfootwear.png',
+          8313 : 'perk-images/styles/inspiration/perfecttiming/perfecttiming.png',
+          8321 : 'perk-images/styles/inspiration/futuresmarket/futuresmarket.png',
+          8316 : 'perk-images/styles/inspiration/miniondematerializer/miniondematerializer.png',
+          8345 : 'perk-images/styles/inspiration/biscuitdelivery/biscuitdelivery.png',
+          8347 : 'perk-images/styles/inspiration/cosmicinsight/cosmicinsight.png',
+          8410 : 'perk-images/styles/resolve/approachvelocity/approachvelocity.png',
+          8352 : 'perk-images/styles/inspiration/timewarptonic/timewarptonic.png',
+          8000 : 'perk-images/Styles/7201_Precision.png',
+          8005 : 'perk-images/styles/precision/presstheattack/presstheattack.png',
+          8008 : 'perk-images/styles/precision/lethaltempo/lethaltempotemp.png',
+          8021 : 'perk-images/styles/precision/fleetfootwork/fleetfootwork.png',
+          8010 : 'perk-images/styles/precision/conqueror/conqueror.png',
+          9101 : 'perk-images/styles/precision/overheal.png',
+          9111 : 'perk-images/styles/precision/triumph.png',
+          8009 : 'perk-images/styles/precision/presenceofmind/presenceofmind.png',
+          9104 : 'perk-images/styles/precision/legendalacrity/legendalacrity.png',
+          9105 : 'perk-images/styles/precision/legendtenacity/legendtenacity.png',
+          9103 : 'perk-images/styles/precision/legendbloodline/legendbloodline.png',
+          8014 : 'perk-images/styles/precision/coupdegrace/coupdegrace.png',
+          8017 : 'perk-images/styles/precision/cutdown/cutdown.png',
+          8299 : 'perk-images/styles/sorcery/laststand/laststand.png',
+          8400 : 'perk-images/Styles/7204_Resolve.png',
+          8437 : 'perk-images/styles/resolve/graspoftheundying/graspoftheundying.png',
+          8439 : 'perk-images/styles/resolve/veteranaftershock/veteranaftershock.png',
+          8465 : 'perk-images/styles/resolve/guardian/guardian.png',
+          8446 : 'perk-images/styles/resolve/demolish/demolish.png',
+          8463 : 'perk-images/styles/resolve/fontoflife/fontoflife.png',
+          8401 : 'perk-images/styles/resolve/mirrorshell/mirrorshell.png',
+          8429 : 'perk-images/styles/resolve/conditioning/conditioning.png',
+          8444 : 'perk-images/styles/resolve/secondwind/secondwind.png',
+          8473 : 'perk-images/styles/resolve/boneplating/boneplating.png',
+          8451 : 'perk-images/styles/resolve/overgrowth/overgrowth.png',
+          8453 : 'perk-images/styles/resolve/revitalize/revitalize.png',
+          8242 : 'perk-images/styles/sorcery/unflinching/unflinching.png',
+          8200 : 'perk-images/Styles/7202_Sorcery.png',
+          8214 : 'perk-images/styles/sorcery/summonaery/summonaery.png',
+          8229 : 'perk-images/styles/sorcery/arcanecomet/arcanecomet.png',
+          8230 : 'perk-images/styles/sorcery/phaserush/phaserush.png',
+          8224 : 'perk-images/styles/sorcery/nullifyingorb/pokeshield.png',
+          8226 : 'perk-images/styles/sorcery/manaflowband/manaflowband.png',
+          8275 : 'perk-images/styles/sorcery/nimbuscloak/6361.png',
+          8210 : 'perk-images/styles/sorcery/transcendence/transcendence.png',
+          8234 : 'perk-images/styles/sorcery/celerity/celeritytemp.png',
+          8233 : 'perk-images/styles/sorcery/absolutefocus/absolutefocus.png',
+          8237 : 'perk-images/styles/sorcery/scorch/scorch.png',
+          8232 : 'perk-images/styles/sorcery/waterwalking/waterwalking.png',
+          8236 : 'perk-images/styles/sorcery/gatheringstorm/gatheringstorm.png',
+      },
       summonerSpells: {
           1: "Cleanse",
           3: "Exhaust",
@@ -184,8 +254,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
+.thumbround {
+  border-radius:4px;
+}
+
 td {
-  padding: 10px 10px 0px 10px;
+  padding: 10px 10px 10px 10px;
 }
 
 span {
@@ -197,7 +271,7 @@ span {
   color: #9a96a4;
   border-radius: 5px;
   width:fit-content;
-  min-width:600px;
+  min-width:570px;
   margin-bottom:8px;
 }
 
