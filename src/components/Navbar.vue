@@ -1,20 +1,20 @@
 <template>
     <div class="navWrapper">
-        <div :class='`item ${ underlineHome ? "underlined" : ""}`'>
-            <router-link :to="{ name: 'Home', params: { summonerSearch: summonerSearch, submitSearch: true }}">
-                Profile
-            </router-link>
-        </div>
-        <div :class='`item ${ underlineLobby ? "underlined" : ""}`'>
-            <router-link to="pregame">
-                Lobby
-            </router-link>
-        </div>
-        <div class="item">
-            <form @submit.prevent="searchSummoner()">
-                <input v-model=summonerSearch type="text" class="inputbox" placeholder="🔍 Search">
-            </form>
-        </div>
+    <div :class='`item ${ underlineHome ? "underlined" : ""}`'>
+        <router-link :to="{ name: 'Home', params: { summonerSearch: summonerSearch, submitSearch: true }}">
+            Profile
+        </router-link>
+    </div>
+    <div :class='`item ${ underlineLobby ? "underlined" : ""}`'>
+        <router-link to="pregame">
+            Lobby
+        </router-link>
+    </div>
+    <div class="item">
+        <form @submit.prevent="searchSummoner()">
+            <input v-model=summonerSearch type="text" class="inputbox" placeholder="🔍 Search">
+        </form>
+    </div>
     </div>
 </template>
 

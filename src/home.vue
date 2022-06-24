@@ -1,29 +1,33 @@
 <template>
-<div class="bumper"></div>
-<div class="wrapper">
   <div v-show='showError' style="background-color:red">
     <h1>LCU Disconnected</h1>
   </div>
-  <table class="container" style="vertical-align: top;">
-    <td>
-      <div id="leftSideBar">
-        <PlayerCard :data=playerCardInfo />
-        <PlayerRank :data=playerCardInfo />
-      </div>
-    </td>
-    <td>
-      <div v-if="!matches.length" class="loadingFrame">
-      <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-      </div>
-      <MatchHistoryItem v-for="match in matches"
-        :key=match.gameId
-        :data=match 
-        :champion_name=championIds[match.participants[0].championId]
-        :queue=queueIds[match.queueId]
-        />
-    </td>
+  <div class="wrapper" v-show='!showError'>
+    <table class="container" style="vertical-align: top;">
+        <td>
+          <div id="leftSideBar">
+              <PlayerCard :data=playerCardInfo />
+              <PlayerRank :data=playerCardInfo />
+          </div>
+        </td>
+        <td>
+          <div v-if="!matches.length" class="loadingFrame">
+              <div class="lds-ellipsis">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+          </div>
+          <MatchHistoryItem v-for="match in matches"
+              :key=match.gameId
+              :data=match 
+              :champion_name=championIds[match.participants[0].championId]
+              :queue=getQueueName(match.queueId)
+              />
+        </td>
     </table>
-</div>
+  </div>
 </template>
 
 <script>
@@ -62,8 +66,16 @@ export default {
   },
   methods: {
     searchSummoner(summonerName){
-      ipcRenderer.send('asynchronous-message', {id:'lol-ranked-stats', user: summonerName})
-      ipcRenderer.send('asynchronous-message', {id:'lol-match-history', user: summonerName, begIndex: 0, endIndex: 9})
+      if(summonerName != undefined && summonerName != ""){
+        ipcRenderer.send('asynchronous-message', {id:'lol-ranked-stats', user: summonerName})
+        ipcRenderer.send('asynchronous-message', {id:'lol-match-history', user: summonerName, begIndex: 0, endIndex: 9})
+      } else {
+        ipcRenderer.send('asynchronous-message', {id:'current-ranked-stats'})
+        ipcRenderer.send('asynchronous-message', {id:'current-summoner', begIndex: 0, endIndex: 9})
+      }
+    },
+    getQueueName(queueId){
+      return this.queueIds[queueId] != "" ? this.queueIds[queueId] : "Custom"
     }
   },
   created: function () {
@@ -84,19 +96,37 @@ export default {
         this.showError = true
         return
       } else {
+        if(data.reply_type == "lcu-disonnceted")
         this.showError = false
+      }
+
+      // Auth and Reload.. 
+      switch(data.reply_type) {
+        case "lcu-disonnceted": {
+          this.showError = true
+          break
+        }
+        case "lcu-reconnected": {
+          if(this.showError){
+            window.location.reload()
+          }
+          break
+        }
       }
 
       // Valid reply handlers
       switch(data.reply_type){
-        case "current-summoner": {
-          this.matches = data.games.games
+        case "lcu-reconnected": {
+          if(this.showError)
+            window.location.reload()
           break
         }
+        case "current-summoner":
         case "lol-match-history": {
           this.matches = data.games.games
           break
         }
+        case "current-ranked-stats":
         case "lol-ranked-stats": {
           this.playerCardInfo = data
           break
@@ -116,11 +146,7 @@ export default {
     }
 
 
-    if(this.$route.params.summonerSearch == undefined || this.$route.params.summonerSearch == ""){
-      this.searchSummoner("Cropster")
-    } else if(this.$route.params.submitSearch == "true"){
-      this.searchSummoner(this.$route.params.summonerSearch)
-    }
+    this.searchSummoner(this.$route.params.summonerSearch)
 
     ipcRenderer.on('asynchronous-reply', this.ondata)
 

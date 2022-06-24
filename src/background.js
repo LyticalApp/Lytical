@@ -110,6 +110,7 @@ function errorHandler(errorCode, event) {
     case "ECONNREFUSED":
     case "0": {
       // Auth == NULL
+      lcu.setAuth(null)
       event.reply('asynchronous-reply', { reply_type: "lcu-disonnceted" })
       break
     }
@@ -127,6 +128,7 @@ function errorHandler(errorCode, event) {
       // GOOD REQUEST. BAD RESPONSE
       // e.g. checking lobby status when
       // no lobby exists. Just do nothing..
+      event.reply('asynchronous-reply', { reply_type: "lcu-reconnected" })
       break
     }
     default: {
@@ -154,103 +156,120 @@ function getPlayerDataByName(name, auth) {
 
 ipcMain.on('asynchronous-message', (event, req) => {
   lcu.getLCUAuth().then(auth => {
-    switch (req.id) {
-      case "current-summoner": {
-        request.requestURL(
-          auth,
-          "/lol-match-history/v1/products/lol/current-summoner/matches?begIndex=0&endIndex=5"
-        ).then((data) => {
-          event.reply('asynchronous-reply', createReply(data, req.id))
-        }).catch(error => errorHandler(error, event))
-        break;
-      }
-      case "lol-lobby-playercard": {
-        let rankedData = null
-        request.requestURL(
-          auth,
-          `/lol-summoner/v1/summoners/${req.summonerId}`
-        ).then(summoner => {
-          summoner = JSON.parse(summoner)
-          request.requestURL(
-            auth,
-            `/lol-ranked/v1/ranked-stats/${summoner.puuid}`
-          ).then(
-            (rankedD) => {
-              rankedData = JSON.parse(rankedD)
-              rankedData.username = summoner.displayName
+      switch (req.id) {
+          case "current-summoner": {
               request.requestURL(
-                auth,
-                `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=9`
-              ).then(
-                (matchHistory) => {
-                  rankedData.matchHistory = JSON.parse(matchHistory)
-                  event.reply('asynchronous-reply', createReply(rankedData, req.id))
-                })
-            })
-        }).catch(error => errorHandler(error, event))
-        break;
+                  auth,
+                  `/lol-match-history/v1/products/lol/current-summoner/matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`
+              ).then((data) => {
+                  event.reply('asynchronous-reply', createReply(data, req.id))
+              }).catch(error => errorHandler(error, event))
+              break;
+          }
+          case "current-ranked-stats": {
+              request.requestURL(
+                  auth,
+                  `/lol-summoner/v1/current-summoner`
+              ).then((summoner) => {
+                  summoner = JSON.parse(summoner)
+                  request.requestURL(
+                      auth,
+                      `/lol-ranked/v1/current-ranked-stats`
+                  ).then((rankData) => {
+                      rankData = JSON.parse(rankData)
+                      rankData.summonerData = summoner
+                      rankData.username = summoner.displayName
+                      event.reply('asynchronous-reply', createReply(rankData, req.id))
+                  })
+              }).catch(error => errorHandler(error, event))
+              break;
+          }
+          case "lol-lobby-playercard": {
+              let rankedData = null
+              request.requestURL(
+                  auth,
+                  `/lol-summoner/v1/summoners/${req.summonerId}`
+              ).then(summoner => {
+                  summoner = JSON.parse(summoner)
+                  request.requestURL(
+                      auth,
+                      `/lol-ranked/v1/ranked-stats/${summoner.puuid}`
+                  ).then(
+                      (rankedD) => {
+                          rankedData = JSON.parse(rankedD)
+                          rankedData.username = summoner.displayName
+                          request.requestURL(
+                              auth,
+                              `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=9`
+                          ).then(
+                              (matchHistory) => {
+                                  rankedData.matchHistory = JSON.parse(matchHistory)
+                                  event.reply('asynchronous-reply', createReply(rankedData, req.id))
+                              })
+                      })
+              }).catch(error => errorHandler(error, event))
+              break;
+          }
+          case "get-auth-token": {
+              // Used for keepalive / check the status of auth data
+              // because it's a fast request.
+              request.requestURL(
+                  auth,
+                  "/riotclient/auth-token"
+              ).catch(error => errorHandler(error, event))
+              break;
+          }
+          case "lol-champ-select": {
+              request.requestURL(
+                  auth,
+                  "/lol-champ-select/v1/session"
+              ).then((data) => {
+                  event.reply('asynchronous-reply', createReply(data, req.id))
+              }).catch(error => errorHandler(error, event))
+              break;
+          }
+          case "lol-match-details": {
+              request.requestURL(
+                  auth,
+                  `/lol-match-history/v1/games/${req.gameId}`
+              ).then((data) => {
+                  event.reply('asynchronous-reply', createReply(data, req.id))
+              }).catch(error => errorHandler(error, event))
+              break;
+          }
+          case "lol-summoner-name": {
+              getPlayerDataByName(req.user, auth).then(
+                  data => event.reply('asynchronous-reply', createReply(data, req.id))
+              ).catch(error => errorHandler(error, event))
+              break;
+          }
+          case "lol-ranked-stats": {
+              getPlayerDataByName(req.user, auth).then(summoner => {
+                  request.requestURL(
+                      auth,
+                      `/lol-ranked/v1/ranked-stats/${summoner.puuid}`
+                  ).then(
+                      (rankData) => {
+                          rankData = JSON.parse(rankData)
+                          rankData.summonerData = summoner
+                          rankData.username = summoner.displayName
+                          event.reply('asynchronous-reply', createReply(rankData, req.id))
+                      })
+              }).catch(error => errorHandler(error, event))
+              break;
+          }
+          case "lol-match-history": {
+              getPlayerDataByName(req.user, auth).then(summoner => {
+                  request.requestURL(
+                      auth,
+                      `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`
+                  ).then(
+                      (matchHistory) => {
+                          event.reply('asynchronous-reply', createReply(matchHistory, req.id))
+                      })
+              }).catch(error => errorHandler(error, event))
+              break;
+          }
       }
-
-      case "get-auth-token": {
-        // Used for keepalive / check the status of auth data
-        // because it's a fast request.
-        request.requestURL(
-          auth,
-          "/riotclient/auth-token"
-        ).catch(error => errorHandler(error, event))
-        break;
-      }
-      case "lol-champ-select": {
-        request.requestURL(
-          auth,
-          "/lol-champ-select/v1/session"
-        ).then((data) => {
-          event.reply('asynchronous-reply', createReply(data, req.id))
-        }).catch(error => errorHandler(error, event))
-        break;
-      }
-      case "lol-match-details": {
-        request.requestURL(
-          auth,
-          `/lol-match-history/v1/games/${req.gameId}`
-        ).then((data) => {
-          event.reply('asynchronous-reply', createReply(data, req.id))
-        }).catch(error => errorHandler(error, event))
-        break;
-      }
-      case "lol-summoner-name": {
-        getPlayerDataByName(req.user, auth).then(
-          data => event.reply('asynchronous-reply', createReply(data, req.id))
-        ).catch(error => errorHandler(error, event))
-        break;
-      }
-      case "lol-ranked-stats": {
-        getPlayerDataByName(req.user, auth).then(summoner => {
-          request.requestURL(
-            auth,
-            `/lol-ranked/v1/ranked-stats/${summoner.puuid}`
-          ).then(
-            (rankData) => {
-              rankData = JSON.parse(rankData)
-              rankData.summonerData = summoner
-              rankData.username = summoner.displayName
-              event.reply('asynchronous-reply', createReply(rankData, req.id))
-            })
-        }).catch(error => errorHandler(error, event))
-        break;
-      }
-      case "lol-match-history": {
-        getPlayerDataByName(req.user, auth).then(summoner => {
-          request.requestURL(
-            auth,
-            `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`
-          ).then(
-            (matchHistory) => {
-              event.reply('asynchronous-reply', createReply(matchHistory, req.id))
-            })
-        }).catch(error => errorHandler(error, event))
-        break;
-      }
-    }
   })
 })

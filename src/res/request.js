@@ -22,7 +22,7 @@ exports.requestURL = async (auth, path, postData = null) => {
             }
         }
 
-        console.log(options.method, auth.protocol + '://' + options.hostname + options.port + options.path)
+        console.log(options.method, `${auth.protocol}://${options.hostname}:${options.port}${options.path}`)
 
         var body = '';
 

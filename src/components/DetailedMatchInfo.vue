@@ -13,9 +13,9 @@
             </tr>
             <tr v-for="(participant,index) in matchDetails.participants" :key=index :class='`${participant.stats.win ? "Victory" : "Defeat"}`'>
                <td>
-                  <div className="aligned">
+                  <div className="aligned summonername">
                      <img style="width:20px;vertical-align:bottom;" :src="CHAMPIONICONURL + participant.championId + '.png'" />
-                     {{matchDetails.participantIdentities[index].player.summonerName}}
+                     <span :title="matchDetails.participantIdentities[index].player.summonerName">{{matchDetails.participantIdentities[index].player.summonerName}}</span>
                   </div>
                </td>
                <td>
@@ -99,6 +99,12 @@ table {
   padding:10px;
   width:100%;
   border:none;
+}
+.summonername {
+   white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 150px !important;
 }
 td{
   padding:0px;

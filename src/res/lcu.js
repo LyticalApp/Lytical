@@ -3,59 +3,54 @@ const fs = require('fs');
 let auth = null;
 
 exports.getLeagueDirectory = async () => {
+
+
+    //https://github.com/matsjla/league-connect/blob/master/src/authentication.ts
+    const portRegex = /--app-port=([0-9]+)/
+    const passwordRegex = /--remoting-auth-token=([\w-_]+)/
+    const pidRegex = /--app-pid=([0-9]+)/
+
     const { exec } = require('child_process')
     return new Promise(function (resolve, reject) {
-        exec('Get-CimInstance Win32_Process -Filter "name = \'LeagueClient.exe\'" | Select-Object -Property CommandLine | ft -HideTableHeaders',
+        exec('Get-CimInstance Win32_Process -Filter "name = \'LeagueClientUx.exe\'" | Select-Object -Property CommandLine | ft -HideTableHeaders | out-string -Width 4096',
             { 'shell': 'powershell.exe' }, (error, stdout) => {
                 if (error) {
                     reject(error)
                 }
-                let parts = stdout.split('"').filter(v => v != '');
-                if (parts.length > 0) {
-                    // Get Path of the LeagueClientUx.exe process
-                    // example C:/Riot Games/League of Legends/
-                    resolve(parts[1].replace("LeagueClient.exe", ""))
-                } else {
-                    // didn't get a path
+                try {
+
+                    const pid = stdout.match(pidRegex)[1]
+                    const password = stdout.match(passwordRegex)[1]
+                    const port = stdout.match(portRegex)[1]
+
+                    resolve({
+                        "name": "riot",
+                        "protocol": "https",
+                        "pid": pid,
+                        "port": port,
+                        "password": password,
+                    })
+
+                } catch (e) {
                     reject()
                 }
             })
     })
 }
 
-// Expose auth setter for errors aka lcu needs to reauthenticate
-exports.setAuth = function(d){
+exports.setAuth = function (d) {
     auth = d
 }
 
 exports.getLCUAuth = async () => {
-    if(auth != null){
-        //We're already authenticated
+    if (auth) {
         return auth
     }
-
-    let path = null;
-
     try {
-        path = await this.getLeagueDirectory()
-    } catch(e){
+        auth = await this.getLeagueDirectory()
+        return auth
+    } catch (e) {
         console.log("ERR: Game is not running..")
         return null
     }
-    
-    try {
-        //example LeagueClient:3272:55961:x15zkwb3fgovhgzklv4Hqg:https
-        let data = fs.readFileSync(path + "lockfile", 'utf8').split(":")
-        auth = {
-            "name": data[0],
-            "pid": data[1],
-            "port": data[2],
-            "password": data[3],
-            "protocol": data[4]
-        }
-        return auth
-    } catch (err) {
-        console.log(err)
-    }
-    return null
 }
