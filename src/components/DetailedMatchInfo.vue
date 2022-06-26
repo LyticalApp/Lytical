@@ -4,7 +4,7 @@
       <table cellspacing=0 style="marginLeft: '11px'">
          <tbody className="divTableCell">
             <tr style="backgroundColor: '#101718'">
-               <td style="padding: '10px'">{{matchDetails.result}} (Red Team)</td>
+               <td style="padding: '10px'">(Red Team)</td>
                <td>KDA</td>
                <td>Damage</td>
                <td>Wards</td>
@@ -14,38 +14,42 @@
             <tr v-for="(participant,index) in matchDetails.participants" :key=index :class='`${participant.stats.win ? "Victory" : "Defeat"}`'>
                <td>
                   <div className="aligned summonername">
-                     <img style="width:20px;vertical-align:bottom;" :src="CHAMPIONICONURL + participant.championId + '.png'" />
-                     <span :title="matchDetails.participantIdentities[index].player.summonerName">{{matchDetails.participantIdentities[index].player.summonerName}}</span>
+                     <img style="width:25px;border-radius:50%;" :src="CHAMPIONICONURL + participant.championId + '.png'" />
+                     <span style="    top: 4px;position:relative;left:-25px;font-size:12px;background-color:rgba(8, 8, 8, 0.95);border-radius:50%;">
+                        {{formatLevelBulb(participant.stats.champLevel)}}
+                     </span>
+                     <span :title="matchDetails.participantIdentities[index].player.summonerName" style="left: 50px;height: fit-content;position: absolute;margin-top: 3px;">{{formatName(matchDetails.participantIdentities[index].player.summonerName)}}</span>
                   </div>
                </td>
                <td>
                   {{participant.stats.kills}}/{{participant.stats.deaths}}/{{participant.stats.assists}}
                </td>
                <td>
-                  <progress style="width:40px;"
+                  <div class="w3-border" style="float:left;width:40px;display:inline-block;">
+                     <div 
                      :title="participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')"
-                     :value="participant.stats.totalDamageDealtToChampions/calcTotalDamage(index)*1.5">
-                  </progress>
+                     class="w3-grey" :style="{ height:'10px', width: participant.stats.totalDamageDealtToChampions/calcTotalDamage(index)*150+'%'}"></div>
+                  </div>
                   <span style="padding:10px;">{{(participant.stats.totalDamageDealtToChampions/calcTotalDamage(index)*100).toFixed(0)}}%</span>
                </td>
                <td>
                   <div class="wardText">
                      {{participant.stats.visionWardsBoughtInGame}}
                      <br>
-                     {{participant.stats.wardsPlaced}} / {{participant.stats.wardsKilled}}
+                     {{participant.stats.wardsPlaced}}/{{participant.stats.wardsKilled}}
                   </div>
                </td>
                <td>
                   {{participant.stats.totalMinionsKilled + participant.stats.neutralMinionsKilled}}
                </td>
                <td>
-                  <img :src="participant.stats.item1 > 0 ? ITEMICONURL + participant.stats.item1 + '.png' : './assets/0.png'" />
-                  <img :src="participant.stats.item0 > 0 ? ITEMICONURL + participant.stats.item0 + '.png' : './assets/0.png'" />
-                  <img :src="participant.stats.item2 > 0 ? ITEMICONURL + participant.stats.item2 + '.png' : './assets/0.png'" />
-                  <img :src="participant.stats.item3 > 0 ? ITEMICONURL + participant.stats.item3 + '.png' : './assets/0.png'" />
-                  <img :src="participant.stats.item4 > 0 ? ITEMICONURL + participant.stats.item4 + '.png' : './assets/0.png'" />
-                  <img :src="participant.stats.item5 > 0 ? ITEMICONURL + participant.stats.item5 + '.png' : './assets/0.png'" />
-                  <img :src="participant.stats.item6 > 0 ? ITEMICONURL + participant.stats.item6 + '.png' : './assets/0.png'" />
+                  <img :src="participant.stats.item1 > 0 ? ITEMICONURL + participant.stats.item1 + '.png' : './assets/0.png'" class="thumbround" />
+                  <img :src="participant.stats.item0 > 0 ? ITEMICONURL + participant.stats.item0 + '.png' : './assets/0.png'" class="thumbround"/>
+                  <img :src="participant.stats.item2 > 0 ? ITEMICONURL + participant.stats.item2 + '.png' : './assets/0.png'" class="thumbround"/>
+                  <img :src="participant.stats.item3 > 0 ? ITEMICONURL + participant.stats.item3 + '.png' : './assets/0.png'" class="thumbround"/>
+                  <img :src="participant.stats.item4 > 0 ? ITEMICONURL + participant.stats.item4 + '.png' : './assets/0.png'" class="thumbround"/>
+                  <img :src="participant.stats.item5 > 0 ? ITEMICONURL + participant.stats.item5 + '.png' : './assets/0.png'" class="thumbround"/>
+                  <img :src="participant.stats.item6 > 0 ? ITEMICONURL + participant.stats.item6 + '.png' : './assets/0.png'" class="thumbround"/>
                </td>
             </tr>
          </tbody>
@@ -86,6 +90,16 @@ export default {
         }
 
         return totalDamage
+      },
+      formatLevelBulb(level){
+         level = String(level)
+         return (level.length < 2) ? "0" + String(level) : level
+      },
+      formatName(name){
+         if(name.length > 10){
+            return name.substring(0,9) + "…"
+         }
+         return name
       }
     }
 }
@@ -94,7 +108,20 @@ export default {
 
 </script>
 <style scoped>
+
+.w3-border {
+   border-radius:1px;
+   background-color: rgba(198, 194, 194, 0.3);
+}
+.w3-grey {
+   border-radius:1px;
+    background-color:#adb6c4;
+}
+.thumbround {
+  border-radius:4px;
+}
 table {
+  font-family: 'Fira Code', monospace;
   border-radius: 4px;
   padding:10px;
   width:100%;
@@ -102,11 +129,12 @@ table {
 }
 .summonername {
    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 150px !important;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   width: 150px !important;
+   margin: auto;
 }
-td{
+td{vertical-align:middle;
   padding:0px;
 }
 .wardText {
@@ -125,8 +153,8 @@ td{
   vertical-align:bottom;
 }
 .aligned {
-  padding-left:10px;
   width: max-content;
+  vertical-align:top;
   text-align:left;
 }
 th:first-child {

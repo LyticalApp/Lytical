@@ -15,6 +15,29 @@
             <input v-model=summonerSearch type="text" class="inputbox" placeholder="🔍 Search">
         </form>
     </div>
+    <!-- Settings Menu -->
+    <div style="position:absolute;right:0px;">
+    <button @click="showModal = !showModal">Settings</button>
+        </div>
+    </div>
+    <div v-show="showModal" class="myModal">
+        <div style="left:50%;margin:auto;">
+            <h1>Settings</h1>
+            <table style="left:50%;margin:auto; background-color:black;">
+                <td>Option Name</td><td>State</td>
+<tr>
+                <td>Automaticly switch to lobby</td><td>
+                <input @click="storeSetting($event,'autoSwitchLobby')" type="checkbox"
+                :checked="getSetting('autoSwitchLobby')"></td>
+                 </tr><tr>
+                <td>Option Name</td><td>State</td>
+                 </tr><tr>
+                <td>Option Name</td><td>State</td>
+                </tr><tr>
+                <td>Option Name</td><td>State</td>
+                </tr>
+            </table>
+        </div>
     </div>
 </template>
 
@@ -22,9 +45,14 @@
 const { ipcRenderer } = require('electron')
     export default {
         name: "NavBar",
+        mounted() {
+            this.mounted = true;
+        },
         data() {
             return {
+                mounted: false,
                 underlineHome: true,
+                showModal: false,
                 underlineLobby: false,
                 summonerSearch: "",
             }
@@ -37,6 +65,16 @@ const { ipcRenderer } = require('electron')
                 ipcRenderer.send('asynchronous-message', {id:'lol-ranked-stats', user: this.summonerSearch})
                 ipcRenderer.send('asynchronous-message', {id:'lol-match-history', user: this.summonerSearch, begIndex: 0, endIndex: 9})
             },
+            storeSetting(event,setting){
+                console.log(setting, event.target.checked)
+                localStorage.setItem(setting, event.target.checked)
+            },
+            getSetting(setting){
+                if(this.mounted)
+                    return localStorage.getItem(setting)
+                else
+                    return false
+            }
         },
         watch:{
             $route (){
@@ -58,6 +96,14 @@ const { ipcRenderer } = require('electron')
 </script>
 
 <style scoped>
+.myModal{
+    height:100vh;
+    width:100%;
+    background:grey;
+}
+.myModal td {
+    padding:10px;
+}
 input[type=text], select {
   width: 100%;
   padding: 12px 20px;

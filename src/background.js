@@ -107,23 +107,7 @@ function errorHandler(errorCode, event) {
   console.log("ERRORCODE: ", errorCode)
   errorCode = String(errorCode)
   switch (errorCode) {
-    case "ECONNREFUSED":
-    case "0": {
-      // Auth == NULL
-      lcu.setAuth(null)
-      event.reply('asynchronous-reply', { reply_type: "lcu-disonnceted" })
-      break
-    }
-    case "400": {
-      // BAD REQUST
-
-      break
-    }
-    case "403": {
-      // AUTH INVALID / AUTH FAILED
-      lcu.setAuth(null)
-      break
-    }
+    case "400":
     case "404": {
       // GOOD REQUEST. BAD RESPONSE
       // e.g. checking lobby status when
@@ -131,8 +115,12 @@ function errorHandler(errorCode, event) {
       event.reply('asynchronous-reply', { reply_type: "lcu-reconnected" })
       break
     }
+    case "403":
+    case "ECONNREFUSED":
+    case "0":
     default: {
       // Unhadled Error..
+      lcu.setAuth(null)
       event.reply('asynchronous-reply', { reply_type: "lcu-disonnceted" })
       break;
     }

@@ -54,14 +54,14 @@
               <td>
                 <!-- Items -->
                 <table>
-                    <td style="padding:0px;"><img :src="data.participants[0].stats.item0 > 0 ? itemURL+data.participants[0].stats.item0+'.png' : './assets/0.png'" class='thumbicon'></td>
-                    <td style="padding:0px;"><img :src="data.participants[0].stats.item1 > 0 ? itemURL+data.participants[0].stats.item1+'.png' : './assets/0.png'" class='thumbicon'></td>
-                    <td style="padding:0px;"><img :src="data.participants[0].stats.item2 > 0 ? itemURL+data.participants[0].stats.item2+'.png' : './assets/0.png'" class='thumbicon'></td>
-                    <td style="padding:0px;"><img :src="data.participants[0].stats.item3 > 0 ? itemURL+data.participants[0].stats.item3+'.png' : './assets/0.png'" class='thumbicon'></td>
+                    <td style="padding:0px;"><img :src="data.participants[0].stats.item0 > 0 ? itemURL+data.participants[0].stats.item0+'.png' : './assets/0.png'" class='thumbicon thumbround'></td>
+                    <td style="padding:0px;"><img :src="data.participants[0].stats.item1 > 0 ? itemURL+data.participants[0].stats.item1+'.png' : './assets/0.png'" class='thumbicon thumbround'></td>
+                    <td style="padding:0px;"><img :src="data.participants[0].stats.item2 > 0 ? itemURL+data.participants[0].stats.item2+'.png' : './assets/0.png'" class='thumbicon thumbround'></td>
+                    <td style="padding:0px;"><img :src="data.participants[0].stats.item3 > 0 ? itemURL+data.participants[0].stats.item3+'.png' : './assets/0.png'" class='thumbicon thumbround'></td>
                     <tr>
-                      <td style="padding:0px;"><img :src="data.participants[0].stats.item4 > 0 ? itemURL+data.participants[0].stats.item4+'.png' : './assets/0.png'" class='thumbicon'></td>
-                      <td style="padding:0px;"><img :src="data.participants[0].stats.item5 > 0 ? itemURL+data.participants[0].stats.item5+'.png' : './assets/0.png'" class='thumbicon'></td>
-                      <td style="padding:0px;"><img :src="data.participants[0].stats.item6 > 0 ? itemURL+data.participants[0].stats.item6+'.png' : './assets/0.png'" class='thumbicon'></td>
+                      <td style="padding:0px;"><img :src="data.participants[0].stats.item4 > 0 ? itemURL+data.participants[0].stats.item4+'.png' : './assets/0.png'" class='thumbicon thumbround'></td>
+                      <td style="padding:0px;"><img :src="data.participants[0].stats.item5 > 0 ? itemURL+data.participants[0].stats.item5+'.png' : './assets/0.png'" class='thumbicon thumbround'></td>
+                      <td style="padding:0px;"><img :src="data.participants[0].stats.item6 > 0 ? itemURL+data.participants[0].stats.item6+'.png' : './assets/0.png'" class='thumbicon thumbround'></td>
                     </tr>
                 </table>
                 <span style="font-size:8px;">Control Wards {{data.participants[0].stats.visionWardsBoughtInGame}}</span>
