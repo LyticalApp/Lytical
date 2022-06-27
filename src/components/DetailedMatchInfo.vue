@@ -15,7 +15,7 @@
                <td>
                   <div className="aligned summonername">
                      <img style="width:25px;border-radius:50%;" :src="CHAMPIONICONURL + participant.championId + '.png'" />
-                     <span style="    top: 4px;position:relative;left:-25px;font-size:12px;background-color:rgba(8, 8, 8, 0.95);border-radius:50%;">
+                     <span style="top: 4px;position:relative;left:-25px;font-size:12px;background-color:rgba(8, 8, 8, 0.95);border-radius:50%;">
                         {{formatLevelBulb(participant.stats.champLevel)}}
                      </span>
                      <span :title="matchDetails.participantIdentities[index].player.summonerName" style="left: 50px;height: fit-content;position: absolute;margin-top: 3px;">{{formatName(matchDetails.participantIdentities[index].player.summonerName)}}</span>
@@ -24,8 +24,8 @@
                <td>
                   {{participant.stats.kills}}/{{participant.stats.deaths}}/{{participant.stats.assists}}
                </td>
-               <td>
-                  <div class="w3-border" style="float:left;width:40px;display:inline-block;">
+               <td style="padding-left:10px;">
+                  <div class="w3-border" style="float:left;width:40px;display:inline-block;margin-top:4px;">
                      <div 
                      :title="participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')"
                      class="w3-grey" :style="{ height:'10px', width: participant.stats.totalDamageDealtToChampions/calcTotalDamage(index)*150+'%'}"></div>
