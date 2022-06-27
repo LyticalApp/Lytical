@@ -135,8 +135,8 @@ export default {
           // We switch to the other view for
           // pregame lobbies which will
           // display player cards for each player
-          console.log("DEBUG:",localStorage.getItem('autoSwitchLobby'))
-          if(localStorage.getItem('autoSwitchLobby') != false){
+          console.log("DEBUG:",localStorage.autoSwitchLobby)
+          if(localStorage.autoSwitchLobby === "true" || localStorage.autoSwitchLobby === undefined){
             this.$router.push("pregame")
           }
           break
@@ -147,7 +147,6 @@ export default {
         }
       }
     }
-
 
     this.searchSummoner(this.$route.params.summonerSearch)
 
