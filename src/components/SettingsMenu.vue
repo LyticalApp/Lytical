@@ -41,6 +41,7 @@
             }
         },
         watch:{
+            // Keep local storage in sync
             autoSwitchLobby(state){
                 localStorage.setItem('autoSwitchLobby',state)
             },

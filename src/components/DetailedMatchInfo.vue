@@ -3,28 +3,48 @@
    <div className="divTable">
       <table cellspacing=0 style="marginLeft: '11px'">
          <tbody className="divTableCell">
-            <tr style="backgroundColor: '#101718'">
-               <td style="padding: '10px'">(Red Team)</td>
-               <td>KDA</td>
-               <td>Damage</td>
-               <td>Wards</td>
-               <td>CS</td>
-               <td>Items</td>
-            </tr>
-            <tr v-for="(participant,index) in matchDetails.participants" :key=index :class='`${participant.stats.win ? "Victory" : "Defeat"}`'>
-               <td>
-                  <div className="aligned summonername">
-                     <img style="width:25px;border-radius:50%;" :src="CHAMPIONICONURL + participant.championId + '.png'" />
-                     <span style="top: 4px;position:relative;left:-25px;font-size:12px;background-color:rgba(8, 8, 8, 0.95);border-radius:50%;">
+            <div v-for="(participant,index) in matchDetails.participants" :key=index :class='`${participant.stats.win ? "Victory" : "Defeat"}`'>
+            
+            <!-- Recap/Middle Scorecard -->
+            <div v-if="index == 5" style="width:100%;height:20px;background-color:black;">
+               <!-- team0 stats -->
+               <div id="team0" style="float:left;">
+                  <span><img :src="'./assets/turret.png'" style="opacity:0.6;"/>{{matchDetails.teams[0].towerKills}}</span>
+                  <span><img :src="'./assets/dragon.png'" style="opacity:0.6;padding-left:10px;"/>{{matchDetails.teams[0].dragonKills}}</span>
+                  <span><img :src="'./assets/baron.png'" style="opacity:0.6;padding-left:10px;"/>{{matchDetails.teams[0].baronKills}}</span>
+               </div>
+
+               <!-- Total Damage to Champions -->
+
+                  <div class="w3-border" style="float:left;width:190px;display:inline-block;margin-top:4px;">
+                     <div 
+                     :title="participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')"
+                     class="w3-red" :style="{ height:'10px', width: calcTotalDamage(0)/(calcTotalDamage(0)+calcTotalDamage(5))*100+'%'}">
+                     <span style="font-size:10px;display: inherit;line-height: 120%;">{{calcTotalDamage(0)}}</span>
+                     </div>
+                  </div>
+
+               <!-- team1 stats -->
+               <div id="team0" style="float:right;">
+                  <span><img :src="'./assets/turret.png'" style="opacity:0.6;"/>{{matchDetails.teams[1].towerKills}}</span>
+                  <span><img :src="'./assets/dragon.png'" style="opacity:0.6;padding-left:10px;"/>{{matchDetails.teams[1].dragonKills}}</span>
+                  <span><img :src="'./assets/baron.png'" style="opacity:0.6;padding-left:10px;"/>{{matchDetails.teams[1].baronKills}}</span>
+               </div>
+            </div>
+            
+            <!-- Normal Scoreboard Item for Player -->
+            <tr>
+               <td style="display:inline-block;">
+                     <img style="width:25px;height:25px;border-radius:50%;padding-bottom:4px;" :src="CHAMPIONICONURL + participant.championId + '.png'" />
+                     <span style="top:4px;position:relative;left:-25px;font-size:12px;background-color:rgba(8, 8, 8, 0.95);border-radius:50%;">
                         {{formatLevelBulb(participant.stats.champLevel)}}
                      </span>
-                     <span :title="matchDetails.participantIdentities[index].player.summonerName" style="left: 50px;height: fit-content;position: absolute;margin-top: 3px;">{{formatName(matchDetails.participantIdentities[index].player.summonerName)}}</span>
-                  </div>
+                        <div style="display:inline-block;width:110px;text-align:left;padding-top:4px;" class="summonername" :title="matchDetails.participantIdentities[index].player.summonerName">{{matchDetails.participantIdentities[index].player.summonerName}}</div>
                </td>
-               <td>
+               <td style="width:60px;">
                   {{participant.stats.kills}}/{{participant.stats.deaths}}/{{participant.stats.assists}}
                </td>
-               <td style="padding-left:10px;">
+               <td style="padding-left:10px;width:100px;">
                   <div class="w3-border" style="float:left;width:40px;display:inline-block;margin-top:4px;">
                      <div 
                      :title="participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')"
@@ -32,17 +52,17 @@
                   </div>
                   <span style="padding:10px;">{{(participant.stats.totalDamageDealtToChampions/calcTotalDamage(index)*100).toFixed(0)}}%</span>
                </td>
-               <td>
+               <td style="width:40px;">
                   <div class="wardText">
                      {{participant.stats.visionWardsBoughtInGame}}
                      <br>
                      {{participant.stats.wardsPlaced}}/{{participant.stats.wardsKilled}}
                   </div>
                </td>
-               <td>
+               <td style="width:40px;">
                   {{participant.stats.totalMinionsKilled + participant.stats.neutralMinionsKilled}}
                </td>
-               <td>
+               <td style="padding-left:10px;">
                   <img :src="participant.stats.item1 > 0 ? ITEMICONURL + participant.stats.item1 + '.png' : './assets/0.png'" class="thumbround" />
                   <img :src="participant.stats.item0 > 0 ? ITEMICONURL + participant.stats.item0 + '.png' : './assets/0.png'" class="thumbround"/>
                   <img :src="participant.stats.item2 > 0 ? ITEMICONURL + participant.stats.item2 + '.png' : './assets/0.png'" class="thumbround"/>
@@ -52,6 +72,7 @@
                   <img :src="participant.stats.item6 > 0 ? ITEMICONURL + participant.stats.item6 + '.png' : './assets/0.png'" class="thumbround"/>
                </td>
             </tr>
+            </div>
          </tbody>
       </table>
    </div>
@@ -95,12 +116,6 @@ export default {
          level = String(level)
          return (level.length < 2) ? "0" + String(level) : level
       },
-      formatName(name){
-         if(name.length > 10){
-            return name.substring(0,9) + "…"
-         }
-         return name
-      }
     }
 }
 
@@ -117,22 +132,24 @@ export default {
    border-radius:1px;
     background-color:#adb6c4;
 }
+.w3-red {
+   border-radius:1px;
+   background-color:#8d3f3f;
+}
+.
 .thumbround {
   border-radius:4px;
-}
-table {
-  font-family: 'Fira Code', monospace;
-  border-radius: 4px;
-  padding:10px;
-  width:100%;
-  border:none;
 }
 .summonername {
    white-space: nowrap;
    overflow: hidden;
    text-overflow: ellipsis;
-   width: 150px !important;
-   margin: auto;
+}
+table {
+  border-radius: 4px;
+  padding:10px;
+  width:100%;
+  border:none;
 }
 td{vertical-align:middle;
   padding:0px;
@@ -157,6 +174,7 @@ td{vertical-align:middle;
   vertical-align:top;
   text-align:left;
 }
+
 th:first-child {
     -moz-border-radius: 6px 0 0 0;
     -webkit-border-radius: 6px 0 0 0;
