@@ -22,6 +22,7 @@
           <MatchHistoryItem v-for="match in matches"
               :key=match.gameId
               :data=match 
+              :summonerName=playerCardInfo.username
               :champion_name=championIds[match.participants[0].championId]
               :queue=getQueueName(match.queueId)
               />
@@ -67,9 +68,11 @@ export default {
   methods: {
     searchSummoner(summonerName){
       if(summonerName != undefined && summonerName != ""){
+        // Searchbar name
         ipcRenderer.send('asynchronous-message', {id:'lol-ranked-stats', user: summonerName})
         ipcRenderer.send('asynchronous-message', {id:'lol-match-history', user: summonerName, begIndex: 0, endIndex: 9})
       } else {
+        // Current summoner from LCU
         ipcRenderer.send('asynchronous-message', {id:'current-ranked-stats'})
         ipcRenderer.send('asynchronous-message', {id:'current-summoner', begIndex: 0, endIndex: 9})
       }

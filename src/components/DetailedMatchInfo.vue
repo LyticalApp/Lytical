@@ -6,37 +6,39 @@
             <div v-for="(participant,index) in matchDetails.participants" :key=index :class='`${participant.stats.win ? "Victory" : "Defeat"}`'>
             
             <!-- Recap/Middle Scorecard -->
-            <div v-if="index == 5" style="width:100%;height:20px;background-color:black;">
-               <!-- team0 stats -->
-               <div id="team0" style="float:left;">
-                  <span><img :src="'./assets/turret.png'" style="opacity:0.6;"/>{{matchDetails.teams[0].towerKills}}</span>
-                  <span><img :src="'./assets/dragon.png'" style="opacity:0.6;padding-left:10px;"/>{{matchDetails.teams[0].dragonKills}}</span>
-                  <span><img :src="'./assets/baron.png'" style="opacity:0.6;padding-left:10px;"/>{{matchDetails.teams[0].baronKills}}</span>
+            <div v-if="index == 5" class="middle-wrapper">
+               <!-- top team stats -->
+               <div id="ourteam" style="float:left;">
+                  <span><img :src="'./assets/baron.png'" class="middle-icon"/>{{matchDetails.teams[getTeamId(0)].baronKills}}</span>
+                  <span><img :src="'./assets/dragon.png'" class="middle-icon" style="padding-left:10px;"/>{{matchDetails.teams[getTeamId(0)].dragonKills}}</span>
+                  <span><img :src="'./assets/turret.png'" class="middle-icon" style="padding-left:10px;"/>{{matchDetails.teams[getTeamId(0)].towerKills}}</span>
                </div>
 
                <!-- Total Damage to Champions -->
 
-                  <div class="w3-border" style="float:left;width:190px;display:inline-block;margin-top:4px;">
+                  <div :class='`${participant.stats.win ? "Victory" : "Defeat"}`' style="width:190px;display:inline-block;margin-top:4px;">
                      <div 
                      :title="participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')"
-                     class="w3-red" :style="{ height:'10px', width: calcTotalDamage(0)/(calcTotalDamage(0)+calcTotalDamage(5))*100+'%'}">
-                     <span style="font-size:10px;display: inherit;line-height: 120%;">{{calcTotalDamage(0)}}</span>
+                     :class='`${participant.stats.win ? "Defeat" : "Victory"}`' :style="{ height:'10px', width: calcTotalDamage(0)/(calcTotalDamage(0)+calcTotalDamage(5))*100+'%'}">
+                     <span style="font-size:10px;display: inherit;line-height: 120%;">{{calcTotalDamage(0).toLocaleString('en-US')}}</span>
                      </div>
                   </div>
 
                <!-- team1 stats -->
-               <div id="team0" style="float:right;">
-                  <span><img :src="'./assets/turret.png'" style="opacity:0.6;"/>{{matchDetails.teams[1].towerKills}}</span>
-                  <span><img :src="'./assets/dragon.png'" style="opacity:0.6;padding-left:10px;"/>{{matchDetails.teams[1].dragonKills}}</span>
-                  <span><img :src="'./assets/baron.png'" style="opacity:0.6;padding-left:10px;"/>{{matchDetails.teams[1].baronKills}}</span>
+               <div id="enemyteam" style="float:right;">
+                  <span><img :src="'./assets/baron.png'" class="middle-icon"/>{{matchDetails.teams[getTeamId(5)].baronKills}}</span>
+                  <span><img :src="'./assets/dragon.png'" class="middle-icon" style="padding-left:10px;"/>{{matchDetails.teams[getTeamId(5)].dragonKills}}</span>
+                  <span><img :src="'./assets/turret.png'" class="middle-icon" style="padding-left:10px;"/>{{matchDetails.teams[getTeamId(5)].towerKills}}</span>
                </div>
             </div>
             
+            <div class="normalScoreboard">
+
             <!-- Normal Scoreboard Item for Player -->
             <tr>
                <td style="display:inline-block;">
                      <img style="width:25px;height:25px;border-radius:50%;padding-bottom:4px;" :src="CHAMPIONICONURL + participant.championId + '.png'" />
-                     <span style="top:4px;position:relative;left:-25px;font-size:12px;background-color:rgba(8, 8, 8, 0.95);border-radius:50%;">
+                     <span style="position:relative;left:-25px;font-size:12px;background-color:rgba(8, 8, 8, 0.95);border-radius:50%;">
                         {{formatLevelBulb(participant.stats.champLevel)}}
                      </span>
                         <div style="display:inline-block;width:110px;text-align:left;padding-top:4px;" class="summonername" :title="matchDetails.participantIdentities[index].player.summonerName">{{matchDetails.participantIdentities[index].player.summonerName}}</div>
@@ -73,6 +75,7 @@
                </td>
             </tr>
             </div>
+            </div>
          </tbody>
       </table>
    </div>
@@ -92,6 +95,7 @@ export default {
           default: "http://ddragon.leagueoflegends.com/cdn/12.6.1/img/item/"
         },
         matchDetails: {
+         // The order of the teams is done in MatchHistoryItem
           type: Object
         }
     },
@@ -116,6 +120,12 @@ export default {
          level = String(level)
          return (level.length < 2) ? "0" + String(level) : level
       },
+      getTeamId(index){
+         if(this.matchDetails.participants[index].teamId == 100){
+            return 0
+         }
+         else return 1
+      }
     }
 }
 
@@ -123,17 +133,25 @@ export default {
 
 </script>
 <style scoped>
-
+.middle-wrapper {
+   width:100%;
+   height:20px;
+   background-color:black;
+   padding-top:4px;
+   padding-bottom:4px;
+}
 .w3-border {
-   border-radius:1px;
    background-color: rgba(198, 194, 194, 0.3);
 }
+.middle-icon{
+   height:15px !important;
+   width:15px !important;
+   opacity:0.6;
+}
 .w3-grey {
-   border-radius:1px;
     background-color:#adb6c4;
 }
 .w3-red {
-   border-radius:1px;
    background-color:#8d3f3f;
 }
 .
@@ -159,6 +177,10 @@ td{vertical-align:middle;
    font-size:12px;
    line-height:.9;
 }
+.normalScoreboard {
+        padding-left:3px;
+  padding-right:3px;
+}
 .Victory {
   background-color:#3b485e;
 }
@@ -168,6 +190,7 @@ td{vertical-align:middle;
 .divTable img{
   width:20px;
   vertical-align:bottom;
+  border-radius:4px;
 }
 .aligned {
   width: max-content;

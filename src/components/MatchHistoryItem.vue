@@ -93,6 +93,10 @@ export default {
         type: String,
         default: "Champion_Name"
     },
+    summonerName: {
+      type: String,
+      defeault: "Faker"
+    },
     queue: {
       type: String,
       default: "Undefined"
@@ -116,6 +120,24 @@ export default {
             case "lol-match-details": {
               if(data.gameId == this.data.gameId) {
                 this.matchDetails = data
+
+                //format team order based on whos profile we're on
+
+                let team0 = [
+                  data.participantIdentities[0].player.summonerName,
+                  data.participantIdentities[1].player.summonerName,
+                  data.participantIdentities[2].player.summonerName,
+                  data.participantIdentities[3].player.summonerName,
+                  data.participantIdentities[4].player.summonerName,
+                ]
+
+                if(!team0.includes(this.summonerName)){
+                  data.participantIdentities = data.participantIdentities.reverse()
+                  data.participants = data.participants.reverse()
+                }
+
+                this.matchDetails = data
+
                 ipcRenderer.removeListener('asynchronous-reply',this.matchListener)
               }
             }
