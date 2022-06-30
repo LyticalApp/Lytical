@@ -2,7 +2,7 @@
   <div v-show='showError' style="background-color:red">
     <h1>LCU Disconnected</h1>
   </div>
-  <div class="wrapper" v-show='!showError'>
+  <div class="wrapper">
     <table class="container" style="vertical-align: top;">
         <td>
           <div id="leftSideBar">
