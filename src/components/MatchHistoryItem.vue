@@ -3,14 +3,14 @@
     <table>
         <tbody>
           <tr>
-              <td style="width:100px;">
+              <td style="width:85px;text-align:left;">
                 <div>
                     <!-- Gamemode and Preview -->
-                    <span><b>{{queue}}</b></span>
+                    <span style="font-size:14px;"><b>{{queue}}</b></span>
                     <span style="font-size:10px;">{{sinceGame(Date.now()-data.gameCreation)}}</span>
-                    <div style="margin:auto;width:40px;border-top: 1px solid #5a4656;margin-top:4px;margin-bottom:4px;"></div>
-                    <span style="font-size:12px;">{{data.participants[0].stats.win ? "Victory" : "Defeat"}}</span>
-                    <span style="font-size:14px;">{{gameLengthHR(data.gameDuration)}}</span>
+                    <div style="width:40px;border-top: 1px solid #5a4656;margin-top:6px;margin-bottom:6px;"></div>
+                    <span style="font-size:12px;font-weight:bold;">{{data.participants[0].stats.win ? "Victory" : "Defeat"}}</span>
+                    <span style="font-size:12px;">{{gameLengthHR(data.gameDuration)}}</span>
                 </div>
               </td>
               <td>
@@ -20,6 +20,9 @@
                       <!-- 2x2 -->
                       <table style="display:inline;">
                           <td style="padding:0px;vertical-align:bottom;">
+                          <span style="position:absolute;left:115px;font-size:14px;background-color:#080808;border-radius:50%;margin-top:35px;padding:2px;">
+                           {{formatLevelBulb(data.participants[0].stats.champLevel)}}
+                           </span>
                             <img :src="'http://ddragon.leagueoflegends.com/cdn/12.9.1/img/champion/'+champion_name+'.png'" style="width:50px;height:50px;border-radius:50%;">
                           </td>
                           <td style="padding:0px;">
@@ -35,20 +38,24 @@
                             <img :src="'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/'+runeMap[data.participants[0].stats.perkSubStyle]" class='thumbicon thumbround'>
                           </td>
                       </table>
-                      <br>
-                      <span style="font-size:8px;">{{champion_name}}</span>
                     </div>
                 </div>
               </td>
-              <td>
+              <td style="width:80px;">
                 <!-- K/D/A -->
-                <span>K/D/A</span>
-                <span>{{data.participants[0].stats.kills}} / {{data.participants[0].stats.deaths}} / {{data.participants[0].stats.assists}}</span>
+                <div>
+                  <span style="font-weight:bold;display:inline-block;color:#fff;">{{data.participants[0].stats.kills}}</span> / 
+                  <span style="font-weight:bold;display:inline-block;color:#e84057;">{{data.participants[0].stats.deaths}}</span> / 
+                  <span style="font-weight:bold;display:inline-block;color:#fff;">{{data.participants[0].stats.assists}}</span>
+                </div>
+                <span style="font-size:12px;">{{(data.participants[0].stats.kills + data.participants[0].stats.assists / data.participants[0].stats.kills).toFixed(2)}}:1 KDA</span>
               </td>
-              <td>
+              <td style="text-align:left;font-size:11px;width:80px;">
                 <!-- Personal Stats -->
-                <span>Level {{data.participants[0].stats.champLevel}}</span>
+                <span style="color:#e84057;">{{(data.participants[0].stats.totalDamageDealtToChampions/1000).toFixed(1)}}k Damage</span>
+                <span>Control Ward {{data.participants[0].stats.visionWardsBoughtInGame}}</span>
                 <span>{{totalCS()}} ({{(totalCS()/(data.gameDuration/60)).toFixed(1)}}) CS</span>
+                <span style="font-size:8px;font-weight:bold;">{{champion_name}}</span>
                 <!-- <span>P/Kill 10%</span> -->
               </td>
               <td>
@@ -64,7 +71,6 @@
                       <td style="padding:0px;"><img :src="data.participants[0].stats.item6 > 0 ? itemURL+data.participants[0].stats.item6+'.png' : './assets/0.png'" class='thumbicon thumbround'></td>
                     </tr>
                 </table>
-                <span style="font-size:8px;">Control Wards {{data.participants[0].stats.visionWardsBoughtInGame}}</span>
               </td>
           </tr>
         </tbody>
@@ -171,7 +177,11 @@ export default {
       const hDisplay = (h > 0 && !dDisplay) ? h + (h == 1 ? " hour " : " hours ") : "";
       const mDisplay = (m > 0 && !hDisplay && !dDisplay) ? m + (m == 1 ? " minute " : " minutes ") : "";
       return dDisplay + hDisplay + mDisplay + " ago"
-    }
+    },
+    formatLevelBulb(level){
+      level = String(level)
+      return (level.length < 2) ? "0" + String(level) : level
+    },
   },
   data(){
     return {
@@ -293,8 +303,7 @@ span {
   background-color:#020202;
   color: #9a96a4;
   border-radius: 5px;
-  width:fit-content;
-  min-width:570px;
+  min-width:575px;
   margin-bottom:8px;
 }
 
@@ -313,8 +322,8 @@ a {
   color: #42b983;
 }
 .thumbicon {
-  width:20px;
-  height:20px;
+  width:22px;
+  height:22px;
 }
 .Victory {
   filter: drop-shadow(0 0 0.1rem #5cd7e4);

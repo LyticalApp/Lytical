@@ -2,19 +2,21 @@
    <div v-if="matchDetails != null" className="detailed-match-history" style="display: display, flex: '0 0 100%', width: '0px'">
       <div className="divTable">
          <table cellspacing=0 style="marginLeft: '11px'   border-radius: 4px;
-            padding:10px;
-            width:100%;
+            padding:2px;
             border:none;">
             <tbody className="divTableCell">
-               <div class="topItem" style="display:flex;margin:auto;background-color:#31313c;font-weight: 50;font-family: Roboto, sans-serif;font-size:14px;height:20px;padding-top:4px;">
-                  <span style="padding-left:20px;" :style='`
-                     ${matchDetails.participants[0].stats.win ? "color:#5383e8;" : "color:#e84057;"}`'>{{matchDetails.participants[0].stats.win ? "Victory" : "Defeat"}} 
+               <div class="topItem header-bar">
+                  <div style="float:left;padding-left:10px;position:absolute;">
+                  <span :style='`
+                     ${matchDetails.participants[0].stats.win ? "color:#5383e8;" : "color:#e84057;"}`'>
+                     <b>{{matchDetails.participants[0].stats.win ? "Victory" : "Defeat"}}</b>
                   </span><span>&nbsp;({{matchDetails.participants[0].teamId == 200 ? "Red Team" : "Blue Team"}})</span>
-                  <span style="padding-left:90px;">KDA</span>
-                  <span style="padding-left:40px;">Damage</span>
-                  <span style="padding-left:20px;">Wards</span>
-                  <span style="padding-left:20px;">CS</span>
-                  <span style="padding-left:60px;">Items</span>
+                  </div>
+                  <span style="left:175px;position:absolute;">KDA</span>
+                  <span style="left:260px;position:absolute;">Damage</span>
+                  <span style="left:337px;position:absolute;">Wards</span>
+                  <span style="left:382px;position:absolute;">CS</span>
+                  <span style="left:465px;position:absolute;">Items</span>
                </div>
                <div v-for="(participant,index) in matchDetails.participants" :key=index :class='`
                   ${participant.stats.win ? "Victory" : "Defeat"} 
@@ -25,42 +27,42 @@
                   <div v-if="index == 5" class="middle-wrapper">
                      <!-- top team stats -->
                      <div id="ourteam" style="float:left;">
-                        <span><img :src="'./assets/baron.png'" class="middle-icon"/>{{matchDetails.teams[getTeamId(0)].baronKills}}</span>
-                        <span><img :src="'./assets/dragon.png'" class="middle-icon" style="padding-left:10px;"/>{{matchDetails.teams[getTeamId(0)].dragonKills}}</span>
-                        <span><img :src="'./assets/turret.png'" class="middle-icon" style="padding-left:10px;"/>{{matchDetails.teams[getTeamId(0)].towerKills}}</span>
-                        <span><img :src="'./assets/gold.png'" class="middle-icon" style="padding-left:10px;"/>{{(calcTotalGold(0)/1000).toFixed(1)}}k</span>
+                        <span>&nbsp;&nbsp;<img :src="'./assets/baron.png'" class="middle-icon"/>&nbsp;{{matchDetails.teams[getTeamId(0)].baronKills}}</span>
+                        <span><img :src="'./assets/dragon.png'" class="middle-icon" style="padding-left:8px;"/>&nbsp;{{matchDetails.teams[getTeamId(0)].dragonKills}}</span>
+                        <span><img :src="'./assets/turret.png'" class="middle-icon" style="padding-left:8px;"/>&nbsp;{{matchDetails.teams[getTeamId(0)].towerKills}}</span>
+                        <span><img :src="'./assets/gold.png'" class="middle-icon" style="padding-left:8px;"/>&nbsp;{{(calcTotalGold(0)/1000).toFixed(1)}}k</span>
                      </div>
                      <!-- Total Kills -->
-                     <div style="display:inline;">
-                        <span style="font-size:10px;line-height: 120%;margin:0 auto;position:absolute;padding-left:70px;padding-top:4px;">Total Kills</span>
-                        <div :class='`${participant.stats.win ? "Victory" : "Defeat"}`' style="width:190px;display:inline-block;margin-top:4px;">
-                           <span style="font-size:10px;line-height: 120%;float:right;">{{calcTotalKills(5).toLocaleString('en-US')}}</span>
-                           <div :class='`${participant.stats.win ? "Defeat" : "Victory"}`' :style="{ height:'12px', width: calcTotalKills(0)/(calcTotalKills(0)+calcTotalKills(5))*100+'%'}">
-                              <span style="font-size:10px;float:left;">{{calcTotalKills(0).toLocaleString('en-US')}}</span>
+                     <div style="display:inline;color:#f2ecff;">
+                        <span style="font-size:10px;line-height: 120%;margin:0 auto;position:absolute;padding-left:70px;margin-top:2px;">Total Kills</span>
+                        <div :class='`${participant.stats.win ? "accentBlue" : "accentRed"}`' style="width:190px;display:inline-block;margin-top:2px;">
+                           <span style="font-size:10px;line-height: 120%;float:right;padding-right:4px;">{{calcTotalKills(5).toLocaleString('en-US')}}</span>
+                           <div :class='`${participant.stats.win ? "accentRed" : "accentBlue"}`' :style="{ height:'12px', width: calcTotalKills(0)/(calcTotalKills(0)+calcTotalKills(5))*100+'%'}">
+                              <span style="font-size:10px;float:left;padding-left:4px;">{{calcTotalKills(0).toLocaleString('en-US')}}</span>
                            </div>
                         </div>
                      </div>
                      <!-- bottom team stats -->
                      <div id="enemyteam" style="float:right;">
-                        <span><img :src="'./assets/baron.png'" class="middle-icon"/>{{matchDetails.teams[getTeamId(5)].baronKills}}</span>
-                        <span><img :src="'./assets/dragon.png'" class="middle-icon" style="padding-left:10px;"/>{{matchDetails.teams[getTeamId(5)].dragonKills}}</span>
-                        <span><img :src="'./assets/turret.png'" class="middle-icon" style="padding-left:10px;"/>{{matchDetails.teams[getTeamId(5)].towerKills}}</span>
-                        <span><img :src="'./assets/gold.png'" class="middle-icon" style="padding-left:10px;"/>{{(calcTotalGold(5)/1000).toFixed(1)}}k</span>
-                     </div>
-                     <div class="topItem" style="display:flex;margin:auto;background-color:#31313c;font-weight: 50;font-family: Roboto, sans-serif;font-size:14px;height:20px;padding-top:4px;">
-                        <span style="padding-left:20px;" :style='`${matchDetails.participants[5].stats.win ? "color:#5383e8;" : "color:#e84057;"}`'>
-                           {{matchDetails.participants[5].stats.win ? "Victory" : "Defeat"}} 
-                        </span>
-                        <span>
-                           &nbsp;({{matchDetails.participants[5].teamId == 200 ? "Red Team" : "Blue Team"}})
-                        </span>
-                        <span style="padding-left:90px;">KDA</span>
-                        <span style="padding-left:40px;">Damage</span>
-                        <span style="padding-left:20px;">Wards</span>
-                        <span style="padding-left:20px;">CS</span>
-                        <span style="padding-left:60px;">Items</span>
+                        <span><img :src="'./assets/baron.png'" class="middle-icon"/>&nbsp;{{matchDetails.teams[getTeamId(5)].baronKills}}</span>
+                        <span><img :src="'./assets/dragon.png'" class="middle-icon" style="padding-left:8px;"/>&nbsp;{{matchDetails.teams[getTeamId(5)].dragonKills}}</span>
+                        <span><img :src="'./assets/turret.png'" class="middle-icon" style="padding-left:8px;"/>&nbsp;{{matchDetails.teams[getTeamId(5)].towerKills}}</span>
+                        <span><img :src="'./assets/gold.png'" class="middle-icon" style="padding-left:8px;"/>&nbsp;{{(calcTotalGold(5)/1000).toFixed(1)}}k&nbsp;&nbsp;</span>
                      </div>
                   </div>
+               <div v-if="index == 5" class="header-bar">
+                  <div style="float:left;padding-left:10px;position:absolute;">
+                  <span :style='`
+                     ${matchDetails.participants[5].stats.win ? "color:#5383e8;" : "color:#e84057;"}`'>
+                     <b>{{matchDetails.participants[5].stats.win ? "Victory" : "Defeat"}}</b>
+                  </span><span>&nbsp;({{matchDetails.participants[5].teamId == 200 ? "Red Team" : "Blue Team"}})</span>
+                  </div>
+                  <span style="left:175px;position:absolute;">KDA</span>
+                  <span style="left:260px;position:absolute;">Damage</span>
+                  <span style="left:337px;position:absolute;">Wards</span>
+                  <span style="left:382px;position:absolute;">CS</span>
+                  <span style="left:465px;position:absolute;">Items</span>
+               </div>
                   <div class="normalScoreboard">
                      <!-- Normal Scoreboard Item for Player -->
                      <tr>
@@ -80,38 +82,38 @@
                                  <img :src="'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/'+runeMap[participant.stats.perkSubStyle]" class='thumbicon thumbround' style="height:15px;width:15px;">
                               </td>
                            </table>
-                           <span style="position:absolute;left:12px;font-size:12px;background-color:rgba(8, 8, 8, 0.95);border-radius:50%;margin-top:25px;">
+                           <span style="position:absolute;left:4px;font-size:12px;background-color:#080808;border-radius:50%;margin-top:30px;padding:1px;">
                            {{formatLevelBulb(participant.stats.champLevel)}}
                            </span>
                            <div style="display:inline-block;width:75px;text-align:left;padding-top:4px;" class="summonername" :title="matchDetails.participantIdentities[index].player.summonerName">
-                              <span style="font-size:12px;">{{matchDetails.participantIdentities[index].player.summonerName}}</span><br>
+                              <span style="font-size:12px;color:#f2ecff;" @click="searchPlayer(matchDetails.participantIdentities[index].player.summonerName)">{{matchDetails.participantIdentities[index].player.summonerName}}</span><br>
                               <span style="font-size:11px;">{{participant.timeline.lane}}</span>
                            </div>
                         </td>
-                        <td style="width:70px;font-size:12px;">
+                        <td style="width:75px;font-size:11px;">
                            <span>{{participant.stats.kills}}/{{participant.stats.deaths}}/{{participant.stats.assists}} ({{(((participant.stats.kills + participant.stats.assists)/calcTotalKills(index))*100).toFixed(0)}}%)</span>
                            <br>
-                           <b>{{((participant.stats.kills + participant.stats.assists)/participant.stats.deaths).toFixed(2)}}:1</b>
+                           <b><span :style="{ color: getKDAStyle(((participant.stats.kills + participant.stats.assists)/participant.stats.deaths)), fontSize: '10px'}">{{((participant.stats.kills + participant.stats.assists)/participant.stats.deaths).toFixed(2)}}:1</span></b>
                         </td>
                         <td style="padding-left:10px;width:100px;font-size:12px;">
                            <div>
                               <span style="float:left;">{{participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')}}</span>
-                              {{participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')}}
+                              {{participant.stats.totalDamageTaken.toLocaleString('en-US')}}
                            </div>
                            <div>
                               <div class="w3-border" style="float:left;width:40px;display:inline-block;margin-top:4px;">
                                  <div 
                                     :title="participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')"
-                                    class="w3-grey" :style="{ height:'6px', width: participant.stats.totalDamageDealtToChampions/calcTotalDamage(index)*150+'%'}"></div>
+                                    class="w3-grey" :style="{ height:'6px', width: participant.stats.totalDamageDealtToChampions/calcTotalDamage(index)*180+'%'}"></div>
                               </div>
                               <div class="w3-border" style="float:left;width:40px;display:inline-block;margin-top:4px;margin-left:10px;">
                                  <div 
-                                    :title="participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')"
-                                    :style="{ backgroundColor: '#7b7a8e', height:'6px', width: participant.stats.totalDamageDealtToChampions/calcTotalDamage(index)*150+'%'}"></div>
+                                    :title="participant.stats.totalDamageTaken.toLocaleString('en-US')"
+                                    :style="{ backgroundColor: '#7b7a8e', height:'6px', width: participant.stats.totalDamageTaken/calcTotalDamageTaken(index)*180+'%'}"></div>
                               </div>
                            </div>
                         </td>
-                        <td style="width:30px;">
+                        <td style="width:40px;">
                            <div class="wardText">
                               {{participant.stats.visionWardsBoughtInGame}}
                               <br>
@@ -143,6 +145,7 @@
 </template>
 
 <script>
+const { ipcRenderer } = require('electron')
 export default {
     name: "DetailedMatchInfo",
     props: {
@@ -188,6 +191,15 @@ export default {
          }
          return totalKills
       },
+      calcTotalDamageTaken(index){
+         let totalKills = 0;
+         for (let player of this.matchDetails.participants){
+            if(player.teamId == this.matchDetails.participants[index].teamId){
+               totalKills += player.stats.totalDamageTaken
+            }
+         }
+         return totalKills
+      },
       formatLevelBulb(level){
          level = String(level)
          return (level.length < 2) ? "0" + String(level) : level
@@ -197,6 +209,19 @@ export default {
             return 0
          }
          else return 1
+      },
+      getKDAStyle(kda){
+         if(kda >= 5)
+            return "#ff8200"
+         if(kda >= 4)
+            return "#0093ff"
+         if(kda >= 3)
+            return "#00bba3"
+         return "#9a96a4"
+      },
+      searchPlayer(username){
+         ipcRenderer.send('asynchronous-message', {id:'lol-ranked-stats', user: username})
+         ipcRenderer.send('asynchronous-message', {id:'lol-match-history', user: username, begIndex: 0, endIndex: 9})
       }
     },
     data(){
@@ -295,10 +320,21 @@ export default {
 
 </script>
 <style scoped>
+.header-bar {
+   display:flex;
+   margin:auto;
+   background-color:#31313c;
+   font-family: Roboto, sans-serif;
+   font-size:11px;
+   height:16px;
+   padding-top:4px;
+}
 .middle-wrapper {
-   padding-top:5px;
+   padding-top:4px;
+   padding-bottom:4px;
    width:100%;
-   background-color:#282830   ;
+   font-size:12px;
+   background-color:#282830;
 }
 .w3-border {
    background-color: #31313c;
@@ -314,8 +350,14 @@ export default {
 .w3-red {
    background-color:#8d3f3f;
 }
-.
+.accentRed {
+   background-color:#e84057;
+}
+.accentBlue {
+   background-color:#5383e8;
+}
 .thumbround {
+   padding-left:1px;
   border-radius:4px;
 }
 .summonername {
@@ -323,7 +365,8 @@ export default {
    overflow: hidden;
    text-overflow: ellipsis;
 }
-td{vertical-align:middle;
+td{
+  vertical-align:middle;
   padding:0px;
 }
 .wardText {
@@ -332,7 +375,8 @@ td{vertical-align:middle;
    line-height:.9;
 }
 .normalScoreboard {
-        padding-left:3px;
+   
+   padding-left:3px;
   padding-right:3px;
 }
 .Victory {

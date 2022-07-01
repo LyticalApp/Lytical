@@ -200,6 +200,7 @@ body {
   color: #2c3e50;
 }
 #leftSideBar {
+  padding-right:10px;
   width: 300px;
 }
 .loadingFrame{
