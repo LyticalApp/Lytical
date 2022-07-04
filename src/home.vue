@@ -129,6 +129,11 @@ export default {
           this.matches = data.games.games
           break
         }
+        case "clear-profile": {
+          this.matches = {}
+          this.playerCardInfo = {}
+          break
+        }
         case "current-ranked-stats":
         case "lol-ranked-stats": {
           this.playerCardInfo = data

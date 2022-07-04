@@ -244,6 +244,7 @@ ipcMain.on('asynchronous-message', (event, req) => {
               break;
           }
           case "lol-ranked-stats": {
+              event.reply('asynchronous-reply', createReply({}, "clear-profile"))
               getPlayerDataByName(req.user, auth).then(summoner => {
                   request.requestURL(
                       auth,

@@ -2,17 +2,19 @@ var request = require('request');
 
 let runes = "https://ddragon.leagueoflegends.com/cdn/12.11.1/data/en_US/runesReforged.json"
 
-function getChampName() {
+let j = {}
+
+function getRuneIcons() {
   request(runes, function (error, response, body) {
       let runes = JSON.parse(body)
       for (rune of runes){
-        console.log((rune.id+" : '"+rune.icon+"',").toLocaleLowerCase())
+        j[String(rune.id).toLowerCase()] = rune.icon.toLowerCase()
         for (subrune of rune.slots){
           for(subsub of subrune.runes)
-            console.log((subsub.id+" : '"+subsub.icon+"',").toLocaleLowerCase())
+            j[String(subsub.id).toLowerCase()] = subsub.icon.toLowerCase()
         }
       } 
+      console.log(j)
   });
 }
-
-getChampName()
+getRuneIcons()

@@ -16,8 +16,8 @@
             </form>
         </div>
         <!-- Settings Menu Button -->
-        <div style="position:absolute;right:0px;">
-            <button @click="this.showSettings = !this.showSettings">Settings</button>
+        <div style="position:absolute;right:12px;top:12px;margin:0 auto;">
+            <img  @click="this.showSettings = !this.showSettings" :src='`assets/settings2.svg`' style="height:20px;opacity:.2;">
         </div>
     </div>
     <SettingsMenu v-if="showSettings" />
@@ -44,8 +44,13 @@
                 if(this.$route.path != "/"){
                     this.$router.push({ name: 'Home', params: { summonerSearch: this.summonerSearch }})
                 }
-                ipcRenderer.send('asynchronous-message', {id:'lol-ranked-stats', user: this.summonerSearch})
-                ipcRenderer.send('asynchronous-message', {id:'lol-match-history', user: this.summonerSearch, begIndex: 0, endIndex: 9})
+                if(this.summonerSearch != ""){
+                    ipcRenderer.send('asynchronous-message', {id:'lol-ranked-stats', user: this.summonerSearch})
+                    ipcRenderer.send('asynchronous-message', {id:'lol-match-history', user: this.summonerSearch, begIndex: 0, endIndex: 9})
+                } else {
+                    ipcRenderer.send('asynchronous-message', {id:'current-ranked-stats'})
+                    ipcRenderer.send('asynchronous-message', {id:'current-summoner', begIndex: 0, endIndex: 9})
+                }
             },
         },
         watch:{
