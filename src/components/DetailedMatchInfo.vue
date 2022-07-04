@@ -1,10 +1,9 @@
 <template>
-   <div v-if="matchDetails != null" className="detailed-match-history" style="display: display, flex: '0 0 100%', width: '0px'">
+   <div v-if="matchDetails != null" className="detailed-match-history">
       <div className="divTable">
-         <table cellspacing=0 style="marginLeft: '11px'   border-radius: 4px;
-            padding:2px;
-            border:none;">
+         <table cellspacing=0 style="padding:2px;">
             <tbody className="divTableCell">
+               <!-- Team 0 title bar/column labels -->
                <div class="topItem header-bar">
                   <div style="float:left;padding-left:10px;position:absolute;">
                   <span :style='`
@@ -50,6 +49,7 @@
                         <span><img :src="'./assets/gold.png'" class="middle-icon" style="padding-left:8px;"/>&nbsp;{{(calcTotalGold(5)/1000).toFixed(1)}}k&nbsp;&nbsp;</span>
                      </div>
                   </div>
+               <!-- Team 1 title bar/column labels -->
                <div v-if="index == 5" class="header-bar">
                   <div style="float:left;padding-left:10px;position:absolute;">
                   <span :style='`

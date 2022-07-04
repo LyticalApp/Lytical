@@ -48,7 +48,7 @@
                   <span style="font-weight:bold;display:inline-block;color:#e84057;">{{data.participants[0].stats.deaths}}</span> / 
                   <span style="font-weight:bold;display:inline-block;color:#fff;">{{data.participants[0].stats.assists}}</span>
                 </div>
-                <span style="font-size:12px;">{{(data.participants[0].stats.kills + data.participants[0].stats.assists / data.participants[0].stats.kills).toFixed(2)}}:1 KDA</span>
+                <span style="font-size:12px;">{{((data.participants[0].stats.kills+data.participants[0].stats.assists)/data.participants[0].stats.deaths).toFixed(2)}}:1 KDA</span>
               </td>
               <td style="text-align:left;font-size:11px;width:80px;">
                 <!-- Personal Stats -->

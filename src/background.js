@@ -175,6 +175,15 @@ ipcMain.on('asynchronous-message', (event, req) => {
               }).catch(error => errorHandler(error, event))
               break;
           }
+          case "current-session": {
+            request.requestURL(
+                auth,
+                `/lol-gameflow/v1/session`
+            ).then((data) => {
+              event.reply('asynchronous-reply', createReply(data, req.id))
+            }).catch(error => errorHandler(error, event))
+            break;
+          }
           case "lol-lobby-playercard": {
               let rankedData = null
               request.requestURL(
