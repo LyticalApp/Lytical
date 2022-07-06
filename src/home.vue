@@ -22,9 +22,7 @@
           <MatchHistoryItem v-for="match in matches"
               :key=match.gameId
               :data=match 
-              :summonerName=playerCardInfo.username
-              :champion_name=championIds[match.participants[0].championId]
-              :queue=getQueueName(match.queueId)
+              :profileSummoner=playerCardInfo.username
               />
         </td>
     </table>
@@ -36,7 +34,6 @@
 import MatchHistoryItem from './components/MatchHistoryItem.vue'
 import PlayerCard from './components/PlayerCard.vue'
 import PlayerRank from './components/PlayerRank.vue'
-import { queueIds, championIds } from './res/common.js'
 const { ipcRenderer } = require('electron')
 
 export default {
@@ -48,8 +45,6 @@ export default {
   },
   data(){
     return{
-      queueIds: queueIds,
-      championIds: championIds,
       polling: null,
       ondata: null,
       showError: false,
