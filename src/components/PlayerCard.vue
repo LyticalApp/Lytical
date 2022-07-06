@@ -5,7 +5,7 @@
         <img :src='`http://ddragon.leagueoflegends.com/cdn/12.10.1/img/profileicon/${data.summonerData.profileIconId}.png`' class="clip-circle" style="height:80px;">
       </td>
       <td style="vertical-align:middle; align:left;">
-        <span style="font-size:24px;">{{data.username}}</span>
+        <span style="font-size:20px;">{{data.username}}</span>
         <br>
         <span style="font-size:14px;">Level {{data.summonerData.summonerLevel}}</span>
         <br>

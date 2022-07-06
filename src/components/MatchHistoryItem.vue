@@ -41,7 +41,7 @@
                     </div>
                 </div>
               </td>
-              <td style="width:80px;">
+              <td style="width:90px;">
                 <!-- K/D/A -->
                 <div>
                   <span style="font-weight:bold;display:inline-block;color:#fff;">{{data.participants[0].stats.kills}}</span> / 

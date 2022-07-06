@@ -1,8 +1,9 @@
 const fs = require('fs');
+const os = require('os');
 
 let auth = null;
 
-exports.getLeagueDirectory = async () => {
+exports.getAuthFromProcess = async () => {
 
 
     //https://github.com/matsjla/league-connect/blob/master/src/authentication.ts
@@ -14,11 +15,7 @@ exports.getLeagueDirectory = async () => {
     return new Promise(function (resolve, reject) {
         exec('Get-CimInstance Win32_Process -Filter "name = \'LeagueClientUx.exe\'" | Select-Object -Property CommandLine | ft -HideTableHeaders | out-string -Width 4096',
             { 'shell': 'powershell.exe' }, (error, stdout) => {
-                if (error) {
-                    reject(error)
-                }
                 try {
-
                     const pid = stdout.match(pidRegex)[1]
                     const password = stdout.match(passwordRegex)[1]
                     const port = stdout.match(portRegex)[1]
@@ -32,7 +29,16 @@ exports.getLeagueDirectory = async () => {
                     })
 
                 } catch (e) {
-                    reject()
+                    // Attempt to restore from file..
+                    fs.readFile(os.tmpdir() + "/lcuAuth", 'utf8', (err, data) => {
+                        try{
+                            resolve(JSON.parse(data))
+                        }
+                        catch{
+                            reject(null)
+                        }
+                    });
+                    
                 }
             })
     })
@@ -47,7 +53,11 @@ exports.getLCUAuth = async () => {
         return auth
     }
     try {
-        auth = await this.getLeagueDirectory()
+        auth = await this.getAuthFromProcess()
+        
+        // Save auth incase of failure
+        fs.writeFileSync(os.tmpdir() + "/lcuAuth", JSON.stringify(auth))
+
         return auth
     } catch (e) {
         console.log("ERR: Game is not running..")

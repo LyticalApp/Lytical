@@ -203,6 +203,7 @@ ipcMain.on('asynchronous-message', (event, req) => {
                               `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=9`
                           ).then(
                               (matchHistory) => {
+                                  rankedData.teamId = req.teamId
                                   rankedData.matchHistory = JSON.parse(matchHistory)
                                   event.reply('asynchronous-reply', createReply(rankedData, req.id))
                               })
