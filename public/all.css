@@ -1,3 +1,40 @@
+html{
+  background-color:#080808;
+}
+
+body {
+  margin:0px;
+  margin-top:55px;
+  overflow:hidden;
+}
+
+.wrapper::-webkit-scrollbar {
+    width: 5px !important;
+    height: 5px !important;
+}
+.wrapper::-webkit-scrollbar-track {
+    background: #080808 !important;
+}
+.wrapper::-webkit-scrollbar-thumb {
+    background-color: #787878 !important;
+    border: none;
+    border-radius: 10px !important;
+}
+
+.imground {
+  border-radius: 50%;
+}
+
+#app {
+  width:100%;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+
 /*!
  * Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)

@@ -7,8 +7,8 @@ import HomeView from './Home.vue'
 import PregameLobby from './Pregame.vue'
 
 const routes = [
-    { path: '/', name: "Home", component: HomeView,  params: { userId: '123' }},
-    { path: '/pregame', name: "Pregame", component: PregameLobby},
+    { path: '/', name: "Home", component: HomeView },
+    { path: '/pregame', name: "Pregame", component: PregameLobby },
 ]
 
 const router = createRouter({

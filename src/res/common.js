@@ -1,3 +1,7 @@
+export const ITEMICONURL = "http://ddragon.leagueoflegends.com/cdn/12.6.1/img/item/"
+export const CHAMPIONICONURL = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/"
+export const RUNEICONURL = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/"
+
 export const championIds = {
     266: "Aatrox",
     103: "Ahri",
@@ -255,10 +259,6 @@ export const queueIds = {
     2020: "Tutorial 3",
 }
 
-export const ITEMICONURL = "http://ddragon.leagueoflegends.com/cdn/12.6.1/img/item/"
-export const CHAMPIONICONURL = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/"
-export const RUNEICONURL = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/"
-
 export const summonerSpells = {
     1: "Cleanse",
     3: "Exhaust",
@@ -276,7 +276,7 @@ export const summonerSpells = {
     39: "Mark",
 }
 
-export const runeIcons ={
+export const runeIcons = {
   8100 : 'perk-images/styles/7200_domination.png',
   8112 : 'perk-images/styles/domination/electrocute/electrocute.png',
   8124 : 'perk-images/styles/domination/predator/predator.png',

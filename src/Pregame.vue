@@ -11,7 +11,7 @@
             <br>
             <div v-for="(match,index) in teammate.matchHistory.games.games" :key="match.gameId" :class='`matchItem`'>
                 <div v-if="!(teammate.teamId == 1 && index > 4)">
-                <img @click="openLink('https://na.op.gg/champions/'+championIds[match.participants[0].championId])" :src="CHAMPIONICONURL+championIds[match.participants[0].championId]+'.png'" style="border-radius:10px;width:20px;height:20px;">
+                <img @click="openLink('https://na.op.gg/champions/'+championIds[match.participants[0].championId])" :src="CHAMPIONICONURL+match.participants[0].championId+'.png'" style="border-radius:10px;width:20px;height:20px;">
                 <div :class='`kda ${match.participants[0].stats.win ? "Victory" : "Defeat"}`'>
                     <span>{{match.participants[0].stats.kills}}/{{match.participants[0].stats.deaths}}/{{match.participants[0].stats.assists}}</span>
                 </div>
@@ -33,7 +33,7 @@
             <div v-for="(match,index) in teammate.matchHistory.games.games" :key="match.gameId" :class='`matchItem`'>
                 <div v-if="index > 4">
                 <a :href="'https://na.op.gg/champions/'+championIds[match.participants[0].championId]">
-                    <img :src="CHAMPIONICONURL+championIds[match.participants[0].championId]+'.png'" style="border-radius:10px;width:20px;height:20px;">
+                    <img :src="CHAMPIONICONURL+match.participants[0].championId+'.png'" style="border-radius:10px;width:20px;height:20px;">
                 </a>
                 <div :class='`kda ${match.participants[0].stats.win ? "Victory" : "Defeat"}`'>
                     <span>{{match.participants[0].stats.kills}}/{{match.participants[0].stats.deaths}}/{{match.participants[0].stats.assists}}</span>

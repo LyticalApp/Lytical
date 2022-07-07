@@ -163,42 +163,15 @@ export default {
 }
 </script>
 
-<style>
-html{
-  background-color:#080808;
+<style scoped>
+.wrapper {
+    margin:auto;
+    display: flex;
+    justify-content: center;
+    overflow:scroll;
+    height:calc(100vh - 55px);
 }
 
-body {
-  margin:0px;
-  margin-top:55px;
-  overflow:hidden;
-}
-
-.wrapper::-webkit-scrollbar {
-    width: 5px !important;
-    height: 5px !important;
-}
-.wrapper::-webkit-scrollbar-track {
-    background: #080808 !important;
-}
-.wrapper::-webkit-scrollbar-thumb {
-    background-color: #787878 !important;
-    border: none;
-    border-radius: 10px !important;
-}
-
-.imground {
-  border-radius: 50%;
-}
-
-#app {
-  width:100%;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 #leftSideBar {
   padding-right:10px;
   width: 300px;
@@ -263,12 +236,4 @@ body {
     transform: translate(24px, 0);
   }
 }
-.wrapper {
-    margin:auto;
-    display: flex;
-    justify-content: center;
-    overflow:scroll;
-    height:calc(100vh - 55px);
-}
-
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="navWrapper">
         <div :class='`item ${ underlineHome ? "underlined" : ""}`'>
-            <router-link :to="{ name: 'Home', params: { summonerSearch: summonerSearch, submitSearch: true }}">
+            <router-link :to="{ name: 'Home', params: { summonerSearch: summonerSearch }}">
                 Profile
             </router-link>
         </div>
@@ -17,7 +17,7 @@
         </div>
         <!-- Settings Menu Button -->
         <div style="position:absolute;right:12px;top:12px;margin:0 auto;">
-            <img  @click="this.showSettings = !this.showSettings" :src='`assets/settings2.svg`' style="height:20px;opacity:.2;">
+            <img  @click="this.showSettings = !this.showSettings" :src='`assets/settings.svg`' style="height:20px;opacity:.2;">
         </div>
     </div>
     <SettingsMenu v-if="showSettings" />
