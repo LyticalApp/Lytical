@@ -18,7 +18,7 @@
                   <span style="left:465px;position:absolute;">Items</span>
                </div>
                <div v-for="(participant,index) in matchDetails.participants" :key=index :class='`
-                  ${participant.stats.win ? "Victory" : "Defeat"} 
+                  ${participant.stats.win ? "Victory" : "Defeat"}
                   ${(index == 5) ? "topItem" : ""}
                   ${(index == 9) ? "bottomItem" : ""}
                   `'>
@@ -102,12 +102,12 @@
                            </div>
                            <div>
                               <div class="w3-border" style="float:left;width:40px;display:inline-block;margin-top:4px;">
-                                 <div 
+                                 <div
                                     :title="participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')"
                                     class="w3-grey" :style="{ height:'6px', width: participant.stats.totalDamageDealtToChampions/calcTotalDamage(index)*180+'%'}"></div>
                               </div>
                               <div class="w3-border" style="float:left;width:40px;display:inline-block;margin-top:4px;margin-left:10px;">
-                                 <div 
+                                 <div
                                     :title="participant.stats.totalDamageTaken.toLocaleString('en-US')"
                                     :style="{ backgroundColor: '#7b7a8e', height:'6px', width: participant.stats.totalDamageTaken/calcTotalDamageTaken(index)*180+'%'}"></div>
                               </div>
@@ -145,97 +145,96 @@
 </template>
 
 <script>
-const { ipcRenderer } = require('electron')
+import {
+  championIds, runeIcons, summonerSpells, CHAMPIONICONURL, ITEMICONURL, RUNEICONURL,
+// eslint-disable-next-line import/extensions
+} from '../res/common.js';
+
+const { ipcRenderer } = require('electron');
 const open = require('open');
 
-import { championIds, runeIcons, summonerSpells, CHAMPIONICONURL, ITEMICONURL, RUNEICONURL } from '.././res/common.js'
-
 export default {
-    name: "DetailedMatchInfo",
-    props: {
-        matchDetails: {
-         // The order of the teams is done in MatchHistoryItem
-          type: Object
+  name: 'DetailedMatchInfo',
+  props: {
+    matchDetails: {
+      // The order of the teams is done in MatchHistoryItem
+      type: Object,
+    },
+  },
+  methods: {
+    calcTotalDamage(index) {
+      let totalDamage = 0;
+      for (const player of this.matchDetails.participants) {
+        if (player.teamId === this.matchDetails.participants[index].teamId) {
+          totalDamage += player.stats.totalDamageDealtToChampions;
         }
-    },
-    methods: {
-      calcTotalDamage(index){
-         let totalDamage = 0;
-         for (let player of this.matchDetails.participants){
-            if(player.teamId == this.matchDetails.participants[index].teamId){
-               totalDamage += player.stats.totalDamageDealtToChampions
-            }
-            
-         }
-        return totalDamage
-      },
-      calcTotalGold(index){
-         let totalGold = 0;
-         for (let player of this.matchDetails.participants){
-            if(player.teamId == this.matchDetails.participants[index].teamId){
-               totalGold += player.stats.goldEarned
-            }
-         }
-         return totalGold
-      },
-      calcTotalKills(index){
-         let totalKills = 0;
-         for (let player of this.matchDetails.participants){
-            if(player.teamId == this.matchDetails.participants[index].teamId){
-               totalKills += player.stats.kills
-            }
-         }
-         return totalKills
-      },
-      calcTotalDamageTaken(index){
-         let totalKills = 0;
-         for (let player of this.matchDetails.participants){
-            if(player.teamId == this.matchDetails.participants[index].teamId){
-               totalKills += player.stats.totalDamageTaken
-            }
-         }
-         return totalKills
-      },
-      formatLevelBulb(level){
-         level = String(level)
-         return (level.length < 2) ? "0" + String(level) : level
-      },
-      openLink(url){
-        open(url)
-      },
-      getTeamId(index){
-         if(this.matchDetails.participants[index].teamId == 100){
-            return 0
-         }
-         else return 1
-      },
-      getKDAStyle(kda){
-         if(kda >= 5)
-            return "#ff8200"
-         if(kda >= 4)
-            return "#0093ff"
-         if(kda >= 3)
-            return "#00bba3"
-         return "#9a96a4"
-      },
-      searchPlayer(username){
-         ipcRenderer.send('asynchronous-message', {id:'lol-ranked-stats', user: username})
-         ipcRenderer.send('asynchronous-message', {id:'lol-match-history', user: username, begIndex: 0, endIndex: 9})
       }
+      return totalDamage;
     },
-    data(){
-       return {
-         CHAMPIONICONURL: CHAMPIONICONURL,
-         ITEMICONURL: ITEMICONURL,
-         RUNEICONURL: RUNEICONURL,
-         championIds: championIds,
-         runeIcons: runeIcons,
-         summonerSpells: summonerSpells,
-       }
-    }
-}
-
-
+    calcTotalGold(index) {
+      let totalGold = 0;
+      for (const player of this.matchDetails.participants) {
+        if (player.teamId === this.matchDetails.participants[index].teamId) {
+          totalGold += player.stats.goldEarned;
+        }
+      }
+      return totalGold;
+    },
+    calcTotalKills(index) {
+      let totalKills = 0;
+      for (const player of this.matchDetails.participants) {
+        if (player.teamId === this.matchDetails.participants[index].teamId) {
+          totalKills += player.stats.kills;
+        }
+      }
+      return totalKills;
+    },
+    calcTotalDamageTaken(index) {
+      let totalKills = 0;
+      for (const player of this.matchDetails.participants) {
+        if (player.teamId === this.matchDetails.participants[index].teamId) {
+          totalKills += player.stats.totalDamageTaken;
+        }
+      }
+      return totalKills;
+    },
+    formatLevelBulb(levelD) {
+      const level = String(levelD);
+      return (level.length < 2) ? `0${level}` : level;
+    },
+    openLink(url) {
+      open(url);
+    },
+    getTeamId(index) {
+      if (this.matchDetails.participants[index].teamId === 100) {
+        return 0;
+      }
+      return 1;
+    },
+    getKDAStyle(kda) {
+      if (kda >= 5) { return '#ff8200'; }
+      if (kda >= 4) { return '#0093ff'; }
+      if (kda >= 3) { return '#00bba3'; }
+      return '#9a96a4';
+    },
+    searchPlayer(username) {
+      ipcRenderer.send('asynchronous-message', { id: 'lol-ranked-stats', user: username });
+      ipcRenderer.send('asynchronous-message', {
+        id: 'lol-match-history', user: username, begIndex: 0, endIndex: 9,
+      });
+    },
+  },
+  data() {
+    return {
+      CHAMPIONICONURL,
+      ITEMICONURL,
+      RUNEICONURL,
+      championIds,
+      runeIcons,
+      summonerSpells,
+    };
+  },
+};
 
 </script>
 <style scoped>
@@ -294,7 +293,7 @@ td{
    line-height:.9;
 }
 .normalScoreboard {
-   
+
    padding-left:3px;
   padding-right:3px;
 }

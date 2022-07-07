@@ -44,8 +44,8 @@
               <td style="width:90px;">
                 <!-- K/D/A -->
                 <div>
-                  <span style="font-weight:bold;display:inline-block;color:#fff;">{{data.participants[0].stats.kills}}</span> / 
-                  <span style="font-weight:bold;display:inline-block;color:#e84057;">{{data.participants[0].stats.deaths}}</span> / 
+                  <span style="font-weight:bold;display:inline-block;color:#fff;">{{data.participants[0].stats.kills}}</span> /
+                  <span style="font-weight:bold;display:inline-block;color:#e84057;">{{data.participants[0].stats.deaths}}</span> /
                   <span style="font-weight:bold;display:inline-block;color:#fff;">{{data.participants[0].stats.assists}}</span>
                 </div>
                 <span style="font-size:12px;">{{((data.participants[0].stats.kills+data.participants[0].stats.assists)/data.participants[0].stats.deaths).toFixed(2)}}:1 KDA</span>
@@ -61,135 +61,168 @@
               <td>
                 <!-- Items -->
                 <table>
-                    <td style="padding:0px;"><img :src="data.participants[0].stats.item0 > 0 ? ITEMICONURL+data.participants[0].stats.item0+'.png' : './assets/0.png'" class='thumbicon thumbround'></td>
-                    <td style="padding:0px;"><img :src="data.participants[0].stats.item1 > 0 ? ITEMICONURL+data.participants[0].stats.item1+'.png' : './assets/0.png'" class='thumbicon thumbround'></td>
-                    <td style="padding:0px;"><img :src="data.participants[0].stats.item2 > 0 ? ITEMICONURL+data.participants[0].stats.item2+'.png' : './assets/0.png'" class='thumbicon thumbround'></td>
-                    <td style="padding:0px;"><img :src="data.participants[0].stats.item3 > 0 ? ITEMICONURL+data.participants[0].stats.item3+'.png' : './assets/0.png'" class='thumbicon thumbround'></td>
+                    <td style="padding:0px;">
+                      <img :src="getIcon(data.participants[0].stats.item0)"
+                      class='thumbicon thumbround'>
+                      </td>
+                      <td style="padding:0px;">
+                      <img :src="getIcon(data.participants[0].stats.item1)"
+                      class='thumbicon thumbround'>
+                      </td>
+                      <td style="padding:0px;">
+                      <img :src="getIcon(data.participants[0].stats.item2)"
+                      class='thumbicon thumbround'>
+                      </td>
+                      <td style="padding:0px;">
+                      <img :src="getIcon(data.participants[0].stats.item3)"
+                      class='thumbicon thumbround'>
+                      </td>
                     <tr>
-                      <td style="padding:0px;"><img :src="data.participants[0].stats.item4 > 0 ? ITEMICONURL+data.participants[0].stats.item4+'.png' : './assets/0.png'" class='thumbicon thumbround'></td>
-                      <td style="padding:0px;"><img :src="data.participants[0].stats.item5 > 0 ? ITEMICONURL+data.participants[0].stats.item5+'.png' : './assets/0.png'" class='thumbicon thumbround'></td>
-                      <td style="padding:0px;"><img :src="data.participants[0].stats.item6 > 0 ? ITEMICONURL+data.participants[0].stats.item6+'.png' : './assets/0.png'" class='thumbicon thumbround'></td>
+                      <td style="padding:0px;">
+                      <img :src="getIcon(data.participants[0].stats.item4)"
+                      class='thumbicon thumbround'>
+                      </td>
+                      <td style="padding:0px;">
+                      <img :src="getIcon(data.participants[0].stats.item5)"
+                      class='thumbicon thumbround'>
+                      </td>
+                      <td style="padding:0px;">
+                      <img :src="getIcon(data.participants[0].stats.item6)"
+                      class='thumbicon thumbround'>
+                      </td>
                     </tr>
                 </table>
               </td>
           </tr>
         </tbody>
     </table>
-    <div :class="`showDetailsTip ${showDetails ? 'flip180' : ''}`" @click="function(){getGameDetails()}">
+    <div :class="`showDetailsTip ${showDetails ? 'flip180' : ''}`"
+    @click="function(){getGameDetails()}">
         <i class="fa-solid fa-angle-down"></i>
     </div>
     <!-- Begin Detailed Match History Item -->
-    <DetailedMatchInfo :matchDetails=matchDetails :style="`display: ${showDetails ? 'inline' : 'none'};`"/>
+    <DetailedMatchInfo
+    :matchDetails=matchDetails
+    :style="`display: ${showDetails ? 'inline' : 'none'};`"/>
   </div>
 </template>
 
 <script>
-const { ipcRenderer } = require('electron')
+import {
+  runeIcons, summonerSpells, CHAMPIONICONURL, ITEMICONURL, RUNEICONURL, queueIds, championIds,
+// eslint-disable-next-line import/extensions
+} from '../res/common.js';
+import DetailedMatchInfo from './DetailedMatchInfo.vue';
+
+const { ipcRenderer } = require('electron');
 const open = require('open');
-import {runeIcons, summonerSpells, CHAMPIONICONURL, ITEMICONURL, RUNEICONURL, queueIds, championIds} from '.././res/common.js'
-import DetailedMatchInfo from './DetailedMatchInfo.vue'
+
 export default {
   name: 'MatchHistoryItem',
   components: {
-    DetailedMatchInfo
+    DetailedMatchInfo,
   },
   props: {
     data: {
-        type: Object
-      },
+      type: Object,
+    },
     profileSummoner: {
       type: String,
-      defeault: "Faker"
+      defeault: 'Faker',
     },
   },
-  methods:{
-    getGameDetails(){
-      if(this.matchDetails == null){
-        ipcRenderer.send('asynchronous-message', {id:'lol-match-details', gameId: this.data.gameId})
+  methods: {
+    getGameDetails() {
+      if (this.matchDetails == null) {
+        ipcRenderer.send('asynchronous-message', { id: 'lol-match-details', gameId: this.data.gameId });
         // Add the Listener for the reply which will be destroyed
         this.matchListener = (event, data) => {
-          switch(data.reply_type){
-            case "lol-match-details": {
-              if(data.gameId == this.data.gameId) {
-                this.matchDetails = data
+          if (data.reply_type === 'lol-match-details') {
+            if (data.gameId === this.data.gameId) {
+              this.matchDetails = data;
 
-                //format team order based on whos profile we're on
+              // format team order based on whos profile we're on
 
-                let team0 = [
-                  data.participantIdentities[0].player.summonerName,
-                  data.participantIdentities[1].player.summonerName,
-                  data.participantIdentities[2].player.summonerName,
-                  data.participantIdentities[3].player.summonerName,
-                  data.participantIdentities[4].player.summonerName,
-                ]
+              const team0 = [
+                data.participantIdentities[0].player.summonerName,
+                data.participantIdentities[1].player.summonerName,
+                data.participantIdentities[2].player.summonerName,
+                data.participantIdentities[3].player.summonerName,
+                data.participantIdentities[4].player.summonerName,
+              ];
 
-                if(!team0.includes(this.profileSummoner)){
-                  data.participantIdentities = data.participantIdentities.reverse()
-                  data.participants = data.participants.reverse()
-                }
-
-                this.matchDetails = data
-
-                ipcRenderer.removeListener('asynchronous-reply',this.matchListener)
+              const tmp = data;
+              if (!team0.includes(this.profileSummoner)) {
+                tmp.participantIdentities = tmp.participantIdentities.reverse();
+                tmp.participants = tmp.participants.reverse();
               }
+
+              this.matchDetails = tmp;
+
+              ipcRenderer.removeListener('asynchronous-reply', this.matchListener);
             }
           }
-        }
-        ipcRenderer.on('asynchronous-reply', this.matchListener)
+        };
       }
-      this.showDetails = !this.showDetails
+      ipcRenderer.on('asynchronous-reply', this.matchListener);
+      this.showDetails = !this.showDetails;
+    },
+    getIcon(itemId) {
+      if (itemId > 0) {
+        return `${ITEMICONURL + itemId}.png`;
+      }
+      return '/assets/0.png';
     },
     totalCS() {
-      return this.data.participants[0].stats.totalMinionsKilled + this.data.participants[0].stats.neutralMinionsKilled
+      return (this.data.participants[0].stats.totalMinionsKilled
+      + this.data.participants[0].stats.neutralMinionsKilled);
     },
-    gameLengthHR(seconds) {
-      seconds = Number(seconds);
+    gameLengthHR(lengthInSeconds) {
+      const seconds = Number(lengthInSeconds);
       const d = Math.floor(seconds / (3600 * 24));
-      const h = Math.floor(seconds % (3600 * 24) / 3600);
-      const m = Math.floor(seconds % 3600 / 60);
+      const h = Math.floor((seconds % (3600 * 24)) / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
       const s = Math.floor(seconds % 60);
-      const dDisplay = d > 0 ? d + (d == 1 ? " day, " : " days, ") : "";
-      const hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours ") : "";
-      const mDisplay = m > 0 ? m + (m == 1 ? "m" : "m ") : "";
-      const sDisplay = s > 0 ? s + (s == 1 ? "s" : "s") : "";
-      return dDisplay + hDisplay + mDisplay + sDisplay
+      const dDisplay = d > 0 ? d + (d === 1 ? ' day, ' : ' days, ') : '';
+      const hDisplay = h > 0 ? h + (h === 1 ? ' hour, ' : ' hours ') : '';
+      const mDisplay = m > 0 ? m + (m === 1 ? 'm' : 'm ') : '';
+      const sDisplay = s > 0 ? s + (s === 1 ? 's' : 's') : '';
+      return dDisplay + hDisplay + mDisplay + sDisplay;
     },
-    sinceGame(seconds) {
-      seconds = Number(seconds/1000);
+    sinceGame(sinceSeconds) {
+      const seconds = Number(sinceSeconds / 1000);
       const d = Math.floor(seconds / (3600 * 24));
-      const h = Math.floor(seconds % (3600 * 24) / 3600);
-      const m = Math.floor(seconds % 3600 / 60);
-      const dDisplay = d > 0 ? d + (d == 1 ? " day " : " days ") : "";
-      const hDisplay = (h > 0 && !dDisplay) ? h + (h == 1 ? " hour " : " hours ") : "";
-      const mDisplay = (m > 0 && !hDisplay && !dDisplay) ? m + (m == 1 ? " minute " : " minutes ") : "";
-      return dDisplay + hDisplay + mDisplay + " ago"
+      const h = Math.floor((seconds % (3600 * 24)) / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const dDisplay = d > 0 ? d + (d === 1 ? ' day ' : ' days ') : '';
+      const hDisplay = (h > 0 && !dDisplay) ? h + (h === 1 ? ' hour ' : ' hours ') : '';
+      const mDisplay = (m > 0 && !hDisplay && !dDisplay) ? m + (m === 1 ? ' minute ' : ' minutes ') : '';
+      return `${dDisplay + hDisplay + mDisplay} ago`;
     },
-    formatLevelBulb(level){
-      level = String(level)
-      return (level.length < 2) ? "0" + String(level) : level
+    formatLevelBulb(level) {
+      const strLevel = String(level);
+      return (strLevel.length < 2) ? `0${strLevel}` : strLevel;
     },
-    openLink(url){
-        open(url)
+    openLink(url) {
+      open(url);
     },
   },
-  data(){
+  data() {
     return {
       showDetails: false,
       matchListener: null,
-      queueIds: queueIds,
-      championIds: championIds,
-      CHAMPIONICONURL: CHAMPIONICONURL,
-      RUNEICONURL: RUNEICONURL,
-      ITEMICONURL: ITEMICONURL,
-      runeIcons: runeIcons,
-      summonerSpells: summonerSpells,
+      queueIds,
+      championIds,
+      CHAMPIONICONURL,
+      RUNEICONURL,
+      ITEMICONURL,
+      runeIcons,
+      summonerSpells,
       matchDetails: null,
-    }
-  }
-}
+    };
+  },
+};
 </script>
-
-
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

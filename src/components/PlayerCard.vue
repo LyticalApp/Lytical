@@ -10,32 +10,33 @@
         <span style="font-size:14px;">Level {{data.summonerData.summonerLevel}}</span>
         <br>
         <br>
-        <span style="background-color:#161818;font-size:10px;padding:3px;">S{{getPreviousSeason()}} {{data.highestPreviousSeasonEndTier}} {{data.highestPreviousSeasonEndDivision}}</span>
+        <span style="background-color:#161818;font-size:10px;padding:3px;">
+          S{{getPreviousSeason()}} {{data.highestPreviousSeasonEndTier}}
+           {{data.highestPreviousSeasonEndDivision}}
+          </span>
       </td>
     </table>
   </div>
-</template> 
+</template>
 
 <script>
 export default {
   name: 'PlayerCard',
-  
+
   props: {
     data: {
-        type: Object
-      }
+      type: Object,
+    },
   },
   methods: {
-    getPreviousSeason(){
-      let d = new Date()
-      d = d.getFullYear()-1
-      return d.toString().substr(2,2);
-    }
-  }
-}
+    getPreviousSeason() {
+      let d = new Date();
+      d = d.getFullYear() - 1;
+      return d.toString().substr(2, 2);
+    },
+  },
+};
 </script>
-
-
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

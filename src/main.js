@@ -1,20 +1,19 @@
-import { createApp } from 'vue'
-import { createRouter,createWebHashHistory } from 'vue-router'
+import { createApp } from 'vue';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
-
-import App from './App.vue'
-import HomeView from './Home.vue'
-import PregameLobby from './Pregame.vue'
+import App from './App.vue';
+import HomeView from './Home.vue';
+import PregameLobby from './Pregame.vue';
 
 const routes = [
-    { path: '/', name: "Home", component: HomeView },
-    { path: '/pregame', name: "Pregame", component: PregameLobby },
-]
+  { path: '/', name: 'Home', component: HomeView },
+  { path: '/pregame', name: 'Pregame', component: PregameLobby },
+];
 
 const router = createRouter({
-    history: createWebHashHistory(),
-    routes
-})
+  history: createWebHashHistory(),
+  routes,
+});
 
 const app = createApp(App);
 app.use(router);
