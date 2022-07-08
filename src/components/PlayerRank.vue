@@ -33,8 +33,7 @@
 
 <script>
 
-// eslint-disable-next-line import/extensions
-import { romanNumbers } from '../res/common.js';
+import { romanNumbers } from '../res/common';
 
 export default {
   name: 'PlayerRank',

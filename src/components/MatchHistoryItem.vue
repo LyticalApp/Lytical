@@ -129,8 +129,7 @@
 <script>
 import {
   runeIcons, summonerSpells, CHAMPIONICONURL, ITEMICONURL, RUNEICONURL, queueIds, championIds,
-// eslint-disable-next-line import/extensions
-} from '../res/common.js';
+} from '../res/common';
 import DetailedMatchInfo from './DetailedMatchInfo.vue';
 
 const { ipcRenderer } = require('electron');

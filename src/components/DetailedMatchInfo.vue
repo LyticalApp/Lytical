@@ -177,26 +177,19 @@
                            </span>
                         </td>
                         <td style="padding-left:10px;">
-                           <img
-                           :src="getIcon(participant.stats.item0)"
+                           <img :src="getIcon(participant.stats.item0)"
                            class="thumbround" />
-                           <img
-                           :src="getIcon(participant.stats.item1)"
+                           <img :src="getIcon(participant.stats.item1)"
                            class="thumbround" />
-                           <img
-                           :src="getIcon(participant.stats.item2)"
+                           <img :src="getIcon(participant.stats.item2)"
                            class="thumbround" />
-                           <img
-                           :src="getIcon(participant.stats.item3)"
+                           <img :src="getIcon(participant.stats.item3)"
                            class="thumbround" />
-                           <img
-                           :src="getIcon(participant.stats.item4)"
+                           <img :src="getIcon(participant.stats.item4)"
                            class="thumbround" />
-                           <img
-                           :src="getIcon(participant.stats.item5)"
+                           <img :src="getIcon(participant.stats.item5)"
                            class="thumbround" />
-                           <img
-                           :src="getIcon(participant.stats.item6)"
+                           <img :src="getIcon(participant.stats.item6)"
                            class="thumbround" />
                         </td>
                      </tr>
@@ -211,8 +204,7 @@
 <script>
 import {
   championIds, runeIcons, summonerSpells, CHAMPIONICONURL, ITEMICONURL, RUNEICONURL,
-// eslint-disable-next-line import/extensions
-} from '../res/common.js';
+} from '../res/common';
 
 const { ipcRenderer } = require('electron');
 const open = require('open');
