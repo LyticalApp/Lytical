@@ -277,9 +277,8 @@ ipcMain.on('asynchronous-message', (event, req) => {
         getPlayerDataByName(req.user, auth).then((summoner) => {
           request.requestURL(
             auth,
-            `/lol-match-history/v1/products/lol/
-            ${summoner.puuid}
-            /matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`,
+            // eslint-disable-next-line max-len
+            `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`,
           ).then(
             (matchHistory) => {
               event.reply(
