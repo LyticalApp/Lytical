@@ -136,7 +136,7 @@ function errorHandler(errorCode, event) {
 
 // Used to get PUUID for many differet requests.
 function getPlayerDataByName(name, auth) {
-  const summonerName = name.replace(/\s/g, '');
+  const summonerName = encodeURI(name.replace(/\s/g, ''));
   return new Promise((resolve, reject) => {
     request.requestURL(
       auth,
