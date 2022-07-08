@@ -24,6 +24,7 @@ async function createWindow() {
     height: 600,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
+      // eslint-disable-next-line max-len
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration
       // for more info
       nodeIntegration: true,
@@ -152,6 +153,7 @@ ipcMain.on('asynchronous-message', (event, req) => {
       case 'current-summoner': {
         request.requestURL(
           auth,
+          // eslint-disable-next-line max-len
           `/lol-match-history/v1/products/lol/current-summoner/matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`,
         ).then((data) => {
           event.reply('asynchronous-reply', createReply(data, req.id));
@@ -171,7 +173,6 @@ ipcMain.on('asynchronous-message', (event, req) => {
             const rankData = JSON.parse(rankedD);
             rankData.summonerData = summoner;
             rankData.username = summoner.displayName;
-            console.log(rankData);
             event.reply('asynchronous-reply', createReply(rankData, req.id));
           });
         }).catch((error) => errorHandler(error, event));
@@ -202,12 +203,16 @@ ipcMain.on('asynchronous-message', (event, req) => {
               rankedData.username = summoner.displayName;
               request.requestURL(
                 auth,
+                // eslint-disable-next-line max-len
                 `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=9`,
               ).then(
                 (matchHistory) => {
                   rankedData.teamId = req.teamId;
                   rankedData.matchHistory = JSON.parse(matchHistory);
-                  event.reply('asynchronous-reply', createReply(rankedData, req.id));
+                  event.reply(
+                    'asynchronous-reply',
+                    createReply(rankedData, req.id),
+                  );
                 },
               );
             },
@@ -244,7 +249,10 @@ ipcMain.on('asynchronous-message', (event, req) => {
       }
       case 'lol-summoner-name': {
         getPlayerDataByName(req.user, auth).then(
-          (data) => event.reply('asynchronous-reply', createReply(data, req.id)),
+          (data) => event.reply(
+            'asynchronous-reply',
+            createReply(data, req.id),
+          ),
         ).catch((error) => errorHandler(error, event));
         break;
       }
@@ -269,10 +277,15 @@ ipcMain.on('asynchronous-message', (event, req) => {
         getPlayerDataByName(req.user, auth).then((summoner) => {
           request.requestURL(
             auth,
-            `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`,
+            `/lol-match-history/v1/products/lol/
+            ${summoner.puuid}
+            /matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`,
           ).then(
             (matchHistory) => {
-              event.reply('asynchronous-reply', createReply(matchHistory, req.id));
+              event.reply(
+                'asynchronous-reply',
+                createReply(matchHistory, req.id),
+              );
             },
           );
         }).catch((error) => errorHandler(error, event));

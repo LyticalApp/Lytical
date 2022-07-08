@@ -17,7 +17,8 @@
                         <option value="opgg" link="https://op.gg/champions">op.gg</option>
                         <option value="ugg" link="https://u.gg/lol/champions">u.gg</option>
                         <option value="blitz" link="https://blitz.gg/lol/champions/">blitz.gg</option>
-                        <option value="leagueofgraphs" link="https://www.leagueofgraphs.com/champions/">leagueofgraphs</option>
+                        <option value="leagueofgraphs"
+                        link="https://www.leagueofgraphs.com/champions/">leagueofgraphs</option>
                         <option value="qq" link="https://101.qq.com/#/hero">qq</option>
                     </select>
                 </td>

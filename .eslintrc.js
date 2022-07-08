@@ -17,7 +17,9 @@ module.exports = {
   rules: {
     'linebreak-style': 'off',
     'no-console': 'off',
-    'max-len': ['error', { code: 999 }],
-    'no-restricted-syntax': ['off', 'FunctionExpression', 'WithStatement', "BinaryExpression[operator='in']"],
+    'max-len': ['error', { code: 120 }],
+    'no-restricted-syntax': [
+      'off', 'FunctionExpression',
+      'WithStatement', "BinaryExpression[operator='in']"],
   },
 };

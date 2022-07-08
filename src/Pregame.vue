@@ -1,56 +1,74 @@
 <template>
     <div class="wrapper2">
         <div class="team">
-        <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
-        <div v-if="teammate.teamId == undefined || teammate.teamId == 1" class="miniCard">
-            <img :src='`assets/Emblem_${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`' style="height:70px;">
-            <br>
-            <span @click="searchSummoner(teammate.username)">{{teammate.username}}</span>
-            <br>
-            <span style="font-size:12px;">{{capitalize(teammate.queueMap.RANKED_SOLO_5x5.tier)}}  {{romanNumbers[teammate.queueMap.RANKED_SOLO_5x5.division]}} ({{teammate.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP)</span>
-            <br>
-            <div v-for="(match,index) in teammate.matchHistory.games.games" :key="match.gameId" :class='`matchItem`'>
-                <div v-if="!(teammate.teamId == 1 && index > 4)">
-                <img @click="openLink('https://na.op.gg/champions/'+championIds[match.participants[0].championId])" :src="CHAMPIONICONURL+match.participants[0].championId+'.png'" style="border-radius:10px;width:20px;height:20px;">
-                <div :class='`kda ${match.participants[0].stats.win ? "Victory" : "Defeat"}`'>
-                    <span>{{match.participants[0].stats.kills}}/{{match.participants[0].stats.deaths}}/{{match.participants[0].stats.assists}}</span>
-                </div>
-                <span style="font-size:15px;margin-left:4px;background-color:#5d4e73;border-radius:4px;padding-left:4px;padding-right:4px;">{{sinceGame(Date.now()-match.gameCreation)}}</span>
+            <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
+                <div v-if="teammate.teamId == undefined || teammate.teamId == 1" class="miniCard">
+                    <img :src='`assets/Emblem_${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`' style="height:70px;">
+                    <br>
+                    <span @click="searchSummoner(teammate.username)">{{teammate.username}}</span>
+                    <br>
+                    <span style="font-size:12px;">{{capitalize(teammate.queueMap.RANKED_SOLO_5x5.tier)}}
+                        {{romanNumbers[teammate.queueMap.RANKED_SOLO_5x5.division]}}
+                        ({{teammate.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP)</span>
+                    <br>
+                    <div v-for="(match,index) in teammate.matchHistory.games.games" :key="match.gameId"
+                        :class='`matchItem`'>
+                        <div v-if="!(teammate.teamId == 1 && index > 4)">
+                            <img @click="openLink(
+                              'https://na.op.gg/champions/'+championIds[match.participants[0].championId]
+                              )"
+                                :src="CHAMPIONICONURL+match.participants[0].championId+'.png'"
+                                style="border-radius:10px;width:20px;height:20px;">
+                            <div :class='`kda ${match.participants[0].stats.win ? "Victory" : "Defeat"}`'>
+                                <span>
+                                  {{match.participants[0].stats.kills}}
+                                  /{{match.participants[0].stats.deaths}}
+                                  /{{match.participants[0].stats.assists}}
+                                </span>
+                            </div>
+                            <span class="sinceGame">{{sinceGame(Date.now()-match.gameCreation)}}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
-    </div>
-    <div class="team">
-    <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
-        <div v-if="teammate.teamId == 2" class="miniCard">
-            <img :src='`assets/Emblem_${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`' style="height:70px;">
-            <br>
-            <span @click="searchSummoner(teammate.username)">{{teammate.username}}</span>
-            <br>
-            <span style="font-size:12px;">{{capitalize(teammate.queueMap.RANKED_SOLO_5x5.tier)}}  {{romanNumbers[teammate.queueMap.RANKED_SOLO_5x5.division]}} ({{teammate.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP)</span>
-            <br>
-            <div v-for="(match,index) in teammate.matchHistory.games.games" :key="match.gameId" :class='`matchItem`'>
-                <div v-if="index < 5">
-                <a :href="'https://na.op.gg/champions/'+championIds[match.participants[0].championId]">
-                    <img :src="CHAMPIONICONURL+match.participants[0].championId+'.png'" style="border-radius:10px;width:20px;height:20px;">
-                </a>
-                <div :class='`kda ${match.participants[0].stats.win ? "Victory" : "Defeat"}`'>
-                    <span>{{match.participants[0].stats.kills}}/{{match.participants[0].stats.deaths}}/{{match.participants[0].stats.assists}}</span>
+        <div class="team">
+            <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
+                <div v-if="teammate.teamId == 2" class="miniCard">
+                    <img :src='`assets/Emblem_${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`' style="height:70px;">
+                    <br>
+                    <span @click="searchSummoner(teammate.username)">{{teammate.username}}</span>
+                    <br>
+                    <span style="font-size:12px;">{{capitalize(teammate.queueMap.RANKED_SOLO_5x5.tier)}}
+                        {{romanNumbers[teammate.queueMap.RANKED_SOLO_5x5.division]}}
+                        ({{teammate.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP)</span>
+                    <br>
+                    <div v-for="(match,index) in teammate.matchHistory.games.games" :key="match.gameId"
+                        :class='`matchItem`'>
+                        <div v-if="index < 5">
+                            <a :href="'https://na.op.gg/champions/'+championIds[match.participants[0].championId]">
+                                <img :src="CHAMPIONICONURL+match.participants[0].championId+'.png'"
+                                    style="border-radius:10px;width:20px;height:20px;">
+                            </a>
+                            <div :class='`kda ${match.participants[0].stats.win ? "Victory" : "Defeat"}`'>
+                                <span>
+                                  {{match.participants[0].stats.kills}}
+                                  /{{match.participants[0].stats.deaths}}
+                                  /{{match.participants[0].stats.assists}}
+                                </span>
+                            </div>
+                            <span class="sinceGame">{{sinceGame(Date.now()-match.gameCreation)}}</span>
+                        </div>
+                    </div>
                 </div>
-                <span style="font-size:15px;margin-left:4px;background-color:#5d4e73;border-radius:4px;padding-left:4px;padding-right:4px;">{{sinceGame(Date.now()-match.gameCreation)}}</span>
             </div>
         </div>
-        </div>
     </div>
-    </div>
-  </div>
 </template>
 
 <script>
 
-// eslint-disable-next-line import/extensions
-import { championIds, romanNumbers, CHAMPIONICONURL } from './res/common.js';
+import { championIds, romanNumbers, CHAMPIONICONURL } from './res/common';
 
 const { ipcRenderer } = require('electron');
 const open = require('open');
@@ -210,6 +228,14 @@ export default {
 .Defeat {
     color:#ba4b45;
     background-color:rgb(186, 75, 69, 0.5);
+}
+.sinceGame {
+  font-size:15px;
+  margin-left:4px;
+  background-color:#5d4e73;
+  border-radius:4px;
+  padding-left:4px;
+  padding-right:4px;
 }
 .matchItem {
     margin:auto;

@@ -2,7 +2,10 @@
     <div>
         <div class="navWrapper">
             <div :class='`item ${ underlineHome ? "underlined" : ""}`'>
-                <router-link :to="{ name: 'Home', params: { summonerSearch: summonerSearch }}">
+                <router-link
+                :to="{
+                  name: 'Home',
+                  params: { summonerSearch: summonerSearch }}">
                     Profile
                 </router-link>
             </div>
@@ -51,16 +54,31 @@ export default {
   methods: {
     searchSummoner() {
       if (this.$route.path !== '/') {
-        this.$router.push({ name: 'Home', params: { summonerSearch: this.summonerSearch } });
+        this.$router.push({
+          name: 'Home',
+          params: { summonerSearch: this.summonerSearch },
+        });
       }
       if (this.summonerSearch !== '') {
-        ipcRenderer.send('asynchronous-message', { id: 'lol-ranked-stats', user: this.summonerSearch });
         ipcRenderer.send('asynchronous-message', {
-          id: 'lol-match-history', user: this.summonerSearch, begIndex: 0, endIndex: 9,
+          id: 'lol-ranked-stats',
+          user: this.summonerSearch,
+        });
+        ipcRenderer.send('asynchronous-message', {
+          id: 'lol-match-history',
+          user: this.summonerSearch,
+          begIndex: 0,
+          endIndex: 9,
         });
       } else {
-        ipcRenderer.send('asynchronous-message', { id: 'current-ranked-stats' });
-        ipcRenderer.send('asynchronous-message', { id: 'current-summoner', begIndex: 0, endIndex: 9 });
+        ipcRenderer.send('asynchronous-message', {
+          id: 'current-ranked-stats',
+        });
+        ipcRenderer.send('asynchronous-message', {
+          id: 'current-summoner',
+          begIndex: 0,
+          endIndex: 9,
+        });
       }
     },
   },

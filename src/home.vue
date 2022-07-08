@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div v-show='showError' style="background-color:red;width:100%;position:fixed;">
+    <div v-show='showError' class="errorDiv">
       <h1>LCU Disconnected</h1>
     </div>
     <table class="container" style="vertical-align: top;">
@@ -11,7 +11,7 @@
           </div>
         </td>
         <td>
-          <div v-if="!matches.length" class="loadingFrame">
+          <div v-if="!matches.length && !showError" class="loadingFrame">
               <div class="lds-ellipsis">
                 <div></div>
                 <div></div>
@@ -64,14 +64,23 @@ export default {
     searchSummoner(summonerName) {
       if (summonerName !== undefined && summonerName !== '') {
         // Searchbar name
-        ipcRenderer.send('asynchronous-message', { id: 'lol-ranked-stats', user: summonerName });
+        ipcRenderer.send('asynchronous-message', {
+          id: 'lol-ranked-stats',
+          user: summonerName,
+        });
         ipcRenderer.send('asynchronous-message', {
           id: 'lol-match-history', user: summonerName, begIndex: 0, endIndex: 9,
         });
       } else {
         // Current summoner from LCU
-        ipcRenderer.send('asynchronous-message', { id: 'current-ranked-stats' });
-        ipcRenderer.send('asynchronous-message', { id: 'current-summoner', begIndex: 0, endIndex: 9 });
+        ipcRenderer.send('asynchronous-message', {
+          id: 'current-ranked-stats',
+        });
+        ipcRenderer.send('asynchronous-message', {
+          id: 'current-summoner',
+          begIndex: 0,
+          endIndex: 9,
+        });
       }
     },
     getQueueName(queueId) {
@@ -127,7 +136,8 @@ export default {
           // pregame lobbies which will
           // display player cards for each player
           console.log('DEBUG:', localStorage.autoSwitchLobby);
-          if (localStorage.autoSwitchLobby === 'true' || localStorage.autoSwitchLobby === undefined) {
+          if (localStorage.autoSwitchLobby === 'true'
+              || localStorage.autoSwitchLobby === undefined) {
             this.$router.push('pregame');
           }
           break;
@@ -158,6 +168,11 @@ export default {
     justify-content: center;
     overflow:scroll;
     height:calc(100vh - 55px);
+}
+.errorDiv {
+  background-color:#e84057;
+  width:100%;
+  position:fixed;
 }
 
 #leftSideBar {

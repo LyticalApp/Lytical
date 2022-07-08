@@ -14,7 +14,7 @@
                   <span style="left:175px;position:absolute;">KDA</span>
                   <span style="left:260px;position:absolute;">Damage</span>
                   <span style="left:337px;position:absolute;">Wards</span>
-                  <span style="left:382px;position:absolute;">CS</span>
+                  <span style="left:385px;position:absolute;">CS</span>
                   <span style="left:465px;position:absolute;">Items</span>
                </div>
                <div v-for="(participant,index) in matchDetails.participants" :key=index :class='`
@@ -26,27 +26,49 @@
                   <div v-if="index == 5" class="middle-wrapper">
                      <!-- top team stats -->
                      <div id="ourteam" style="float:left;">
-                        <span>&nbsp;&nbsp;<img :src="'./assets/baron.png'" class="middle-icon"/>&nbsp;{{matchDetails.teams[getTeamId(0)].baronKills}}</span>
-                        <span><img :src="'./assets/dragon.png'" class="middle-icon" style="padding-left:8px;"/>&nbsp;{{matchDetails.teams[getTeamId(0)].dragonKills}}</span>
-                        <span><img :src="'./assets/turret.png'" class="middle-icon" style="padding-left:8px;"/>&nbsp;{{matchDetails.teams[getTeamId(0)].towerKills}}</span>
-                        <span><img :src="'./assets/gold.png'" class="middle-icon" style="padding-left:8px;"/>&nbsp;{{(calcTotalGold(0)/1000).toFixed(1)}}k</span>
+                        <span>&nbsp;&nbsp;
+                           <img :src="'./assets/baron.png'" class="middle-icon"/>
+                           &nbsp;{{matchDetails.teams[getTeamId(0)].baronKills}}</span>
+                        <span>
+                           <img :src="'./assets/dragon.png'" class="middle-icon" style="padding-left:8px;"/>
+                           &nbsp;{{matchDetails.teams[getTeamId(0)].dragonKills}}</span>
+                        <span>
+                           <img :src="'./assets/turret.png'" class="middle-icon" style="padding-left:8px;"/>
+                           &nbsp;{{matchDetails.teams[getTeamId(0)].towerKills}}</span>
+                        <span>
+                           <img :src="'./assets/gold.png'" class="middle-icon" style="padding-left:8px;"/>
+                           &nbsp;{{(calcTotalGold(0)/1000).toFixed(1)}}k</span>
                      </div>
                      <!-- Total Kills -->
                      <div style="display:inline;color:#f2ecff;">
-                        <span style="font-size:10px;line-height: 120%;margin:0 auto;position:absolute;padding-left:70px;margin-top:2px;">Total Kills</span>
-                        <div :class='`${participant.stats.win ? "accentBlue" : "accentRed"}`' style="width:190px;display:inline-block;margin-top:2px;">
-                           <span style="font-size:10px;line-height: 120%;float:right;padding-right:4px;">{{calcTotalKills(5).toLocaleString('en-US')}}</span>
-                           <div :class='`${participant.stats.win ? "accentRed" : "accentBlue"}`' :style="{ height:'12px', width: calcTotalKills(0)/(calcTotalKills(0)+calcTotalKills(5))*100+'%'}">
-                              <span style="font-size:10px;float:left;padding-left:4px;">{{calcTotalKills(0).toLocaleString('en-US')}}</span>
+                        <span class="totalKillsLabel">
+                           Total Kills</span>
+                        <div :class='`${participant.stats.win ? "accentBlue" : "accentRed"}`'
+                        style="width:190px;display:inline-block;margin-top:2px;">
+                           <span style="font-size:10px;line-height: 120%;float:right;padding-right:4px;">
+                              {{calcTotalKills(5).toLocaleString('en-US')}}</span>
+                           <div :class='`${participant.stats.win ? "accentRed" : "accentBlue"}`'
+                           :style="{ height:'12px',
+                           width: calcTotalKills(0)/(calcTotalKills(0)+calcTotalKills(5))*100+'%'}">
+                              <span style="font-size:10px;float:left;padding-left:4px;">
+                                 {{calcTotalKills(0).toLocaleString('en-US')}}</span>
                            </div>
                         </div>
                      </div>
                      <!-- bottom team stats -->
                      <div id="enemyteam" style="float:right;">
-                        <span><img :src="'./assets/baron.png'" class="middle-icon"/>&nbsp;{{matchDetails.teams[getTeamId(5)].baronKills}}</span>
-                        <span><img :src="'./assets/dragon.png'" class="middle-icon" style="padding-left:8px;"/>&nbsp;{{matchDetails.teams[getTeamId(5)].dragonKills}}</span>
-                        <span><img :src="'./assets/turret.png'" class="middle-icon" style="padding-left:8px;"/>&nbsp;{{matchDetails.teams[getTeamId(5)].towerKills}}</span>
-                        <span><img :src="'./assets/gold.png'" class="middle-icon" style="padding-left:8px;"/>&nbsp;{{(calcTotalGold(5)/1000).toFixed(1)}}k&nbsp;&nbsp;</span>
+                        <span>
+                           <img :src="'./assets/baron.png'" class="middle-icon"/>
+                           &nbsp;{{matchDetails.teams[getTeamId(5)].baronKills}}</span>
+                        <span>
+                           <img :src="'./assets/dragon.png'" class="middle-icon" style="padding-left:8px;"/>
+                           &nbsp;{{matchDetails.teams[getTeamId(5)].dragonKills}}</span>
+                        <span>
+                           <img :src="'./assets/turret.png'" class="middle-icon" style="padding-left:8px;"/>
+                           &nbsp;{{matchDetails.teams[getTeamId(5)].towerKills}}</span>
+                        <span>
+                           <img :src="'./assets/gold.png'" class="middle-icon" style="padding-left:8px;"/>
+                           &nbsp;{{(calcTotalGold(5)/1000).toFixed(1)}}k&nbsp;&nbsp;</span>
                      </div>
                   </div>
                <!-- Team 1 title bar/column labels -->
@@ -60,56 +82,83 @@
                   <span style="left:175px;position:absolute;">KDA</span>
                   <span style="left:260px;position:absolute;">Damage</span>
                   <span style="left:337px;position:absolute;">Wards</span>
-                  <span style="left:382px;position:absolute;">CS</span>
+                  <span style="left:385px;position:absolute;">CS</span>
                   <span style="left:465px;position:absolute;">Items</span>
                </div>
                   <div class="normalScoreboard">
                      <!-- Normal Scoreboard Item for Player -->
                      <tr>
                         <td style="display:inline-block;">
-                           <img @click="openLink('https://na.op.gg/champions/'+championIds[participant.championId])" style="width:30px;height:30px;border-radius:50%;padding-bottom:4px;" :src="CHAMPIONICONURL + participant.championId + '.png'" />
+                           <img @click="openLink(
+                              'https://na.op.gg/champions/'+championIds[participant.championId]
+                              )"
+                              style="width:30px;height:30px;border-radius:50%;padding-bottom:4px;"
+                              :src="CHAMPIONICONURL + participant.championId + '.png'" />
                            <table style="display:inline;">
                               <td style="padding:0px;">
                                  <!-- Summoner Spells -->
-                                 <img :src='`assets/${summonerSpells[participant.spell1Id]}.webp`' class='thumbicon thumbround' style="height:15px;width:15px;">
+                                 <img :src='`assets/${summonerSpells[participant.spell1Id]}.webp`'
+                                 class='thumbicon thumbround' style="height:15px;width:15px;">
                                  <br>
-                                 <img :src='`assets/${summonerSpells[participant.spell2Id]}.webp`' class='thumbicon thumbround' style="height:15px;width:15px;">
+                                 <img :src='`assets/${summonerSpells[participant.spell2Id]}.webp`'
+                                 class='thumbicon thumbround' style="height:15px;width:15px;">
                               </td>
                               <td style="padding:0px;">
                                  <!-- Runes -->
-                                 <img :src="RUNEICONURL+runeIcons[participant.stats.perk0]" class='thumbicon thumbround' style="height:15px;width:15px;">
+                                 <img :src="RUNEICONURL+runeIcons[participant.stats.perk0]"
+                                 class='thumbicon thumbround' style="height:15px;width:15px;">
                                  <br>
-                                 <img :src="RUNEICONURL+runeIcons[participant.stats.perkSubStyle]" class='thumbicon thumbround' style="height:15px;width:15px;">
+                                 <img :src="RUNEICONURL+runeIcons[participant.stats.perkSubStyle]"
+                                 class='thumbicon thumbround' style="height:15px;width:15px;">
                               </td>
                            </table>
-                           <span style="position:absolute;left:4px;font-size:12px;background-color:#080808;border-radius:50%;margin-top:30px;padding:1px;">
+                           <span class="championLeveLBulb">
                            {{formatLevelBulb(participant.stats.champLevel)}}
                            </span>
-                           <div style="display:inline-block;width:75px;text-align:left;padding-top:4px;" class="summonername" :title="matchDetails.participantIdentities[index].player.summonerName">
-                              <span style="font-size:12px;color:#f2ecff;" @click="searchPlayer(matchDetails.participantIdentities[index].player.summonerName)">{{matchDetails.participantIdentities[index].player.summonerName}}</span><br>
+                           <div style="display:inline-block;width:75px;text-align:left;padding-top:4px;"
+                           class="summonername" :title="matchDetails.participantIdentities[index].player.summonerName">
+                              <span style="font-size:12px;color:#f2ecff;"
+                              @click="searchPlayer(matchDetails.participantIdentities[index].player.summonerName)">
+                              {{matchDetails.participantIdentities[index].player.summonerName}}</span><br>
                               <span style="font-size:11px;">{{participant.timeline.lane}}</span>
                            </div>
                         </td>
                         <td style="width:75px;font-size:11px;">
-                           <span>{{participant.stats.kills}}/{{participant.stats.deaths}}/{{participant.stats.assists}} ({{(((participant.stats.kills + participant.stats.assists)/calcTotalKills(index))*100).toFixed(0)}}%)</span>
+                           <span>
+                              {{participant.stats.kills}}/{{participant.stats.deaths}}/{{participant.stats.assists}}
+                               ({{(((participant.stats.kills +
+                               participant.stats.assists)/calcTotalKills(index))*100).toFixed(0)}}%)</span>
                            <br>
-                           <b><span :style="{ color: getKDAStyle(((participant.stats.kills + participant.stats.assists)/participant.stats.deaths)), fontSize: '10px'}">{{((participant.stats.kills + participant.stats.assists)/participant.stats.deaths).toFixed(2)}}:1</span></b>
+                           <b><span :style="{ color: getKDAStyle(
+                              ((participant.stats.kills +
+                              participant.stats.assists)/participant.stats.deaths)),
+                              fontSize: '10px'}">
+                              {{((participant.stats.kills + participant.stats.assists)
+                              /participant.stats.deaths).toFixed(2)}}:1</span></b>
                         </td>
                         <td style="padding-left:10px;width:100px;font-size:12px;">
                            <div>
-                              <span style="float:left;">{{participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')}}</span>
+                              <span style="float:left;">
+                                 {{participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')}}</span>
                               {{participant.stats.totalDamageTaken.toLocaleString('en-US')}}
                            </div>
                            <div>
                               <div class="w3-border" style="float:left;width:40px;display:inline-block;margin-top:4px;">
                                  <div
                                     :title="participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')"
-                                    class="w3-grey" :style="{ height:'6px', width: participant.stats.totalDamageDealtToChampions/calcTotalDamage(index)*180+'%'}"></div>
+                                    class="w3-grey"
+                                    :style="{ height:'6px',
+                                    width: participant.stats.totalDamageDealtToChampions/calcTotalDamage(index)*180+'%'
+                                    }"></div>
                               </div>
-                              <div class="w3-border" style="float:left;width:40px;display:inline-block;margin-top:4px;margin-left:10px;">
+                              <div class="w3-border"
+                              style="float:left;width:40px;display:inline-block;margin-top:4px;margin-left:10px;">
                                  <div
                                     :title="participant.stats.totalDamageTaken.toLocaleString('en-US')"
-                                    :style="{ backgroundColor: '#7b7a8e', height:'6px', width: participant.stats.totalDamageTaken/calcTotalDamageTaken(index)*180+'%'}"></div>
+                                    :style="{ backgroundColor: '#7b7a8e',
+                                    height:'6px',
+                                    width: participant.stats.totalDamageTaken/calcTotalDamageTaken(index)*180+'%'}">
+                                    </div>
                               </div>
                            </div>
                         </td>
@@ -123,17 +172,32 @@
                         <td style="width:40px;">
                            <span style="font-size:12px;display: block;">
                            {{participant.stats.totalMinionsKilled + participant.stats.neutralMinionsKilled}}
-                           {{((participant.stats.totalMinionsKilled + participant.stats.neutralMinionsKilled)/(matchDetails.gameDuration/60)).toFixed(1)}}/m
+                           {{((participant.stats.totalMinionsKilled + participant.stats.neutralMinionsKilled)/
+                           (matchDetails.gameDuration/60)).toFixed(1)}}/m
                            </span>
                         </td>
                         <td style="padding-left:10px;">
-                           <img :src="participant.stats.item1 > 0 ? ITEMICONURL + participant.stats.item1 + '.png' : './assets/0.png'" class="thumbround" />
-                           <img :src="participant.stats.item0 > 0 ? ITEMICONURL + participant.stats.item0 + '.png' : './assets/0.png'" class="thumbround"/>
-                           <img :src="participant.stats.item2 > 0 ? ITEMICONURL + participant.stats.item2 + '.png' : './assets/0.png'" class="thumbround"/>
-                           <img :src="participant.stats.item3 > 0 ? ITEMICONURL + participant.stats.item3 + '.png' : './assets/0.png'" class="thumbround"/>
-                           <img :src="participant.stats.item4 > 0 ? ITEMICONURL + participant.stats.item4 + '.png' : './assets/0.png'" class="thumbround"/>
-                           <img :src="participant.stats.item5 > 0 ? ITEMICONURL + participant.stats.item5 + '.png' : './assets/0.png'" class="thumbround"/>
-                           <img :src="participant.stats.item6 > 0 ? ITEMICONURL + participant.stats.item6 + '.png' : './assets/0.png'" class="thumbround"/>
+                           <img
+                           :src="getIcon(participant.stats.item0)"
+                           class="thumbround" />
+                           <img
+                           :src="getIcon(participant.stats.item1)"
+                           class="thumbround" />
+                           <img
+                           :src="getIcon(participant.stats.item2)"
+                           class="thumbround" />
+                           <img
+                           :src="getIcon(participant.stats.item3)"
+                           class="thumbround" />
+                           <img
+                           :src="getIcon(participant.stats.item4)"
+                           class="thumbround" />
+                           <img
+                           :src="getIcon(participant.stats.item5)"
+                           class="thumbround" />
+                           <img
+                           :src="getIcon(participant.stats.item6)"
+                           class="thumbround" />
                         </td>
                      </tr>
                   </div>
@@ -179,6 +243,12 @@ export default {
         }
       }
       return totalGold;
+    },
+    getIcon(itemId) {
+      if (itemId > 0) {
+        return `${ITEMICONURL + itemId}.png`;
+      }
+      return '/assets/0.png';
     },
     calcTotalKills(index) {
       let totalKills = 0;
@@ -238,6 +308,23 @@ export default {
 
 </script>
 <style scoped>
+.totalKillsLabel {
+   font-size:10px;
+   line-height: 120%;
+   margin:0 auto;
+   position:absolute;
+   padding-left:70px;
+   margin-top:2px;
+}
+.championLeveLBulb {
+   position:absolute;
+   left:4px;
+   font-size:12px;
+   background-color:#080808;
+   border-radius:50%;
+   margin-top:30px;
+   padding:1px;
+}
 .header-bar {
    display:flex;
    margin:auto;

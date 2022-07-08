@@ -1,110 +1,129 @@
 <template>
-  <div :class='`matchItem ${data.participants[0].stats.win ? "Victory" : "Defeat"}`'>
-    <table>
-        <tbody>
-          <tr>
-              <td style="width:85px;text-align:left;">
-                <div>
-                    <!-- Gamemode and Preview -->
-                    <span style="font-size:14px;"><b>{{queueIds[data.queueId]}}</b></span>
-                    <span style="font-size:10px;">{{sinceGame(Date.now()-data.gameCreation)}}</span>
-                    <div style="width:40px;border-top: 1px solid #5a4656;margin-top:6px;margin-bottom:6px;"></div>
-                    <span style="font-size:12px;font-weight:bold;">{{data.participants[0].stats.win ? "Victory" : "Defeat"}}</span>
-                    <span style="font-size:12px;">{{gameLengthHR(data.gameDuration)}}</span>
-                </div>
-              </td>
-              <td>
-                <div>
-                    <!-- Icon summoners, and champ name -->
-                    <div>
-                      <!-- 2x2 -->
-                      <table style="display:inline;">
-                          <td style="padding:0px;vertical-align:bottom;">
-                          <span style="position:absolute;left:115px;font-size:14px;background-color:#080808;border-radius:50%;margin-top:35px;padding:2px;">
-                           {{formatLevelBulb(data.participants[0].stats.champLevel)}}
-                           </span>
-                            <img @click="openLink('https://na.op.gg/champions/'+championIds[data.participants[0].championId])" :src="CHAMPIONICONURL+data.participants[0].championId+'.png'" style="width:50px;height:50px;border-radius:50%;">
-                          </td>
-                          <td style="padding:0px;">
-                            <!-- Summoner Spells -->
-                            <img :src='`assets/${summonerSpells[data.participants[0].spell1Id]}.webp`' class='thumbicon thumbround'>
-                            <br>
-                            <img :src='`assets/${summonerSpells[data.participants[0].spell2Id]}.webp`' class='thumbicon thumbround'>
-                          </td>
-                          <td style="padding:0px;">
-                            <!-- Runes -->
-                            <img :src="RUNEICONURL+runeIcons[data.participants[0].stats.perk0]" class='thumbicon thumbround'>
-                            <br>
-                            <img :src="RUNEICONURL+runeIcons[data.participants[0].stats.perkSubStyle]" class='thumbicon thumbround'>
-                          </td>
-                      </table>
-                    </div>
-                </div>
-              </td>
-              <td style="width:90px;">
-                <!-- K/D/A -->
-                <div>
-                  <span style="font-weight:bold;display:inline-block;color:#fff;">{{data.participants[0].stats.kills}}</span> /
-                  <span style="font-weight:bold;display:inline-block;color:#e84057;">{{data.participants[0].stats.deaths}}</span> /
-                  <span style="font-weight:bold;display:inline-block;color:#fff;">{{data.participants[0].stats.assists}}</span>
-                </div>
-                <span style="font-size:12px;">{{((data.participants[0].stats.kills+data.participants[0].stats.assists)/data.participants[0].stats.deaths).toFixed(2)}}:1 KDA</span>
-              </td>
-              <td style="text-align:left;font-size:11px;width:80px;">
-                <!-- Personal Stats -->
-                <span style="color:#e84057;">{{(data.participants[0].stats.totalDamageDealtToChampions/1000).toFixed(1)}}k Damage</span>
-                <span>Control Ward {{data.participants[0].stats.visionWardsBoughtInGame}}</span>
-                <span>{{totalCS()}} ({{(totalCS()/(data.gameDuration/60)).toFixed(1)}}) CS</span>
-                <span style="font-size:8px;font-weight:bold;">{{championIds[data.participants[0].championId]}}</span>
-                <!-- <span>P/Kill 10%</span> -->
-              </td>
-              <td>
-                <!-- Items -->
-                <table>
-                    <td style="padding:0px;">
-                      <img :src="getIcon(data.participants[0].stats.item0)"
-                      class='thumbicon thumbround'>
-                      </td>
-                      <td style="padding:0px;">
-                      <img :src="getIcon(data.participants[0].stats.item1)"
-                      class='thumbicon thumbround'>
-                      </td>
-                      <td style="padding:0px;">
-                      <img :src="getIcon(data.participants[0].stats.item2)"
-                      class='thumbicon thumbround'>
-                      </td>
-                      <td style="padding:0px;">
-                      <img :src="getIcon(data.participants[0].stats.item3)"
-                      class='thumbicon thumbround'>
-                      </td>
-                    <tr>
-                      <td style="padding:0px;">
-                      <img :src="getIcon(data.participants[0].stats.item4)"
-                      class='thumbicon thumbround'>
-                      </td>
-                      <td style="padding:0px;">
-                      <img :src="getIcon(data.participants[0].stats.item5)"
-                      class='thumbicon thumbround'>
-                      </td>
-                      <td style="padding:0px;">
-                      <img :src="getIcon(data.participants[0].stats.item6)"
-                      class='thumbicon thumbround'>
-                      </td>
-                    </tr>
-                </table>
-              </td>
-          </tr>
-        </tbody>
-    </table>
-    <div :class="`showDetailsTip ${showDetails ? 'flip180' : ''}`"
-    @click="function(){getGameDetails()}">
-        <i class="fa-solid fa-angle-down"></i>
+    <div :class='`matchItem ${data.participants[0].stats.win ? "Victory" : "Defeat"}`'>
+        <table>
+            <tbody>
+                <tr>
+                    <td style="width:85px;text-align:left;">
+                        <div>
+                            <!-- Gamemode and Preview -->
+                            <span style="font-size:14px;"><b>{{queueIds[data.queueId]}}</b></span>
+                            <span style="font-size:10px;">{{sinceGame(Date.now()-data.gameCreation)}}</span>
+                            <div style="width:40px;border-top: 1px solid #5a4656;margin-top:6px;margin-bottom:6px;">
+                            </div>
+                            <span style="font-size:12px;font-weight:bold;">{{data.participants[0].stats.win ? "Victory"
+                                : "Defeat"}}</span>
+                            <span style="font-size:12px;">{{gameLengthHR(data.gameDuration)}}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <!-- Icon summoners, and champ name -->
+                            <div>
+                                <!-- 2x2 -->
+                                <table style="display:inline;">
+                                    <td style="padding:0px;vertical-align:bottom;">
+                                        <span class="championLevelBulb">
+                                            {{formatLevelBulb(data.participants[0].stats.champLevel)}}
+                                        </span>
+                                        <img @click="openLink(
+                                          'https://na.op.gg/champions/'+championIds[data.participants[0].championId]
+                                          )"
+                                            :src="CHAMPIONICONURL+data.participants[0].championId+'.png'"
+                                            style="width:50px;height:50px;border-radius:50%;">
+                                    </td>
+                                    <td style="padding:0px;">
+                                        <!-- Summoner Spells -->
+                                        <img :src='`assets/${summonerSpells[data.participants[0].spell1Id]}.webp`'
+                                            class='thumbicon thumbround'>
+                                        <br>
+                                        <img :src='`assets/${summonerSpells[data.participants[0].spell2Id]}.webp`'
+                                            class='thumbicon thumbround'>
+                                    </td>
+                                    <td style="padding:0px;">
+                                        <!-- Runes -->
+                                        <img :src="RUNEICONURL+runeIcons[data.participants[0].stats.perk0]"
+                                            class='thumbicon thumbround'>
+                                        <br>
+                                        <img :src="RUNEICONURL+runeIcons[data.participants[0].stats.perkSubStyle]"
+                                            class='thumbicon thumbround'>
+                                    </td>
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:90px;">
+                        <!-- K/D/A -->
+                        <div>
+                            <span
+                                style="font-weight:bold;display:inline-block;color:#fff;">
+                                {{data.participants[0].stats.kills}}
+                            </span>
+                            /
+                            <span
+                                style="font-weight:bold;display:inline-block;color:#e84057;">
+                                {{data.participants[0].stats.deaths}}
+                            </span>
+                            /
+                            <span
+                                style="font-weight:bold;display:inline-block;color:#fff;">
+                                {{data.participants[0].stats.assists}}
+                            </span>
+                        </div>
+                        <span
+                            style="font-size:12px;">
+                            {{((data.participants[0].stats.kills+data.participants[0].stats.assists)
+                            /data.participants[0].stats.deaths).toFixed(2)}}:1
+                            KDA</span>
+                    </td>
+                    <td style="text-align:left;font-size:11px;width:80px;">
+                        <!-- Personal Stats -->
+                        <span style="color:#e84057;">
+                          {{(data.participants[0].stats.totalDamageDealtToChampions/1000).toFixed(1)}}k Damage
+                        </span>
+                        <span>Control Ward {{data.participants[0].stats.visionWardsBoughtInGame}}</span>
+                        <span>{{totalCS()}} ({{(totalCS()/(data.gameDuration/60)).toFixed(1)}}) CS</span>
+                        <span style="font-size:8px;font-weight:bold;">
+                          {{championIds[data.participants[0].championId]}}
+                        </span>
+                        <!-- <span>P/Kill 10%</span> -->
+                    </td>
+                    <td>
+                        <!-- Items -->
+                        <table>
+                            <td style="padding:0px;">
+                                <img :src="getIcon(data.participants[0].stats.item0)" class='thumbicon thumbround'>
+                            </td>
+                            <td style="padding:0px;">
+                                <img :src="getIcon(data.participants[0].stats.item1)" class='thumbicon thumbround'>
+                            </td>
+                            <td style="padding:0px;">
+                                <img :src="getIcon(data.participants[0].stats.item2)" class='thumbicon thumbround'>
+                            </td>
+                            <td style="padding:0px;">
+                                <img :src="getIcon(data.participants[0].stats.item3)" class='thumbicon thumbround'>
+                            </td>
+                            <tr>
+                                <td style="padding:0px;">
+                                    <img :src="getIcon(data.participants[0].stats.item4)" class='thumbicon thumbround'>
+                                </td>
+                                <td style="padding:0px;">
+                                    <img :src="getIcon(data.participants[0].stats.item5)" class='thumbicon thumbround'>
+                                </td>
+                                <td style="padding:0px;">
+                                    <img :src="getIcon(data.participants[0].stats.item6)" class='thumbicon thumbround'>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div :class="`showDetailsTip ${showDetails ? 'flip180' : ''}`" @click="function(){getGameDetails()}">
+            <i class="fa-solid fa-angle-down"></i>
+        </div>
+        <!-- Begin Detailed Match History Item -->
+        <DetailedMatchInfo :matchDetails=matchDetails :style="`display: ${showDetails ? 'inline' : 'none'};`" />
     </div>
-    <!-- Begin Detailed Match History Item -->
-    <DetailedMatchInfo
-    :matchDetails=matchDetails
-    :style="`display: ${showDetails ? 'inline' : 'none'};`"/>
-  </div>
 </template>
 
 <script>
@@ -238,7 +257,15 @@ td {
 span {
   display:block;
 }
-
+.championLevelBulb {
+  position:absolute;
+  left:115px;
+  font-size:14px;
+  background-color:#080808;
+  border-radius:50%;
+  margin-top:35px;
+  padding:2px;
+}
 .matchItem {
   transition: all 3s ease-in-out;
   background-color:#020202;

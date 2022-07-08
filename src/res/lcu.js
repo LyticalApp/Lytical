@@ -11,6 +11,7 @@ exports.getAuthFromProcess = async () => {
   const pidRegex = /--app-pid=([0-9]+)/;
   return new Promise((resolve, reject) => {
     exec(
+      // eslint-disable-next-line max-len
       'Get-CimInstance Win32_Process -Filter "name = \'LeagueClientUx.exe\'" | Select-Object -Property CommandLine | ft -HideTableHeaders | out-string -Width 4096',
       { shell: 'powershell.exe' },
       (error, stdout) => {
