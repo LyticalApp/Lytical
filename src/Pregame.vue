@@ -20,10 +20,10 @@
                                 :src="CHAMPIONICONURL+match.participants[0].championId+'.png'"
                                 style="border-radius:10px;width:20px;height:20px;">
                             <div :class='`kda ${match.participants[0].stats.win ? "Victory" : "Defeat"}`'>
-                                <span>
-                                  {{match.participants[0].stats.kills}}
-                                  /{{match.participants[0].stats.deaths}}
-                                  /{{match.participants[0].stats.assists}}
+                                <span style="white-space:nowrap">
+                                  {{match.participants[0].stats.kills + "/"
+                                  + match.participants[0].stats.deaths + "/"
+                                  + match.participants[0].stats.assists}}
                                 </span>
                             </div>
                             <span class="sinceGame">{{sinceGame(Date.now()-match.gameCreation)}}</span>
@@ -51,10 +51,10 @@
                                     style="border-radius:10px;width:20px;height:20px;">
                             </a>
                             <div :class='`kda ${match.participants[0].stats.win ? "Victory" : "Defeat"}`'>
-                                <span>
-                                  {{match.participants[0].stats.kills}}
-                                  /{{match.participants[0].stats.deaths}}
-                                  /{{match.participants[0].stats.assists}}
+                                <span style="white-space:nowrap">
+                                  {{match.participants[0].stats.kills + "/"
+                                  + match.participants[0].stats.deaths + "/"
+                                  + match.participants[0].stats.assists}}
                                 </span>
                             </div>
                             <span class="sinceGame">{{sinceGame(Date.now()-match.gameCreation)}}</span>
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-
+/* eslint-disable */
 import { championIds, romanNumbers, CHAMPIONICONURL } from './res/common';
 
 const { ipcRenderer } = require('electron');
