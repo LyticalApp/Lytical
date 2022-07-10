@@ -30,7 +30,7 @@ async function createWindow() {
       nodeIntegration: true,
       contextIsolation: false,
     },
-    icon: './public/favicon.ico',
+    icon: './public/raste2r.ico',
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -279,6 +279,27 @@ ipcMain.on('asynchronous-message', (event, req) => {
             auth,
             // eslint-disable-next-line max-len
             `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`,
+          ).then(
+            (matchHistory) => {
+              event.reply(
+                'asynchronous-reply',
+                createReply(matchHistory, req.id),
+              );
+            },
+          );
+        }).catch((error) => errorHandler(error, event));
+        break;
+      }
+      case 'lol-full-ranked-history': {
+        getPlayerDataByName(req.user, auth).then((summoner) => {
+          request.requestURL(
+            auth,
+            // eslint-disable-next-line max-len
+            //
+            // This is capped at 200 Games internally. If the player refreshes late into the season we
+            // Could iterate backwards with an older start index but I don't really care..
+            // Timing: Takes 2345.318800000474ms
+            `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=200`,
           ).then(
             (matchHistory) => {
               event.reply(

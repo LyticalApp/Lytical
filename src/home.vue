@@ -8,6 +8,7 @@
           <div id="leftSideBar">
               <PlayerCard :data=playerCardInfo />
               <PlayerRank :data=playerCardInfo />
+              <RankedChampionOverview :data=rankedOverviewData />
           </div>
         </td>
         <td>
@@ -33,6 +34,7 @@
 import MatchHistoryItem from './components/MatchHistoryItem.vue';
 import PlayerCard from './components/PlayerCard.vue';
 import PlayerRank from './components/PlayerRank.vue';
+import RankedChampionOverview from './components/RankedChampionOverview.vue';
 
 const { ipcRenderer } = require('electron');
 
@@ -42,6 +44,7 @@ export default {
     MatchHistoryItem,
     PlayerCard,
     PlayerRank,
+    RankedChampionOverview,
   },
   data() {
     return {
@@ -49,6 +52,7 @@ export default {
       ondata: null,
       showError: false,
       playerCardInfo: {},
+      rankedOverviewData: null,
       matches: {},
     };
   },
@@ -121,6 +125,60 @@ export default {
           this.matches = data.games.games;
           break;
         }
+        case 'lol-full-ranked-history': {
+          const gamesOnChampions = {};
+          const { games } = data.games;
+          const rankedGames = (games).filter((game) => game.queueId === 420);
+          const thisSeason = rankedGames.filter((game) => game.gameVersion.substring(0, 2) === '12');
+          // eslint-disable-next-line guard-for-in
+          for (const game of thisSeason) {
+            const player = game.participants[0];
+            const tempObj = {
+              id: 0,
+              kills: 0,
+              deaths: 0,
+              assists: 0,
+              wins: 0,
+              losses: 0,
+            };
+            if (gamesOnChampions[player.championId] === undefined) {
+              gamesOnChampions[player.championId] = tempObj;
+            }
+            gamesOnChampions[player.championId].id = player.championId;
+            gamesOnChampions[player.championId].kills += player.stats.kills;
+            gamesOnChampions[player.championId].deaths += player.stats.deaths;
+            gamesOnChampions[player.championId].assists += player.stats.assists;
+            if (player.stats.win) {
+              gamesOnChampions[player.championId].wins += 1;
+            } else {
+              gamesOnChampions[player.championId].losses += 1;
+            }
+          }
+
+          const keyValues = [];
+
+          // Get most played
+          // eslint-disable-next-line guard-for-in
+          for (const key in gamesOnChampions) {
+            keyValues.push([key, gamesOnChampions[key].wins + gamesOnChampions[key].losses]);
+          }
+          keyValues.sort((kv1, kv2) =>
+            // eslint-disable-next-line implicit-arrow-linebreak
+            kv2[1] - kv1[1]);
+
+          // Create a new Object of only the top 10 most played
+          const newObj = [];
+
+          const shortlist = keyValues.slice(0, 10);
+
+          // eslint-disable-next-line guard-for-in
+          for (const key of shortlist) {
+            newObj.push(gamesOnChampions[key[0]]);
+          }
+
+          this.rankedOverviewData = newObj;
+          break;
+        }
         case 'clear-profile': {
           this.matches = {};
           this.playerCardInfo = {};
@@ -152,6 +210,7 @@ export default {
     this.searchSummoner(this.$route.params.summonerSearch);
 
     ipcRenderer.on('asynchronous-reply', this.ondata);
+    ipcRenderer.send('asynchronous-message', { id: 'lol-full-ranked-history', user: 'Cropster' });
 
     // Poll for champion select state
     this.polling = setInterval(() => {
@@ -173,6 +232,7 @@ export default {
   background-color:#e84057;
   width:100%;
   position:fixed;
+  z-index: 999;
 }
 
 #leftSideBar {
