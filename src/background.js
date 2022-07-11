@@ -161,6 +161,7 @@ ipcMain.on('asynchronous-message', (event, req) => {
         break;
       }
       case 'current-ranked-stats': {
+        event.reply('asynchronous-reply', createReply({}, 'clear-profile'));
         request.requestURL(
           auth,
           '/lol-summoner/v1/current-summoner',

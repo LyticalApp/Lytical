@@ -1,6 +1,7 @@
 <template>
   <div id="playerCard" v-if="data?.queueMap?.RANKED_SOLO_5x5" >
-    <span style="float:left;padding-left:8px;">Solo/Duo</span>
+    <span style="float:left;padding-left:8px;">Solo/Duo
+    </span>
     <table style="width:100%;">
       <td>
         <img
@@ -19,6 +20,9 @@
       <td style="text-align:right;vertical-align:middle;">
         <span>
           {{data.queueMap.RANKED_SOLO_5x5.wins}}W {{data.queueMap.RANKED_SOLO_5x5.losses}}L
+          <i v-if="data.flag"
+          title="Only the players last 200 games are calculated" style="color:#797979d9;font-size:12px;"
+      class="fa fa-circle-info" aria-hidden="true"></i>
         </span>
         <br>
         <span>

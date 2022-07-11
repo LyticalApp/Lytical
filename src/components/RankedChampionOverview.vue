@@ -1,42 +1,42 @@
 <template>
-   <div id="playerCard" v-if="data != null" >
-      <div v-for="(champion,index) in data" :key=index>
-         <div style="display:inline-block;width:275px;margin-bottom:12px;">
-            <img
-               @click="openLink(
-                  'https://na.op.gg/champions/'+championIds[champion.id]
-                )"
-               :src="CHAMPIONICONURL+champion.id+'.png'"
-               style="height:32px;border-radius:50%;float:left;margin-right:10px;"/>
-            <!-- KDA -->
-            <div>
-            <div style="display:inline-block;text-align:left;float:left;">
-               <b><div                @click="openLink(
-                  'https://na.op.gg/champions/'+championIds[champion.id]
-                )" class="largeText">{{championIds[champion.id]}}</div></b>
-               CS {{(champion.cs/champion.total).toFixed(1)}} ({{(champion.cs/(champion.time/60)).toFixed(1)}})
-            </div>
-            <div style="display:inline-block;">
-               <div :style="{ color: getKDAStyle(((champion.kills+champion.assists)/champion.deaths))}">
-                  <b class="largeText">{{(((champion.kills+champion.assists)/champion.deaths)).toFixed(2)}}:1 KDA</b>
-                  <br>
-                  {{(((champion.kills)/champion.total)).toFixed(1)}} /
-                  {{(((champion.deaths)/champion.total)).toFixed(1)}} /
-                  {{(((champion.assists)/champion.total)).toFixed(1)}}
-               </div>
-            </div>
-              <div style="display:inline-block;text-align:right;float:right;">
-                <span class="largeText" :style="{ color: getWinrateStyle(champion.wins/(champion.total)*100)}">
-                {{(champion.wins/(champion.total)*100).toFixed(0)}}%
-                </span>
-                <br>
-                {{(champion.total)}} Played
+    <div id="playerCard">
+        <div v-for="(champion,index) in data" :key=index>
+          <div style="display:inline-block;width:275px;margin-bottom:12px;">
+              <img
+                @click="openLink(
+                    'https://na.op.gg/champions/'+championIds[champion.id]
+                  )"
+                :src="CHAMPIONICONURL+champion.id+'.png'"
+                style="height:32px;border-radius:50%;float:left;margin-right:10px;"/>
+              <!-- KDA -->
+              <div>
+              <div style="display:inline-block;text-align:left;float:left;">
+                <b><div                @click="openLink(
+                    'https://na.op.gg/champions/'+championIds[champion.id]
+                  )" class="largeText">{{championIds[champion.id]}}</div></b>
+                CS {{(champion.cs/champion.total).toFixed(1)}} ({{(champion.cs/(champion.time/60)).toFixed(1)}})
               </div>
-            </div>
-         </div>
-         <br>
-      </div>
-   </div>
+              <div style="display:inline-block;">
+                <div :style="{ color: getKDAStyle(((champion.kills+champion.assists)/champion.deaths))}">
+                    <b class="largeText">{{(((champion.kills+champion.assists)/champion.deaths)).toFixed(2)}}:1 KDA</b>
+                    <br>
+                    {{(((champion.kills)/champion.total)).toFixed(1)}} /
+                    {{(((champion.deaths)/champion.total)).toFixed(1)}} /
+                    {{(((champion.assists)/champion.total)).toFixed(1)}}
+                </div>
+              </div>
+                <div style="display:inline-block;text-align:right;float:right;">
+                  <span class="largeText" :style="{ color: getWinrateStyle(champion.wins/(champion.total)*100)}">
+                  {{(champion.wins/(champion.total)*100).toFixed(0)}}%
+                  </span>
+                  <br>
+                  {{(champion.total)}} Played
+                </div>
+              </div>
+          </div>
+          <br>
+        </div>
+    </div>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-export const ITEMICONURL = 'http://ddragon.leagueoflegends.com/cdn/12.6.1/img/item/';
+export const ITEMICONURL = 'http://ddragon.leagueoflegends.com/cdn/12.12.1/img/item/';
 export const CHAMPIONICONURL = 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/';
 export const RUNEICONURL = 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/';
 

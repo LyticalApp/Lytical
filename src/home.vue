@@ -6,9 +6,15 @@
     <table class="container" style="vertical-align: top;">
         <td>
           <div id="leftSideBar">
-              <PlayerCard :data=playerCardInfo />
-              <PlayerRank :data=playerCardInfo />
-              <RankedChampionOverview :data=rankedOverviewData />
+            <Transition>
+              <PlayerCard v-if="playerCardInfo != null" :data=playerCardInfo />
+            </Transition>
+            <Transition>
+              <PlayerRank v-if="playerCardInfo != null" :data=playerCardInfo />
+            </Transition>
+            <Transition>
+              <RankedChampionOverview v-if="rankedOverviewData != null" :data=rankedOverviewData />
+            </Transition>
           </div>
         </td>
         <td>
@@ -52,6 +58,7 @@ export default {
       ondata: null,
       showError: false,
       playerCardInfo: {},
+      lockout: 0,
       matchHistoryMax: 9,
       rankedOverviewData: null,
       matches: [],
@@ -104,12 +111,18 @@ export default {
   },
   mounted() {
     document.getElementsByClassName('wrapper')[0].addEventListener('scroll', (e) => {
-      if ((e.target.scrollHeight - e.target.clientHeight) === e.target.scrollTop) {
-        console.log('requesting 20 games..', this.matchHistoryMax);
+      const d = new Date();
+      const currentTime = d.getTime();
+      const isScrolledToBottom = (e.target.scrollHeight - e.target.clientHeight) === e.target.scrollTop;
+      if (isScrolledToBottom && this.lockout < currentTime) {
+        // Request 20 more games.
+        this.lockout = currentTime + 1000;
         if (this.$route.params.summonerSearch !== undefined && this.$route.params.summonerSearch !== '') {
           ipcRenderer.send('asynchronous-message', {
-            // eslint-disable-next-line max-len
-            id: 'lol-match-history', user: this.$route.params.summonerSearch, begIndex: this.matchHistoryMax - 1, endIndex: this.matchHistoryMax += 20,
+            id: 'lol-match-history',
+            user: this.$route.params.summonerSearch,
+            begIndex: this.matchHistoryMax - 1,
+            endIndex: this.matchHistoryMax += 20,
           });
         } else {
           ipcRenderer.send('asynchronous-message', {
@@ -164,6 +177,11 @@ export default {
           const thisSeason = (games)
             .filter((game) => game.queueId === 420)
             .filter((game) => game.gameVersion.substring(0, 2) === '12');
+
+          // Used to Update PlayerRankedCard
+          let totalWins = 0;
+          let totalLosses = 0;
+
           // eslint-disable-next-line guard-for-in
           for (const game of thisSeason) {
             const player = game.participants[0];
@@ -190,8 +208,10 @@ export default {
             gamesOnChampions[player.championId].cs += player.stats.totalMinionsKilled;
             if (player.stats.win) {
               gamesOnChampions[player.championId].wins += 1;
+              totalWins += 1;
             } else {
               gamesOnChampions[player.championId].losses += 1;
+              totalLosses += 1;
             }
             gamesOnChampions[player.championId].total += 1;
           }
@@ -215,6 +235,12 @@ export default {
             sorted.push(gamesOnChampions[key[0]]);
           }
 
+          // Update missing data with new info
+          if (this.playerCardInfo.queueMap.RANKED_SOLO_5x5.losses < totalLosses) {
+            this.playerCardInfo.queueMap.RANKED_SOLO_5x5.wins = totalWins;
+            this.playerCardInfo.queueMap.RANKED_SOLO_5x5.losses = totalLosses;
+            this.playerCardInfo.flag = true;
+          }
           this.rankedOverviewData = sorted;
           break;
         }
@@ -271,6 +297,17 @@ export default {
     overflow:scroll;
     height:calc(100vh - 55px);
 }
+
+/* we will explain what these classes do next! */
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 .errorDiv {
   background-color:#e84057;
   width:100%;
@@ -279,12 +316,12 @@ export default {
 }
 
 #leftSideBar {
-  padding-right:10px;
+  padding:10px;
   width: 300px;
 }
 .loadingFrame{
   margin:auto;
-  width:605px;
+  width:576px;
   position:relative;
 }
 .lds-ellipsis {

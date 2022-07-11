@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper2">
+    <div class="wrapper">
         <div class="team">
             <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
                 <div v-if="teammate.teamId == undefined || teammate.teamId == 1" class="miniCard">
@@ -44,7 +44,7 @@
                         ({{teammate.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP)</span>
                     <br>
                     <div v-for="(match,index) in teammate.matchHistory.games.games" :key="match.gameId"
-                        :class='`matchItem`'>
+                        :class="matchItem">
                         <div v-if="index < 5">
                             <a :href="'https://na.op.gg/champions/'+championIds[match.participants[0].championId]">
                                 <img :src="CHAMPIONICONURL+match.participants[0].championId+'.png'"
@@ -217,7 +217,7 @@ export default {
     color:#080808;
     text-align:center !important;
     display:inline-block;
-    width:50px;
+    width:55px;
     border-radius:4px;
     font-weight: 400;
 }
@@ -254,9 +254,11 @@ export default {
     background-color: #020202;
     filter: drop-shadow(0 0 0.1rem #5cd7e4);
 }
-.wrapper2 {
+.wrapper {
     margin:auto;
     display: flex;
+    overflow:scroll;
+    height:calc(100vh - 55px);
     flex-wrap: wrap;
     justify-content: center;
 }
