@@ -206,7 +206,6 @@ import {
   championIds, runeIcons, summonerSpells, CHAMPIONICONURL, ITEMICONURL, RUNEICONURL,
 } from '../res/common';
 
-const { ipcRenderer } = require('electron');
 const open = require('open');
 
 export default {
@@ -280,9 +279,11 @@ export default {
       return '#9a96a4';
     },
     searchPlayer(username) {
-      ipcRenderer.send('asynchronous-message', { id: 'lol-ranked-stats', user: username });
-      ipcRenderer.send('asynchronous-message', {
-        id: 'lol-match-history', user: username, begIndex: 0, endIndex: 9,
+      this.$router.push({
+        name: 'Home',
+        params: {
+          summonerSearch: username,
+        },
       });
     },
   },

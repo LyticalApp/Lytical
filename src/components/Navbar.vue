@@ -17,7 +17,7 @@
             <div class="item">
                 <form @submit.prevent="searchSummoner()">
                     <input v-model=summonerSearch
-                    type="text"
+                    type="Search"
                     class="inputbox"
                     placeholder="🔍 Search">
                 </form>
@@ -36,8 +36,6 @@
 <script>
 import SettingsMenu from './SettingsMenu.vue';
 
-const { ipcRenderer } = require('electron');
-
 export default {
   name: 'NavBar',
   components: {
@@ -53,33 +51,10 @@ export default {
   },
   methods: {
     searchSummoner() {
-      if (this.$route.path !== '/') {
-        this.$router.push({
-          name: 'Home',
-          params: { summonerSearch: this.summonerSearch },
-        });
-      }
-      if (this.summonerSearch !== '') {
-        ipcRenderer.send('asynchronous-message', {
-          id: 'lol-ranked-stats',
-          user: this.summonerSearch,
-        });
-        ipcRenderer.send('asynchronous-message', {
-          id: 'lol-match-history',
-          user: this.summonerSearch,
-          begIndex: 0,
-          endIndex: 9,
-        });
-      } else {
-        ipcRenderer.send('asynchronous-message', {
-          id: 'current-ranked-stats',
-        });
-        ipcRenderer.send('asynchronous-message', {
-          id: 'current-summoner',
-          begIndex: 0,
-          endIndex: 9,
-        });
-      }
+      this.$router.push({
+        name: 'Home',
+        params: { summonerSearch: this.summonerSearch },
+      });
     },
   },
   watch: {
@@ -105,13 +80,44 @@ export default {
 </script>
 
 <style scoped>
-input[type=text], select {
+
+input[type="search"] {
     width: 100%;
     padding: 12px 20px;
     display: inline-block;
     border:none;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+input[type="search"].dark {
+  background: #222;
+  color: #fff;
+}
+
+input[type="search"].light {
+  background: #fff;
+  color: #222;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  height: 1em;
+  width: 1em;
+  border-radius: 50em;
+  background: url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg) no-repeat 50% 50%;
+  background-size: contain;
+  opacity: 0;
+  pointer-events: none;
+}
+
+input[type="search"]:focus::-webkit-search-cancel-button {
+  opacity: .3;
+  pointer-events: all;
+}
+
+input[type="search"].dark::-webkit-search-cancel-button {
+  filter: invert(1);
 }
 .navWrapper {
     z-index:100;

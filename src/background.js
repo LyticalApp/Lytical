@@ -104,7 +104,6 @@ function createReply(dataD, id) {
   try {
     data = JSON.parse(dataD);
   } catch {
-    console.log('Data is already JSON');
     data = dataD;
   }
   data.reply_type = id;
@@ -148,6 +147,7 @@ function getPlayerDataByName(name, auth) {
 }
 
 ipcMain.on('asynchronous-message', (event, req) => {
+  console.log('new request: ', req);
   lcu.getLCUAuth().then((auth) => {
     switch (req.id) {
       case 'current-summoner': {
@@ -290,8 +290,12 @@ ipcMain.on('asynchronous-message', (event, req) => {
         }).catch((error) => errorHandler(error, event));
         break;
       }
-      case 'lol-full-ranked-history': {
-        getPlayerDataByName(req.user, auth).then((summoner) => {
+      case 'current-full-ranked-history': {
+        request.requestURL(
+          auth,
+          '/lol-summoner/v1/current-summoner',
+        ).then((summonerD) => {
+          const summoner = JSON.parse(summonerD);
           request.requestURL(
             auth,
             // eslint-disable-next-line max-len
@@ -302,6 +306,25 @@ ipcMain.on('asynchronous-message', (event, req) => {
             `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=200`,
           ).then(
             (matchHistory) => {
+              event.reply(
+                'asynchronous-reply',
+                createReply(matchHistory, req.id),
+              );
+            },
+          );
+        }).catch((error) => errorHandler(error, event));
+        break;
+      }
+      case 'lol-full-ranked-history': {
+        getPlayerDataByName(req.user, auth).then((summoner) => {
+          request.requestURL(
+            auth,
+            // eslint-disable-next-line max-len
+            // Timing: Takes 2345.318800000474ms
+            `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=200`,
+          ).then(
+            (matchHistory) => {
+              console.log('test');
               event.reply(
                 'asynchronous-reply',
                 createReply(matchHistory, req.id),

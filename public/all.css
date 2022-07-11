@@ -25,9 +25,14 @@ body {
   border-radius: 50%;
 }
 
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Regular.ttf'); /* IE9 Compat Modes */
+}
+
 #app {
   width:100%;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Roboto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

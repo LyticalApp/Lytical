@@ -57,11 +57,16 @@ export default {
     };
   },
   watch: {
-    $route() {
+    $route(to, from) {
       // Unregister the listener..
-      console.log('Unregistering Listeners on Home');
-      ipcRenderer.removeListener('asynchronous-reply', this.ondata);
-      clearInterval(this.polling);
+      console.log(to, from);
+      if (to.name !== from.name) {
+        console.log('Unregistering Listeners on Home');
+        ipcRenderer.removeListener('asynchronous-reply', this.ondata);
+        clearInterval(this.polling);
+      } else {
+        this.searchSummoner(to.params.summonerSearch);
+      }
     },
   },
   methods: {
@@ -75,6 +80,10 @@ export default {
         ipcRenderer.send('asynchronous-message', {
           id: 'lol-match-history', user: summonerName, begIndex: 0, endIndex: 9,
         });
+        // Hack
+        ipcRenderer.send('asynchronous-message', {
+          id: 'lol-full-ranked-history', user: summonerName,
+        });
       } else {
         // Current summoner from LCU
         ipcRenderer.send('asynchronous-message', {
@@ -85,6 +94,7 @@ export default {
           begIndex: 0,
           endIndex: 9,
         });
+        ipcRenderer.send('asynchronous-message', { id: 'current-full-ranked-history' });
       }
     },
     getQueueName(queueId) {
@@ -125,11 +135,15 @@ export default {
           this.matches = data.games.games;
           break;
         }
+        case 'current-full-ranked-history':
         case 'lol-full-ranked-history': {
           const gamesOnChampions = {};
           const { games } = data.games;
-          const rankedGames = (games).filter((game) => game.queueId === 420);
-          const thisSeason = rankedGames.filter((game) => game.gameVersion.substring(0, 2) === '12');
+          // substring 12 meaning patch beginning with a 12..
+          // there is no official "current season"
+          const thisSeason = (games)
+            .filter((game) => game.queueId === 420)
+            .filter((game) => game.gameVersion.substring(0, 2) === '12');
           // eslint-disable-next-line guard-for-in
           for (const game of thisSeason) {
             const player = game.participants[0];
@@ -140,6 +154,9 @@ export default {
               assists: 0,
               wins: 0,
               losses: 0,
+              total: 0,
+              cs: 0,
+              time: 0,
             };
             if (gamesOnChampions[player.championId] === undefined) {
               gamesOnChampions[player.championId] = tempObj;
@@ -148,11 +165,15 @@ export default {
             gamesOnChampions[player.championId].kills += player.stats.kills;
             gamesOnChampions[player.championId].deaths += player.stats.deaths;
             gamesOnChampions[player.championId].assists += player.stats.assists;
+            gamesOnChampions[player.championId].time += game.gameDuration;
+            gamesOnChampions[player.championId].cs += player.stats.neutralMinionsKilled;
+            gamesOnChampions[player.championId].cs += player.stats.totalMinionsKilled;
             if (player.stats.win) {
               gamesOnChampions[player.championId].wins += 1;
             } else {
               gamesOnChampions[player.championId].losses += 1;
             }
+            gamesOnChampions[player.championId].total += 1;
           }
 
           const keyValues = [];
@@ -160,28 +181,27 @@ export default {
           // Get most played
           // eslint-disable-next-line guard-for-in
           for (const key in gamesOnChampions) {
-            keyValues.push([key, gamesOnChampions[key].wins + gamesOnChampions[key].losses]);
+            keyValues.push([key, gamesOnChampions[key].total]);
           }
           keyValues.sort((kv1, kv2) =>
             // eslint-disable-next-line implicit-arrow-linebreak
             kv2[1] - kv1[1]);
 
           // Create a new Object of only the top 10 most played
-          const newObj = [];
-
-          const shortlist = keyValues.slice(0, 10);
+          const sorted = [];
 
           // eslint-disable-next-line guard-for-in
-          for (const key of shortlist) {
-            newObj.push(gamesOnChampions[key[0]]);
+          for (const key of keyValues.slice(0, 7)) {
+            sorted.push(gamesOnChampions[key[0]]);
           }
 
-          this.rankedOverviewData = newObj;
+          this.rankedOverviewData = sorted;
           break;
         }
         case 'clear-profile': {
           this.matches = {};
           this.playerCardInfo = {};
+          this.rankedOverviewData = {};
           break;
         }
         case 'current-ranked-stats':
@@ -206,11 +226,8 @@ export default {
         }
       }
     };
-
-    this.searchSummoner(this.$route.params.summonerSearch);
-
     ipcRenderer.on('asynchronous-reply', this.ondata);
-    ipcRenderer.send('asynchronous-message', { id: 'lol-full-ranked-history', user: 'Cropster' });
+    this.searchSummoner(this.$route.params.summonerSearch);
 
     // Poll for champion select state
     this.polling = setInterval(() => {

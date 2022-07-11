@@ -67,7 +67,7 @@ export default {
 }
 td{
   font-size:15px;
-  color: #555872;
+  color: #9a96a4;
   margin-top:40px;
 }
 .backgroundImg img{
