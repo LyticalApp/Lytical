@@ -83,42 +83,25 @@ export default {
 
 input[type="search"] {
     width: 100%;
-    padding: 12px 20px;
+    padding: 14px 20px;
     display: inline-block;
     border:none;
+    font-size:14px;
     border-radius: 4px;
     box-sizing: border-box;
 }
 
-input[type="search"].dark {
-  background: #222;
-  color: #fff;
-}
-
-input[type="search"].light {
-  background: #fff;
-  color: #222;
-}
-
-input[type="search"]::-webkit-search-cancel-button {
-  -webkit-appearance: none;
-  height: 1em;
-  width: 1em;
-  border-radius: 50em;
-  background: url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg) no-repeat 50% 50%;
-  background-size: contain;
-  opacity: 0;
-  pointer-events: none;
-}
+input:focus {
+    outline: none !important;
+    border-color: #719ECE;
+    box-shadow: 0 0 4px #719ECE;
+ }
 
 input[type="search"]:focus::-webkit-search-cancel-button {
-  opacity: .3;
+  opacity: .4;
   pointer-events: all;
 }
 
-input[type="search"].dark::-webkit-search-cancel-button {
-  filter: invert(1);
-}
 .navWrapper {
     z-index:100;
     display: flex;

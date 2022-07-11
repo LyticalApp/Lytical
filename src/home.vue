@@ -52,8 +52,9 @@ export default {
       ondata: null,
       showError: false,
       playerCardInfo: {},
+      matchHistoryMax: 9,
       rankedOverviewData: null,
-      matches: {},
+      matches: [],
     };
   },
   watch: {
@@ -101,6 +102,25 @@ export default {
       return this.queueIds[queueId] !== '' ? this.queueIds[queueId] : 'Custom';
     },
   },
+  mounted() {
+    document.getElementsByClassName('wrapper')[0].addEventListener('scroll', (e) => {
+      if ((e.target.scrollHeight - e.target.clientHeight) === e.target.scrollTop) {
+        console.log('requesting 20 games..', this.matchHistoryMax);
+        if (this.$route.params.summonerSearch !== undefined && this.$route.params.summonerSearch !== '') {
+          ipcRenderer.send('asynchronous-message', {
+            // eslint-disable-next-line max-len
+            id: 'lol-match-history', user: this.$route.params.summonerSearch, begIndex: this.matchHistoryMax - 1, endIndex: this.matchHistoryMax += 20,
+          });
+        } else {
+          ipcRenderer.send('asynchronous-message', {
+            id: 'current-summoner',
+            begIndex: this.matchHistoryMax - 1,
+            endIndex: this.matchHistoryMax += 20,
+          });
+        }
+      }
+    });
+  },
   created() {
     // First run only
     this.ondata = (event, data) => {
@@ -132,7 +152,7 @@ export default {
         }
         case 'current-summoner':
         case 'lol-match-history': {
-          this.matches = data.games.games;
+          this.matches = this.matches.concat(data.games.games);
           break;
         }
         case 'current-full-ranked-history':
@@ -199,9 +219,10 @@ export default {
           break;
         }
         case 'clear-profile': {
-          this.matches = {};
+          this.matches = [];
           this.playerCardInfo = {};
           this.rankedOverviewData = {};
+          this.matchHistoryMax = 9;
           break;
         }
         case 'current-ranked-stats':
@@ -228,6 +249,11 @@ export default {
     };
     ipcRenderer.on('asynchronous-reply', this.ondata);
     this.searchSummoner(this.$route.params.summonerSearch);
+
+    window.addEventListener('scroll', () => {
+      const scroll = this.scrollY;
+      console.log(scroll);
+    });
 
     // Poll for champion select state
     this.polling = setInterval(() => {

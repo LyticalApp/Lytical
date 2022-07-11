@@ -3,12 +3,17 @@
       <div v-for="(champion,index) in data" :key=index>
          <div style="display:inline-block;width:275px;margin-bottom:12px;">
             <img
+               @click="openLink(
+                  'https://na.op.gg/champions/'+championIds[champion.id]
+                )"
                :src="CHAMPIONICONURL+champion.id+'.png'"
                style="height:32px;border-radius:50%;float:left;margin-right:10px;"/>
             <!-- KDA -->
             <div>
             <div style="display:inline-block;text-align:left;float:left;">
-               <b><div class="largeText">{{championIds[champion.id]}}</div></b>
+               <b><div                @click="openLink(
+                  'https://na.op.gg/champions/'+championIds[champion.id]
+                )" class="largeText">{{championIds[champion.id]}}</div></b>
                CS {{(champion.cs/champion.total).toFixed(1)}} ({{(champion.cs/(champion.time/60)).toFixed(1)}})
             </div>
             <div style="display:inline-block;">
@@ -40,6 +45,8 @@ import {
   championIds,
 } from '../res/common';
 
+const open = require('open');
+
 export default {
   name: 'RankedChampionOverview',
   props: {
@@ -67,6 +74,9 @@ export default {
     getWinrateStyle(wr) {
       if (wr >= 60) { return '#e84057'; }
       return '#9e9eb1';
+    },
+    openLink(url) {
+      open(url);
     },
   },
 };

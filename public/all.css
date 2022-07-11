@@ -39,6 +39,17 @@ body {
   color: #2c3e50;
 }
 
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  height: 1em;
+  width: 1em;
+  border-radius: 50em;
+  background: url('./assets/times-circle.svg') no-repeat 50% 50%;
+  background-size: contain;
+  opacity: 0;
+  pointer-events: none;
+}
+
 
 /*!
  * Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com
