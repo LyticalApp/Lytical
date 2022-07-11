@@ -1,5 +1,6 @@
 <template>
-    <div id="playerCard">
+  <Transition>
+    <div id="playerCard" v-show="this.visibility">
         <div v-for="(champion,index) in data" :key=index>
           <div style="display:inline-block;width:275px;margin-bottom:12px;">
               <img
@@ -35,8 +36,10 @@
               </div>
           </div>
           <br>
+          {{toggleVisibility(index)}}
         </div>
     </div>
+  </Transition>
 </template>
 
 <script>
@@ -54,10 +57,16 @@ export default {
       type: Object,
     },
   },
+  watch: {
+    data() {
+      this.visibility = false;
+    },
+  },
   data() {
     return {
       championIds,
       CHAMPIONICONURL,
+      visibility: false,
     };
   },
   methods: {
@@ -78,6 +87,13 @@ export default {
     openLink(url) {
       open(url);
     },
+    toggleVisibility(index) {
+      // We actually interate the loop 2 times because of the updated visibility..
+      // but it do work though!
+      if (index === 6 && !this.visibility) {
+        this.visibility = true;
+      }
+    },
   },
 };
 </script>
@@ -94,5 +110,14 @@ export default {
 .largeText {
   weight: bold;
   font-size: 13px;
+}
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

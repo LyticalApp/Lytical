@@ -107,7 +107,7 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     display: flex;
     top:0px;
     left:0px;
-    height:44px;
+    height:42px;
     position:fixed;
     background-color:#191a1d;
     width: 100%;
@@ -122,7 +122,7 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     color:#f2ecff;
     height:20px;
     border-radius:4px;
-    background-color: #161818;
+    background-color: #080808a3;
 }
 .item {
     font-weight: lighter;
@@ -132,8 +132,6 @@ input[type="search"]:focus::-webkit-search-cancel-button {
     display: flex;
 }
 .item a{
-    font-family: 'Open Sans', sans-serif;
-    font-weight: light;
     text-decoration:none;
     color:#f2ecff;
 }

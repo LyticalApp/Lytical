@@ -2,7 +2,7 @@
   <div id="playerCard" v-if="data?.queueMap?.RANKED_SOLO_5x5" >
     <span style="float:left;padding-left:8px;">Solo/Duo
     </span>
-    <table style="width:100%;">
+    <table style="width:100%;    padding-top: 10px;">
       <td>
         <img
         :src='`assets/Emblem_${data.queueMap.RANKED_SOLO_5x5.tier}.webp`'
@@ -21,7 +21,7 @@
         <span>
           {{data.queueMap.RANKED_SOLO_5x5.wins}}W {{data.queueMap.RANKED_SOLO_5x5.losses}}L
           <i v-if="data.flag"
-          title="Only the players last 200 games are calculated" style="color:#797979d9;font-size:12px;"
+          title="Info: Only includes latest 200 games" style="color:#797979d9;font-size:12px;"
       class="fa fa-circle-info" aria-hidden="true"></i>
         </span>
         <br>
@@ -68,6 +68,7 @@ export default {
   color: #f2ecff;
   background-color:#080808;
   border-radius:5px;
+  margin-bottom:10px;
 }
 td{
   font-size:15px;
@@ -80,7 +81,7 @@ td{
 .backgroundImg{
   padding-top:1px;
   border-color:#080808;
-  background-color: rgba(10, 10, 10, 0.8);
+  background-color: #16181854;
   border-radius: 40px;
 }
 </style>

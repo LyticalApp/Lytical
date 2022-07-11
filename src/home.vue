@@ -3,7 +3,7 @@
     <div v-show='showError' class="errorDiv">
       <h1>LCU Disconnected</h1>
     </div>
-    <table class="container" style="vertical-align: top;">
+    <table class="container" style="vertical-align: top;padding: 10px;">
         <td>
           <div id="leftSideBar">
             <Transition>
@@ -247,7 +247,7 @@ export default {
         case 'clear-profile': {
           this.matches = [];
           this.playerCardInfo = {};
-          this.rankedOverviewData = {};
+          this.rankedOverviewData = [];
           this.matchHistoryMax = 9;
           break;
         }
@@ -295,7 +295,7 @@ export default {
     display: flex;
     justify-content: center;
     overflow:scroll;
-    height:calc(100vh - 55px);
+    height:calc(100vh - 42px);
 }
 
 /* we will explain what these classes do next! */

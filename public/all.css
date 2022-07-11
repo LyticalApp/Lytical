@@ -1,9 +1,16 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url('./webfonts/Roboto-Regular.ttf');
+}
+
+
 html{
   background-color:#080808;
 }
 
 body {
   margin:0px;
+  font-family: Roboto;
   margin-top:55px;
   overflow:hidden;
 }
@@ -25,14 +32,10 @@ body {
   border-radius: 50%;
 }
 
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Regular.ttf'); /* IE9 Compat Modes */
-}
-
 #app {
   width:100%;
-  font-family: Roboto;
+  top: 42px;
+  position: absolute;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

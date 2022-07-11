@@ -45,10 +45,11 @@
                            Total Kills</span>
                         <div :class='`${participant.stats.win ? "accentBlue" : "accentRed"}`'
                         style="width:190px;display:inline-block;margin-top:2px;">
-                           <span style="font-size:10px;line-height: 120%;float:right;padding-right:4px;">
+                           <span style="font-size:10px;line-height: 120%;
+                           float:right;padding-right:4px;margin-top: 1px;">
                               {{calcTotalKills(5).toLocaleString('en-US')}}</span>
                            <div :class='`${participant.stats.win ? "accentRed" : "accentBlue"}`'
-                           :style="{ height:'12px',
+                           :style="{ height:'13px',
                            width: calcTotalKills(0)/(calcTotalKills(0)+calcTotalKills(5))*100+'%'}">
                               <span style="font-size:10px;float:left;padding-left:4px;">
                                  {{calcTotalKills(0).toLocaleString('en-US')}}</span>
@@ -307,7 +308,7 @@ export default {
    margin:0 auto;
    position:absolute;
    padding-left:70px;
-   margin-top:2px;
+   margin-top:3px;
 }
 .championLeveLBulb {
    position:absolute;
