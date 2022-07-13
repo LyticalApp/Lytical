@@ -20,6 +20,11 @@ npm install
 ```
 npm run electron:serve
 ```
+Create installer for distribution
+```
+npm run electron:build -- --win nsis
+```
+
 
 # Contribution Guidelines
 
