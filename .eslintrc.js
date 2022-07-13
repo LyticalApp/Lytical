@@ -16,6 +16,7 @@ module.exports = {
   ],
   rules: {
     'linebreak-style': 'off',
+    'guard-for-in': 'off',
     'no-console': 'off',
     'max-len': ['error', { code: 120 }],
     'no-restricted-syntax': [

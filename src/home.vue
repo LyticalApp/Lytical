@@ -182,7 +182,6 @@ export default {
           let totalWins = 0;
           let totalLosses = 0;
 
-          // eslint-disable-next-line guard-for-in
           for (const game of thisSeason) {
             const player = game.participants[0];
             const tempObj = {
@@ -216,26 +215,20 @@ export default {
             gamesOnChampions[player.championId].total += 1;
           }
 
-          const keyValues = [];
-
           // Get most played
-          // eslint-disable-next-line guard-for-in
+          const mostPlayedKeyValues = [];
           for (const key in gamesOnChampions) {
-            keyValues.push([key, gamesOnChampions[key].total]);
+            mostPlayedKeyValues.push([key, gamesOnChampions[key].total]);
           }
-          keyValues.sort((kv1, kv2) =>
-            // eslint-disable-next-line implicit-arrow-linebreak
-            kv2[1] - kv1[1]);
+          mostPlayedKeyValues.sort((kv1, kv2) => kv2[1] - kv1[1]);
 
           // Create a new Object of only the top 10 most played
           const sorted = [];
-
-          // eslint-disable-next-line guard-for-in
-          for (const key of keyValues.slice(0, 7)) {
+          for (const key of mostPlayedKeyValues.slice(0, 7)) {
             sorted.push(gamesOnChampions[key[0]]);
           }
 
-          // Update missing data with new info
+          // Update missing data with new info for playerCardInfo (LCU doesn't show losses in lookup)
           if (this.playerCardInfo.queueMap.RANKED_SOLO_5x5.losses < totalLosses) {
             this.playerCardInfo.queueMap.RANKED_SOLO_5x5.wins = totalWins;
             this.playerCardInfo.queueMap.RANKED_SOLO_5x5.losses = totalLosses;
@@ -294,7 +287,7 @@ export default {
     margin:auto;
     display: flex;
     justify-content: center;
-    overflow:scroll;
+    overflow-y:scroll;
     height:calc(100vh - 42px);
 }
 

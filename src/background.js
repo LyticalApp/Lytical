@@ -30,7 +30,7 @@ async function createWindow() {
       nodeIntegration: true,
       contextIsolation: false,
     },
-    icon: './public/raste2r.ico',
+    icon: './public/favicon.ico',
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {

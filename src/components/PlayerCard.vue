@@ -3,7 +3,7 @@
     <table>
       <td>
         <img
-        :src='`http://ddragon.leagueoflegends.com/cdn/12.10.1/img/profileicon/${data.summonerData.profileIconId}.png`'
+        :src='`${PROFILEPICONURL + data.summonerData.profileIconId}.png`'
         class="clip-circle" style="height:80px;margin-right:10px;max-width:280px;">
       </td>
       <td style="vertical-align:middle; align:left;">
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import { PROFILEPICONURL } from '../res/common';
+
 export default {
   name: 'PlayerCard',
 
@@ -29,6 +31,11 @@ export default {
     data: {
       type: Object,
     },
+  },
+  data() {
+    return {
+      PROFILEPICONURL,
+    };
   },
   methods: {
     getPreviousSeason() {
@@ -40,7 +47,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #playerCard {
   margin:0 auto;
