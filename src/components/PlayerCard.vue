@@ -32,6 +32,13 @@ export default {
       type: Object,
     },
   },
+  watch: {
+    data() {
+      if (this.data.username) {
+        document.title = `Lytical - ${this.data.username}`;
+      }
+    },
+  },
   data() {
     return {
       PROFILEPICONURL,

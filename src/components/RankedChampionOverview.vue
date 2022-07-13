@@ -90,7 +90,7 @@ export default {
     toggleVisibility(index) {
       // We actually interate the loop 2 times because of the updated visibility..
       // but it do work though!
-      if (index === 6 && !this.visibility) {
+      if (index === this.data.length - 1 && !this.visibility) {
         this.visibility = true;
       }
     },

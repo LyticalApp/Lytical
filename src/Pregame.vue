@@ -35,7 +35,7 @@
         <div class="team">
             <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
                 <div v-if="teammate.teamId == 2" class="miniCard">
-                    <img class="RankEmblem" :src='`assets/Emblem_${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`'>
+                    <img class="emblem" :src='`assets/Emblem_${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`'>
                     <br>
                     <span @click="searchSummoner(teammate.username)">{{teammate.username}}</span>
                     <br>
@@ -147,6 +147,7 @@ export default {
       // Valid reply handlers
       switch (data.reply_type) {
         case 'lol-champ-select': {
+          document.title = 'Lytical - Champion Select';
           this.lobbyData = data;
           if (!this.lobbyPlayers.length) {
             for (const player of this.lobbyData.myTeam) {
@@ -157,6 +158,7 @@ export default {
         }
         case 'current-session': {
           if (data.phase === 'InProgress' && (this.gameId !== data.gameData.gameId)) {
+            document.title = 'Lytical - Live Game';
             this.lobbyData = data;
             this.gameId = data.gameData.gameId;
             this.lobbyPlayers = [];
@@ -184,6 +186,7 @@ export default {
 
     // We are already in a champ select because we got navigated here..
     // just get the data again instead of being passed into this view..
+    document.title = 'Lytical';
     ipcRenderer.send('asynchronous-message', {
       id: 'lol-champ-select',
     });
@@ -220,7 +223,7 @@ export default {
     border-radius:4px;
     font-weight: 400;
 }
-.RankEmblem {
+.emblem {
   height:70px;
 }
 .Victory {
@@ -234,6 +237,7 @@ export default {
 .sinceGame {
   font-size:15px;
   margin-left:4px;
+  width:200px;
   background-color:#5d4e73;
   border-radius:4px;
   padding-left:4px;

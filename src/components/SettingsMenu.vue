@@ -38,8 +38,8 @@ export default {
   },
   data() {
     return {
-      autoSwitchLobby: 'false',
-      statsSite: 'op.gg',
+      autoSwitchLobby: 'true',
+      statsSite: 'opgg',
     };
   },
   watch: {

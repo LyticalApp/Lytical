@@ -253,7 +253,7 @@ export default {
           // We switch to the other view for
           // pregame lobbies which will
           // display player cards for each player
-          console.log('DEBUG:', localStorage.autoSwitchLobby);
+          console.log('DEBUG autoSwitchLobby:', localStorage.autoSwitchLobby);
           if (localStorage.autoSwitchLobby === 'true'
               || localStorage.autoSwitchLobby === undefined) {
             this.$router.push('pregame');
