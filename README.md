@@ -1,14 +1,10 @@
-# <img src="https://lyticalapp.github.io/images/Logo.png" width="36"> Lytical 
+# <img src="https://lyticalapp.github.io/images/Logo.png" width="36" alt="Lytical Logo" title="Lyitcal Logo"> Lytical 
 
 Lytical is an open source League of Legends statistics and profile analytics tool for all regions including Garena & WeGame
 
 Learn more at [Lytical.app](https://lytical.app)
 
-# Media [(Website)](https://lytical.app)
-
-![](https://i.imgur.com/TPzePxj.png)
-
-
+![Lytical App](https://i.imgur.com/TPzePxj.png "Lytical App")
 
 ## Project setup
 ```
