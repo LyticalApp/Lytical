@@ -1,5 +1,9 @@
 <template>
     <div class="wrapper">
+        <LCUErrorMessage v-if="showError" />
+        <div v-if="showTimeout">
+          <h1>Unable to connect to lobby</h1>
+        </div>
         <div class="team">
             <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
                 <div v-if="teammate.teamId == undefined || teammate.teamId == 1" class="miniCard">
@@ -69,17 +73,24 @@
 
 <script>
 import { championIds, romanNumbers, CHAMPIONICONURL } from './res/common';
+import LCUErrorMessage from './components/LCUErrorMessage.vue';
 
 const { ipcRenderer } = require('electron');
 const open = require('open');
 
 export default {
   name: 'PregameLobby',
+  components: {
+    LCUErrorMessage,
+  },
   data() {
     return {
+      showError: false,
       CHAMPIONICONURL,
       championIds,
       polling: null,
+      timeout: null,
+      showTimeout: false,
       ondata: null,
       romanNumbers,
       lobbyPlayers: [],
@@ -102,6 +113,10 @@ export default {
         summonerId: id,
         teamId,
       });
+    },
+    clearErrorTimeout() {
+      this.showTimeout = false;
+      clearTimeout(this.timeout);
     },
     capitalize(s) {
       if (typeof s !== 'string') return '';
@@ -142,11 +157,17 @@ export default {
       // We have diconnected or auth error..
       if (data.reply_type === 'lcu-disonnceted') {
         console.log('Disconnected..');
+        this.showError = true;
+        document.title = 'Lytical - Disconnected';
+      } else if (this.showError) {
+        this.showError = false;
+        document.title = 'Lytical';
       }
 
       // Valid reply handlers
       switch (data.reply_type) {
         case 'lol-champ-select': {
+          this.clearErrorTimeout(this.timeout);
           document.title = 'Lytical - Champion Select';
           this.lobbyData = data;
           if (!this.lobbyPlayers.length) {
@@ -157,6 +178,7 @@ export default {
           break;
         }
         case 'current-session': {
+          this.clearErrorTimeout(this.timeout);
           if (data.phase === 'InProgress' && (this.gameId !== data.gameData.gameId)) {
             document.title = 'Lytical - Live Game';
             this.lobbyData = data;
@@ -186,7 +208,11 @@ export default {
 
     // We are already in a champ select because we got navigated here..
     // just get the data again instead of being passed into this view..
-    document.title = 'Lytical';
+    document.title = 'Lytical - Connecting...';
+    if (this.timeout == null) {
+      this.timeout = setTimeout(() => { this.showTimeout = true; }, 5000);
+    }
+
     ipcRenderer.send('asynchronous-message', {
       id: 'lol-champ-select',
     });
@@ -203,6 +229,7 @@ export default {
       });
     }, 15000);
   },
+
 };
 </script>
 

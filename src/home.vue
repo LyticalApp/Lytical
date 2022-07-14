@@ -1,8 +1,6 @@
 <template>
   <div class="wrapper">
-    <div v-show='showError' class="errorDiv">
-      <h1>LCU Disconnected</h1>
-    </div>
+    <LCUErrorMessage v-if="showError" />
     <table class="container" style="vertical-align: top;padding: 10px;">
         <td>
           <div id="leftSideBar">
@@ -40,6 +38,7 @@
 import MatchHistoryItem from './components/MatchHistoryItem.vue';
 import PlayerCard from './components/PlayerCard.vue';
 import PlayerRank from './components/PlayerRank.vue';
+import LCUErrorMessage from './components/LCUErrorMessage.vue';
 import RankedChampionOverview from './components/RankedChampionOverview.vue';
 
 const { ipcRenderer } = require('electron');
@@ -50,6 +49,7 @@ export default {
     MatchHistoryItem,
     PlayerCard,
     PlayerRank,
+    LCUErrorMessage,
     RankedChampionOverview,
   },
   data() {
@@ -148,6 +148,7 @@ export default {
 
       // We have diconnected or auth error..
       if (data.reply_type === 'lcu-disonnceted') {
+        document.title = 'Lytical - Disconnected';
         this.showError = true;
         return;
       }

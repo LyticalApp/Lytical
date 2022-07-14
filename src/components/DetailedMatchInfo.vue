@@ -146,7 +146,8 @@
                            <div>
                               <div class="w3-border" style="float:left;width:40px;display:inline-block;margin-top:4px;">
                                  <div
-                                    :title="participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')"
+                                    :title="'Damage Delt to Champions: '
+                                    + participant.stats.totalDamageDealtToChampions.toLocaleString('en-US')"
                                     class="w3-grey"
                                     :style="{ height:'6px',
                                     width: participant.stats.totalDamageDealtToChampions/calcTotalDamage(index)*180+'%'
@@ -155,7 +156,8 @@
                               <div class="w3-border"
                               style="float:left;width:40px;display:inline-block;margin-top:4px;margin-left:10px;">
                                  <div
-                                    :title="participant.stats.totalDamageTaken.toLocaleString('en-US')"
+                                    :title="'Damage Taken: '
+                                    + participant.stats.totalDamageTaken.toLocaleString('en-US')"
                                     :style="{ backgroundColor: '#7b7a8e',
                                     height:'6px',
                                     width: participant.stats.totalDamageTaken/calcTotalDamageTaken(index)*180+'%'}">
