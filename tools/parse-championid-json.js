@@ -1,18 +1,19 @@
-var request = require('request');
+/* eslint-disable import/no-extraneous-dependencies */
+const request = require('request');
 
-let champions = "http://ddragon.leagueoflegends.com/cdn/12.11.1/data/en_US/champion.json"
+const champions = 'http://ddragon.leagueoflegends.com/cdn/12.13.1/data/en_US/champion.json';
 
-let j = {}
+const j = {};
 
 function getChampName() {
-  request(champions, function (error, response, body) { 
-      let list = JSON.parse(body);
-      let championList = list.data;
-      for (var i in championList) {
-        j[championList[i].key] = championList[i].id
-      }
-      console.log(j)
+  request(champions, (error, response, body) => {
+    const list = JSON.parse(body);
+    const championList = list.data;
+    for (const i in championList) {
+      j[championList[i].key] = championList[i].id;
+    }
+    console.log(j);
   });
 }
 
-getChampName()
+getChampName();

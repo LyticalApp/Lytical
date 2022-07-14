@@ -208,7 +208,7 @@ export default {
 
     // We are already in a champ select because we got navigated here..
     // just get the data again instead of being passed into this view..
-    document.title = 'Lytical - Connecting...';
+    document.title = 'Lytical';
     if (this.timeout == null) {
       this.timeout = setTimeout(() => { this.showTimeout = true; }, 5000);
     }
