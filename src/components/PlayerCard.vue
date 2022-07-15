@@ -3,7 +3,7 @@
     <table>
       <td>
         <img
-        :src='`${PROFILEPICONURL + data.summonerData.profileIconId}.png`'
+        :src='`${PROFILEPICONURL + data.summonerData.profileIconId}.jpg`'
         class="clip-circle" style="height:80px;margin-right:10px;max-width:280px;">
       </td>
       <td style="vertical-align:middle; align:left;">

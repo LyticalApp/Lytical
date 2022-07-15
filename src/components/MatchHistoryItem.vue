@@ -118,11 +118,14 @@
                 </tr>
             </tbody>
         </table>
-        <div :class="`showDetailsTip ${showDetails ? 'flip180' : ''}`" @click="function(){getGameDetails()}">
+        <div :class="`showDetailsTip ${showDetails ? 'flip180' : ''}`" @click="()=>{getGameDetails()}">
             <i class="fa-solid fa-angle-down"></i>
         </div>
         <!-- Begin Detailed Match History Item -->
-        <DetailedMatchInfo :matchDetails=matchDetails :style="`display: ${showDetails ? 'inline' : 'none'};`" />
+        <DetailedMatchInfo
+        :matchDetails=matchDetails
+        :ourPlayer=data.participantIdentities[0].player.summonerName
+        v-show="showDetails" />
     </div>
 </template>
 

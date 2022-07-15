@@ -199,7 +199,7 @@ export default {
           break;
         }
         default: {
-          console.error('Handling for', data.reply_type, 'is not implemented');
+          console.warn('Handling for', data.reply_type, 'is not implemented in ', this.$route.name);
           break;
         }
       }

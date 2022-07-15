@@ -2,7 +2,7 @@ const patch = '12.13.1';
 
 /* eslint-disable max-len */
 export const ITEMICONURL = `http://ddragon.leagueoflegends.com/cdn/${patch}/img/item/`;
-export const PROFILEPICONURL = `http://ddragon.leagueoflegends.com/cdn/${patch}/img/profileicon/`;
+export const PROFILEPICONURL = 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/';
 export const CHAMPIONICONURL = 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/';
 export const RUNEICONURL = 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/';
 

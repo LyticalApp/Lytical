@@ -4,7 +4,7 @@
          <table cellspacing=0 style="padding:2px;">
             <tbody className="divTableCell">
                <!-- Team 0 title bar/column labels -->
-               <div class="topItem header-bar">
+               <div class="roundedTopItem header-bar">
                   <div style="float:left;padding-left:10px;position:absolute;">
                   <span :style='`
                      ${matchDetails.participants[0].stats.win ? "color:#5383e8;" : "color:#e84057;"}`'>
@@ -18,9 +18,9 @@
                   <span style="left:465px;position:absolute;">Items</span>
                </div>
                <div v-for="(participant,index) in matchDetails.participants" :key=index :class='`
-                  ${participant.stats.win ? "Victory" : "Defeat"}
-                  ${(index == 5) ? "topItem" : ""}
-                  ${(index == 9) ? "bottomItem" : ""}
+                  ${getAccentStyle(index,participant.stats.win)}
+                  ${(index == 5) ? "roundedTopItem" : ""}
+                  ${(index == 9) ? "roundedBottomItem" : ""}
                   `'>
                   <!-- Recap/Middle Scorecard -->
                   <div v-if="index == 5" class="middle-wrapper">
@@ -218,6 +218,9 @@ export default {
       // The order of the teams is done in MatchHistoryItem
       type: Object,
     },
+    profileSummoner: {
+      type: String,
+    },
   },
   methods: {
     calcTotalDamage(index) {
@@ -280,6 +283,13 @@ export default {
       if (kda >= 4) { return '#0093ff'; }
       if (kda >= 3) { return '#00bba3'; }
       return '#9a96a4';
+    },
+    getAccentStyle(index, isWin) {
+      if (this.matchDetails.participantIdentities[index].player.summonerName
+      === this.profileSummoner) {
+        return isWin ? 'OurVictory' : 'OurDefeat';
+      }
+      return isWin ? 'Victory' : 'Defeat';
     },
     searchPlayer(username) {
       this.$router.push({
@@ -386,6 +396,12 @@ td{
 .Defeat {
   background-color:#59343b;
 }
+.OurVictory {
+  background-color:#2f436e;
+}
+.OurDefeat {
+  background-color:#703c47;
+}
 .divTable img{
   width:20px;
   vertical-align:bottom;
@@ -397,12 +413,12 @@ td{
   text-align:left;
 }
 
-.topItem{
+.roundedTopItem{
    border-top-right-radius: 4px;
    border-top-left-radius: 4px;
 }
 
-.bottomItem{
+.roundedBottomItem{
    border-bottom-right-radius: 4px;
    border-bottom-left-radius: 4px;
 }
