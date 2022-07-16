@@ -25,9 +25,7 @@
                                         <span class="championLevelBulb">
                                             {{formatLevelBulb(data.participants[0].stats.champLevel)}}
                                         </span>
-                                        <img @click="openLink(
-                                          'https://na.op.gg/champions/'+championIds[data.participants[0].championId]
-                                          )"
+                                        <img @click="open(getPreferredSite(data.participants[0].championId))"
                                             :src="CHAMPIONICONURL+data.participants[0].championId+'.png'"
                                             style="width:50px;height:50px;border-radius:50%;">
                                     </td>
@@ -124,14 +122,14 @@
         <!-- Begin Detailed Match History Item -->
         <DetailedMatchInfo
         :matchDetails=matchDetails
-        :ourPlayer=data.participantIdentities[0].player.summonerName
+        :profileSummoner=profileSummoner
         v-show="showDetails" />
     </div>
 </template>
 
 <script>
 import {
-  runeIcons, summonerSpells, CHAMPIONICONURL, ITEMICONURL, RUNEICONURL, queueIds, championIds,
+  runeIcons, summonerSpells, CHAMPIONICONURL, ITEMICONURL, RUNEICONURL, queueIds, championIds, getPreferredSite,
 } from '../res/common';
 import DetailedMatchInfo from './DetailedMatchInfo.vue';
 
@@ -153,6 +151,8 @@ export default {
     },
   },
   methods: {
+    getPreferredSite,
+    open,
     getGameDetails() {
       if (this.matchDetails == null) {
         ipcRenderer.send('asynchronous-message', { id: 'lol-match-details', gameId: this.data.gameId });
@@ -223,9 +223,6 @@ export default {
     formatLevelBulb(level) {
       const strLevel = String(level);
       return (strLevel.length < 2) ? `0${strLevel}` : strLevel;
-    },
-    openLink(url) {
-      open(url);
     },
   },
   data() {

@@ -270,11 +270,6 @@ export default {
     ipcRenderer.on('asynchronous-reply', this.ondata);
     this.searchSummoner(this.$route.params.summonerSearch);
 
-    window.addEventListener('scroll', () => {
-      const scroll = this.scrollY;
-      console.log(scroll);
-    });
-
     // Poll for champion select state
     this.polling = setInterval(() => {
       ipcRenderer.send('asynchronous-message', { id: 'lol-champ-select' });

@@ -90,9 +90,7 @@
                      <!-- Normal Scoreboard Item for Player -->
                      <tr>
                         <td style="display:inline-block;">
-                           <img @click="openLink(
-                              'https://na.op.gg/champions/'+championIds[participant.championId]
-                              )"
+                           <img @click="open(getPreferredSite(participant.championId))"
                               style="width:30px;height:30px;border-radius:50%;padding-bottom:4px;"
                               :src="CHAMPIONICONURL + participant.championId + '.png'" />
                            <table style="display:inline;">
@@ -206,7 +204,7 @@
 
 <script>
 import {
-  championIds, runeIcons, summonerSpells, CHAMPIONICONURL, ITEMICONURL, RUNEICONURL,
+  championIds, runeIcons, summonerSpells, CHAMPIONICONURL, ITEMICONURL, RUNEICONURL, getPreferredSite,
 } from '../res/common';
 
 const open = require('open');
@@ -223,6 +221,8 @@ export default {
     },
   },
   methods: {
+    open,
+    getPreferredSite,
     calcTotalDamage(index) {
       let totalDamage = 0;
       for (const player of this.matchDetails.participants) {
@@ -268,9 +268,6 @@ export default {
     formatLevelBulb(levelD) {
       const level = String(levelD);
       return (level.length < 2) ? `0${level}` : level;
-    },
-    openLink(url) {
-      open(url);
     },
     getTeamId(index) {
       if (this.matchDetails.participants[index].teamId === 100) {

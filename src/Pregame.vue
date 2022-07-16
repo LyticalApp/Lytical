@@ -16,11 +16,9 @@
                         ({{teammate.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP)</span>
                     <br>
                     <div v-for="(match,index) in teammate.matchHistory.games.games" :key="match.gameId"
-                        :class='`matchItem`'>
+                        class="matchItem">
                         <div v-if="!(teammate.teamId == 1 && index > 4)">
-                            <img @click="openLink(
-                                'https://na.op.gg/champions/'+championIds[match.participants[0].championId]
-                                )"
+                            <img @click="open(getPreferredSite(match.participants[0].championId))"
                                 :src="CHAMPIONICONURL+match.participants[0].championId+'.png'"
                                 class="championIcon">
                             <div :class='`kda ${match.participants[0].stats.win ? "Victory" : "Defeat"}`'>
@@ -48,11 +46,9 @@
                         ({{teammate.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP)</span>
                     <br>
                     <div v-for="(match,index) in teammate.matchHistory.games.games" :key="match.gameId"
-                        :class="matchItem">
+                        class="matchItem">
                         <div v-if="index < 5">
-                            <img @click="openLink(
-                                'https://na.op.gg/champions/'+championIds[match.participants[0].championId]
-                                )"
+                            <img @click="open(getPreferredSite(match.participants[0].championId))"
                                 :src="CHAMPIONICONURL+match.participants[0].championId+'.png'"
                                 class="championIcon">
                             <div :class='`kda ${match.participants[0].stats.win ? "Victory" : "Defeat"}`'>
@@ -72,7 +68,9 @@
 </template>
 
 <script>
-import { championIds, romanNumbers, CHAMPIONICONURL } from './res/common';
+import {
+  championIds, romanNumbers, CHAMPIONICONURL, getPreferredSite,
+} from './res/common';
 import LCUErrorMessage from './components/LCUErrorMessage.vue';
 
 const { ipcRenderer } = require('electron');
@@ -107,6 +105,8 @@ export default {
     },
   },
   methods: {
+    getPreferredSite,
+    open,
     getSummonerById(id, teamId) {
       ipcRenderer.send('asynchronous-message', {
         id: 'lol-lobby-playercard',
@@ -138,9 +138,6 @@ export default {
           summonerSearch: summoner,
         },
       });
-    },
-    openLink(url) {
-      open(url);
     },
   },
   created() {
@@ -264,11 +261,13 @@ export default {
 .sinceGame {
   font-size:15px;
   margin-left:4px;
-  width:200px;
+  width:28px;
+  display:inline-block;
   background-color:#5d4e73;
   border-radius:4px;
   padding-left:4px;
   padding-right:4px;
+  text-align: center;
 }
 .matchItem {
     margin:auto;
@@ -290,8 +289,10 @@ export default {
 .wrapper {
     margin:auto;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     overflow-y:scroll;
-    height:calc(100vh);
+    height:calc(100vh - 42px);
     flex-wrap: wrap;
     justify-content: center;
 }

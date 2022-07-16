@@ -352,3 +352,19 @@ export const runeIcons = {
   8232: 'perk-images/styles/sorcery/waterwalking/waterwalking.png',
   8236: 'perk-images/styles/sorcery/gatheringstorm/gatheringstorm.png',
 };
+
+export const getPreferredSite = (championId) => {
+  const site = localStorage.getItem('statsSite');
+  const championName = championIds[championId];
+  switch (site) {
+    case 'opgg': return `https://na.op.gg/champions/${championName}`;
+    case 'ugg': return `https://u.gg/lol/champions/${championName}`;
+    case 'blitz': return `https://blitz.gg/lol/champions/${championName}`;
+    case 'leagueofgraphs': return `https://www.leagueofgraphs.com/champions/builds/${championName.toLowerCase()}`;
+    case 'qq': return `https://101.qq.com/#/hero-detail?heroid=${championId}`;
+    default: {
+      console.log('e');
+    }
+  }
+  return `https://na.op.gg/champions/${championName}`;
+};

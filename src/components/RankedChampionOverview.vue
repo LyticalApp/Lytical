@@ -4,17 +4,14 @@
         <div v-for="(champion,index) in data" :key=index>
           <div style="display:inline-block;width:275px;margin-bottom:12px;">
               <img
-                @click="openLink(
-                    'https://na.op.gg/champions/'+championIds[champion.id]
-                  )"
+                @click="open(getPreferredSite(champion.id))"
                 :src="CHAMPIONICONURL+champion.id+'.png'"
                 style="height:32px;border-radius:50%;float:left;margin-right:10px;"/>
               <!-- KDA -->
               <div>
               <div style="display:inline-block;text-align:left;float:left;">
-                <b><div                @click="openLink(
-                    'https://na.op.gg/champions/'+championIds[champion.id]
-                  )" class="largeText">{{championIds[champion.id]}}</div></b>
+                <b><div @click="open(getPreferredSite(champion.id))"
+                 class="largeText">{{championIds[champion.id]}}</div></b>
                 CS {{(champion.cs/champion.total).toFixed(1)}} ({{(champion.cs/(champion.time/60)).toFixed(1)}})
               </div>
               <div style="display:inline-block;">
@@ -46,6 +43,7 @@
 import {
   CHAMPIONICONURL,
   championIds,
+  getPreferredSite,
 } from '../res/common';
 
 const open = require('open');
@@ -70,6 +68,8 @@ export default {
     };
   },
   methods: {
+    getPreferredSite,
+    open,
     capitalize(s) {
       if (typeof s !== 'string') { return ''; }
       return s.charAt(0).toUpperCase() + s.slice(1).toLocaleLowerCase();
@@ -83,9 +83,6 @@ export default {
     getWinrateStyle(wr) {
       if (wr >= 60) { return '#e84057'; }
       return '#9e9eb1';
-    },
-    openLink(url) {
-      open(url);
     },
     toggleVisibility(index) {
       // We actually interate the loop 2 times because of the updated visibility..
@@ -107,7 +104,6 @@ export default {
   border-radius:5px;
 }
 .largeText {
-  weight: bold;
   font-size: 13px;
 }
 .v-enter-active,

@@ -20,8 +20,8 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 1150,
-    height: 600,
+    width: 1105,
+    height: 700,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // eslint-disable-next-line max-len
