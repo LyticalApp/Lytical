@@ -7,6 +7,8 @@
         <div class="team">
             <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
                 <div v-if="teammate.teamId == undefined || teammate.teamId == 1" class="miniCard">
+                    <img v-if="teammate.championId"
+                    class="selectedChampion emblem" :src="CHAMPIONICONURL+teammate.championId+'.png'">
                     <img class="emblem" :src='`assets/Emblem_${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`'>
                     <br>
                     <span @click="searchSummoner(teammate.username)">{{teammate.username}}</span>
@@ -37,6 +39,8 @@
         <div class="team">
             <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
                 <div v-if="teammate.teamId == 2" class="miniCard">
+                  <img v-if="teammate.championId"
+                    class="selectedChampion emblem" :src="CHAMPIONICONURL+teammate.championId+'.png'">
                     <img class="emblem" :src='`assets/Emblem_${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`'>
                     <br>
                     <span @click="searchSummoner(teammate.username)">{{teammate.username}}</span>
@@ -93,7 +97,6 @@ export default {
       romanNumbers,
       lobbyPlayers: [],
       gameId: 0,
-      currentGame: {},
     };
   },
   watch: {
@@ -182,15 +185,44 @@ export default {
             this.gameId = data.gameData.gameId;
             this.lobbyPlayers = [];
 
-            for (const player of data.gameData.teamOne) {
-              this.getSummonerById(player.summonerId, 1);
+            // Debug
+            for (const teamPlayer of data.gameData.teamOne) {
+            // Get champion id from list
+              let champId = 0;
+              for (const player of data.gameData.playerChampionSelections) {
+                if (player.summonerInternalName === teamPlayer.summonerInternalName) {
+                  champId = player.championId;
+                }
+              }
+              ipcRenderer.send('asynchronous-message', {
+                id: 'lol-lobby-playercard-with-sid',
+                summonerName: teamPlayer.summonerName,
+                puuid: teamPlayer.puuid,
+                championId: champId,
+                teamId: 1,
+              });
             }
-            for (const player of data.gameData.teamTwo) {
-              this.getSummonerById(player.summonerId, 2);
+            // Debug
+            for (const teamPlayer of data.gameData.teamTwo) {
+            // Get champion id from list
+              let champId = 0;
+              for (const player of data.gameData.playerChampionSelections) {
+                if (player.summonerInternalName === teamPlayer.summonerInternalName) {
+                  champId = player.championId;
+                }
+              }
+              ipcRenderer.send('asynchronous-message', {
+                id: 'lol-lobby-playercard-with-sid',
+                summonerName: teamPlayer.summonerName,
+                puuid: teamPlayer.puuid,
+                championId: champId,
+                teamId: 2,
+              });
             }
           }
           break;
         }
+        case 'lol-lobby-playercard-with-sid':
         case 'lol-lobby-playercard': {
           this.lobbyPlayers.push(data);
           break;
@@ -249,6 +281,9 @@ export default {
 }
 .emblem {
   height:70px;
+}
+.selectedChampion {
+  border-radius:50%;
 }
 .Victory {
     color:#5cd7e4;

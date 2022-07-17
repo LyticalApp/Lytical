@@ -20,8 +20,8 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 1105,
-    height: 700,
+    width: 1200,
+    height: 650,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // eslint-disable-next-line max-len
@@ -219,6 +219,34 @@ ipcMain.on('asynchronous-message', (event, req) => {
             },
           );
         }).catch((error) => errorHandler(error, event));
+        break;
+      }
+      case 'lol-lobby-playercard-with-sid': {
+        let rankedData = null;
+        request.requestURL(
+          auth,
+          `/lol-ranked/v1/ranked-stats/${req.puuid}`,
+        ).then(
+          (rankedD) => {
+            rankedData = JSON.parse(rankedD);
+            rankedData.username = req.summonerName;
+            rankedData.championId = req.championId;
+            request.requestURL(
+              auth,
+              // eslint-disable-next-line max-len
+              `/lol-match-history/v1/products/lol/${req.puuid}/matches?begIndex=0&endIndex=9`,
+            ).then(
+              (matchHistory) => {
+                rankedData.teamId = req.teamId;
+                rankedData.matchHistory = JSON.parse(matchHistory);
+                event.reply(
+                  'asynchronous-reply',
+                  createReply(rankedData, req.id),
+                );
+              },
+            );
+          },
+        ).catch((error) => errorHandler(error, event));
         break;
       }
       case 'get-auth-token': {

@@ -25,6 +25,7 @@ export default {
 
 <style scoped>
 .errorDiv {
+  top:42px;
   background-color:#e84057;
   width:100%;
   position:fixed;
