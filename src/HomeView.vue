@@ -64,7 +64,7 @@ export default {
       playerCardInfo: {},
       lockout: 0,
       matchHistoryMax: 19,
-      rankedOverviewData: null,
+      rankedOverviewData: [],
       matches: [],
     };
   },
@@ -83,14 +83,14 @@ export default {
   methods: {
     filterGameModes,
     searchSummoner(summonerName) {
-      if (summonerName !== undefined && summonerName !== '') {
+      if (summonerName !== undefined && summonerName.trim() !== '') {
         // Searchbar name
         ipcRenderer.send('asynchronous-message', {
           id: 'lol-ranked-stats',
           user: summonerName,
         });
         ipcRenderer.send('asynchronous-message', {
-          id: 'lol-match-history', user: summonerName, begIndex: 0, endIndex: 19,
+          id: 'lol-match-history', user: summonerName, begIndex: 0, endIndex: this.matchHistoryMax,
         });
         // Hack
         ipcRenderer.send('asynchronous-message', {
@@ -104,13 +104,10 @@ export default {
         ipcRenderer.send('asynchronous-message', {
           id: 'current-summoner',
           begIndex: 0,
-          endIndex: 9,
+          endIndex: this.matchHistoryMax,
         });
         ipcRenderer.send('asynchronous-message', { id: 'current-full-ranked-history' });
       }
-    },
-    getQueueName(queueId) {
-      return this.queueIds[queueId] !== '' ? this.queueIds[queueId] : 'Custom';
     },
   },
   mounted() {
@@ -249,7 +246,7 @@ export default {
           this.matches = [];
           this.playerCardInfo = {};
           this.rankedOverviewData = [];
-          this.matchHistoryMax = 9;
+          this.matchHistoryMax = 19;
           break;
         }
         case 'current-ranked-stats':

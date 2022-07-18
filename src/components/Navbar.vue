@@ -24,6 +24,9 @@
             </div>
             <!-- Settings Menu Button -->
             <div style="position:absolute;right:12px;top:12px;margin:0 auto;">
+              <img  @click="reload()"
+                :src='`assets/refresh-svg.svg`'
+                style="height:20px;opacity:.2;padding-right:10px;color:white;">
                 <img  @click="this.showSettings = !this.showSettings"
                 :src='`assets/settings.svg`'
                 style="height:20px;opacity:.2;">
@@ -54,6 +57,18 @@ export default {
       this.$router.push({
         name: 'Home',
         params: { summonerSearch: this.summonerSearch },
+      });
+    },
+    reload() {
+      console.log('relod triggered');
+      // eslint-disable-next-line no-underscore-dangle
+      console.log(this.$router.currentRoute._value.params.summonerSearch);
+      this.$router.push({
+        name: 'Home',
+        // Appending a blank space to the end of the username allow the route to update
+        // Tried the this.$router.go() but the params got eaten..
+        // eslint-disable-next-line no-underscore-dangle
+        params: { summonerSearch: `${this.$router.currentRoute._value.params.summonerSearch} ` },
       });
     },
   },
