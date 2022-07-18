@@ -363,8 +363,16 @@ export const getPreferredSite = (championId) => {
     case 'leagueofgraphs': return `https://www.leagueofgraphs.com/champions/builds/${championName.toLowerCase()}`;
     case 'qq': return `https://101.qq.com/#/hero-detail?heroid=${championId}`;
     default: {
-      console.log('e');
+      console.log('Unknown PreferredSite settings: ', site);
     }
   }
   return `https://na.op.gg/champions/${championName}`;
+};
+
+export const filterGameModes = (matchHistory) => {
+  let filteredGames = matchHistory;
+  if (localStorage.showSoloGames === 'false') { filteredGames = (filteredGames).filter((game) => game.queueId !== 420); }
+  if (localStorage.showFlexGames === 'false') { filteredGames = (filteredGames).filter((game) => game.queueId !== 440); }
+  if (localStorage.showNormalGames === 'false') { filteredGames = (filteredGames).filter((game) => !(game.queueId !== 440 && game.queueId !== 420)); }
+  return filteredGames;
 };

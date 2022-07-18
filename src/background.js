@@ -109,6 +109,28 @@ function createReply(dataD, id) {
   data.reply_type = id;
   return data;
 }
+/**
+const WebSocket = require('ws');
+function connectToWebsocket() {
+  // Connect to websocket
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+  lcu.getLCUAuth().then((auth) => {
+    const ws = new WebSocket(`wss://riot:${auth.password}@127.0.0.1:${auth.port}/`, 'wamp');
+    ws.on('open', () => {
+    // Subsribe to [Ingame, Lobby, Matchmaking] events
+      ws.send('[5, "OnJsonApiEvent_lol-gameflow_v1_session"]');
+    });
+
+    ws.on('error', (err) => {
+      console.log(err);
+    });
+
+    ws.on('message', (msg) => {
+      console.log(JSON.parse(msg));
+    });
+  });
+}
+*/
 
 function errorHandler(errorCode, event) {
   console.log('ERRORCODE: ', errorCode);

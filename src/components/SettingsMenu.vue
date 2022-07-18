@@ -1,6 +1,6 @@
 <template>
     <div class="myModal">
-        <div style="left:50%;margin:auto;">
+        <div style="left:50%;margin:auto;align:left;">
             <h1>Settings</h1>
             <table style="left:50%;margin:auto;">
                 <tr>
@@ -14,14 +14,21 @@
                     <td>Stats/Champion Website</td>
                 <td>
                     <select v-model="statsSite" name="stats-website">
-                        <option value="opgg" link="https://op.gg/champions">op.gg</option>
-                        <option value="ugg" link="https://u.gg/lol/champions">u.gg</option>
-                        <option value="blitz" link="https://blitz.gg/lol/champions/">blitz.gg</option>
-                        <option value="leagueofgraphs"
-                        link="https://www.leagueofgraphs.com/champions/">leagueofgraphs</option>
-                        <option value="qq" link="https://101.qq.com/#/hero">qq</option>
+                        <option value="opgg">op.gg</option>
+                        <option value="ugg">u.gg</option>
+                        <option value="blitz">blitz.gg</option>
+                        <option value="leagueofgraphs">leagueofgraphs</option>
+                        <option value="qq">101.qq</option>
                     </select>
                 </td>
+                </tr>
+                <tr>
+                    <td>Filter (checked items displayed)</td>
+                    <td>
+                    <input v-model="showSoloGames" :checked="showSoloGames == 'true'" type="checkbox"> Solo/Duo
+                    <input v-model="showFlexGames" :checked="showFlexGames == 'true'" type="checkbox"> Flex
+                    <input v-model="showNormalGames" :checked="showNormalGames == 'true'" type="checkbox"> ARAM/Normal
+                    </td>
                 </tr>
             </table>
         </div>
@@ -35,17 +42,32 @@ export default {
     // Load settings because localStorage isn't ready until mount
     if (localStorage.autoSwitchLobby) this.autoSwitchLobby = localStorage.getItem('autoSwitchLobby');
     if (localStorage.statsSite) this.statsSite = localStorage.getItem('statsSite');
+    if (localStorage.showSoloGames) this.showSoloGames = localStorage.getItem('showSoloGames');
+    if (localStorage.showFlexGames) this.showFlexGames = localStorage.getItem('showFlexGames');
+    if (localStorage.showNormalGames) this.showNormalGames = localStorage.getItem('showNormalGames');
   },
   data() {
     return {
       autoSwitchLobby: 'true',
       statsSite: 'opgg',
+      showSoloGames: 'true',
+      showFlexGames: 'true',
+      showNormalGames: 'true',
     };
   },
   watch: {
     // Keep local storage in sync
     autoSwitchLobby(state) {
       localStorage.setItem('autoSwitchLobby', state);
+    },
+    showSoloGames(state) {
+      localStorage.setItem('showSoloGames', state);
+    },
+    showFlexGames(state) {
+      localStorage.setItem('showFlexGames', state);
+    },
+    showNormalGames(state) {
+      localStorage.setItem('showNormalGames', state);
     },
     statsSite(state) {
       localStorage.setItem('statsSite', state);

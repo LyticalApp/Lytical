@@ -10,7 +10,7 @@
                 </router-link>
             </div>
             <div :class='`item ${ underlineLobby ? "underlined" : ""}`'>
-                <router-link to="pregame">
+                <router-link to="lobby">
                     Lobby
                 </router-link>
             </div>
@@ -65,7 +65,7 @@ export default {
           this.underlineHome = true;
           break;
         }
-        case '/pregame': {
+        case '/lobby': {
           this.underlineLobby = true;
           this.underlineHome = false;
           break;

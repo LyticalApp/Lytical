@@ -17,7 +17,7 @@ export default {
     },
     title: {
       type: String,
-      default: 'Unable to connect to League of Legends client. If it is open run Lytical as Administrator',
+      default: 'Unable to connect to League of Legends client (LCU). If it is open run Lytical as Administrator',
     },
   },
 };

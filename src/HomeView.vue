@@ -16,7 +16,7 @@
           </div>
         </td>
         <td>
-          <div v-if="!matches.length && !showError" class="loadingFrame">
+          <div v-if="showLoading" class="loadingFrame">
               <div class="lds-ellipsis">
                 <div></div>
                 <div></div>
@@ -40,6 +40,9 @@ import PlayerCard from './components/PlayerCard.vue';
 import PlayerRank from './components/PlayerRank.vue';
 import LCUErrorMessage from './components/LCUErrorMessage.vue';
 import RankedChampionOverview from './components/RankedChampionOverview.vue';
+import {
+  filterGameModes,
+} from './res/common';
 
 const { ipcRenderer } = require('electron');
 
@@ -55,11 +58,12 @@ export default {
   data() {
     return {
       polling: null,
+      showLoading: true,
       ondata: null,
       showError: false,
       playerCardInfo: {},
       lockout: 0,
-      matchHistoryMax: 9,
+      matchHistoryMax: 19,
       rankedOverviewData: null,
       matches: [],
     };
@@ -67,7 +71,6 @@ export default {
   watch: {
     $route(to, from) {
       // Unregister the listener..
-      console.log(to, from);
       if (to.name !== from.name) {
         console.log('Unregistering Listeners on Home');
         ipcRenderer.removeListener('asynchronous-reply', this.ondata);
@@ -78,6 +81,7 @@ export default {
     },
   },
   methods: {
+    filterGameModes,
     searchSummoner(summonerName) {
       if (summonerName !== undefined && summonerName !== '') {
         // Searchbar name
@@ -86,7 +90,7 @@ export default {
           user: summonerName,
         });
         ipcRenderer.send('asynchronous-message', {
-          id: 'lol-match-history', user: summonerName, begIndex: 0, endIndex: 9,
+          id: 'lol-match-history', user: summonerName, begIndex: 0, endIndex: 19,
         });
         // Hack
         ipcRenderer.send('asynchronous-message', {
@@ -150,6 +154,7 @@ export default {
       if (data.reply_type === 'lcu-disonnceted') {
         document.title = 'Lytical - Disconnected';
         this.showError = true;
+        this.showLoading = false;
         return;
       }
       if (data.reply_type === 'lcu-disonnceted') this.showError = false;
@@ -166,7 +171,8 @@ export default {
         }
         case 'current-summoner':
         case 'lol-match-history': {
-          this.matches = this.matches.concat(data.games.games);
+          this.matches = this.matches.concat(this.filterGameModes(data.games.games));
+          this.showLoading = false;
           break;
         }
         case 'current-full-ranked-history':
@@ -239,6 +245,7 @@ export default {
           break;
         }
         case 'clear-profile': {
+          this.showLoading = true;
           this.matches = [];
           this.playerCardInfo = {};
           this.rankedOverviewData = [];
@@ -252,12 +259,11 @@ export default {
         }
         case 'lol-champ-select': {
           // We switch to the other view for
-          // pregame lobbies which will
+          // Lobby view
           // display player cards for each player
           console.log('DEBUG autoSwitchLobby:', localStorage.autoSwitchLobby);
-          if (localStorage.autoSwitchLobby === 'true'
-              || localStorage.autoSwitchLobby === undefined) {
-            this.$router.push('pregame');
+          if (localStorage.autoSwitchLobby !== 'false') {
+            this.$router.push('lobby');
           }
           break;
         }

@@ -73,7 +73,7 @@
 
 <script>
 import {
-  championIds, romanNumbers, CHAMPIONICONURL, getPreferredSite,
+  championIds, romanNumbers, CHAMPIONICONURL, getPreferredSite, filterGameModes,
 } from './res/common';
 import LCUErrorMessage from './components/LCUErrorMessage.vue';
 
@@ -81,7 +81,7 @@ const { ipcRenderer } = require('electron');
 const open = require('open');
 
 export default {
-  name: 'PregameLobby',
+  name: 'LobbyView',
   components: {
     LCUErrorMessage,
   },
@@ -109,6 +109,7 @@ export default {
   },
   methods: {
     getPreferredSite,
+    filterGameModes,
     open,
     getSummonerById(id, teamId) {
       ipcRenderer.send('asynchronous-message', {
@@ -224,7 +225,9 @@ export default {
         }
         case 'lol-lobby-playercard-with-sid':
         case 'lol-lobby-playercard': {
-          this.lobbyPlayers.push(data);
+          const filteredData = data;
+          filteredData.matchHistory.games = filterGameModes(filteredData.matchHistory.games);
+          this.lobbyPlayers.push(filteredData);
           break;
         }
         default: {

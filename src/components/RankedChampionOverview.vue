@@ -24,7 +24,8 @@
                 </div>
               </div>
                 <div style="display:inline-block;text-align:right;float:right;">
-                  <span class="largeText" :style="{ color: getWinrateStyle(champion.wins/(champion.total)*100)}">
+                  <span class="largeText" :style="
+                  { color: getWinrateStyle((champion.wins/(champion.total)*100).toFixed(0))}">
                   {{(champion.wins/(champion.total)*100).toFixed(0)}}%
                   </span>
                   <br>
