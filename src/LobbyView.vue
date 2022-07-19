@@ -186,7 +186,7 @@ export default {
             this.gameId = data.gameData.gameId;
             this.lobbyPlayers = [];
 
-            // Debug
+            // TeamOne Plyers
             for (const teamPlayer of data.gameData.teamOne) {
             // Get champion id from list
               let champId = 0;
@@ -203,7 +203,7 @@ export default {
                 teamId: 1,
               });
             }
-            // Debug
+            // TeamTwo Plyers
             for (const teamPlayer of data.gameData.teamTwo) {
             // Get champion id from list
               let champId = 0;
@@ -226,7 +226,7 @@ export default {
         case 'lol-lobby-playercard-with-sid':
         case 'lol-lobby-playercard': {
           const filteredData = data;
-          filteredData.matchHistory.games = filterGameModes(filteredData.matchHistory.games);
+          filteredData.matchHistory.games.games = filterGameModes(filteredData.matchHistory.games.games);
           this.lobbyPlayers.push(filteredData);
           break;
         }

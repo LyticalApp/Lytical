@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="navWrapper">
-            <div :class='`item ${ underlineHome ? "underlined" : ""}`'>
+            <div :class='`item ${ viewingHome ? "underlined" : ""}`'>
                 <router-link
                 :to="{
                   name: 'Home',
@@ -9,13 +9,13 @@
                     Profile
                 </router-link>
             </div>
-            <div :class='`item ${ underlineLobby ? "underlined" : ""}`'>
-                <router-link to="lobby">
+            <div :class='`item ${ viewingLobby ? "underlined" : ""}`'>
+                <router-link to="Lobby">
                     Lobby
                 </router-link>
             </div>
             <div class="item">
-                <form @submit.prevent="searchSummoner()">
+                <form @submit.prevent="searchSummoner(summonerSearch)">
                     <input v-model=summonerSearch
                     type="Search"
                     class="inputbox"
@@ -32,7 +32,7 @@
                 style="height:20px;opacity:.2;">
             </div>
         </div>
-        <SettingsMenu v-if="showSettings" />
+        <SettingsMenu v-show="showSettings" />
     </div>
 </template>
 
@@ -46,43 +46,44 @@ export default {
   },
   data() {
     return {
-      underlineHome: true,
       showSettings: false,
-      underlineLobby: false,
+      viewingLobby: false,
+      viewingHome: true,
       summonerSearch: '',
     };
   },
   methods: {
-    searchSummoner() {
+    searchSummoner(summoner) {
       this.$router.push({
         name: 'Home',
-        params: { summonerSearch: this.summonerSearch },
+        params: { summonerSearch: summoner },
       });
     },
     reload() {
-      console.log('relod triggered');
-      // eslint-disable-next-line no-underscore-dangle
-      console.log(this.$router.currentRoute._value.params.summonerSearch);
-      this.$router.push({
-        name: 'Home',
-        // Appending a blank space to the end of the username allow the route to update
-        // Tried the this.$router.go() but the params got eaten..
-        // eslint-disable-next-line no-underscore-dangle
-        params: { summonerSearch: `${this.$router.currentRoute._value.params.summonerSearch} ` },
-      });
+      if (this.viewingHome) {
+        this.$router.push({
+          name: 'Home',
+          // Appending a blank space to the end of the username allow the route to update
+          // Tried the this.$router.go() but the params got eaten..
+          // eslint-disable-next-line no-underscore-dangle
+          params: { summonerSearch: `${this.$router.currentRoute._value.params.summonerSearch} ` },
+        });
+      } else {
+        this.$router.go();
+      }
     },
   },
   watch: {
     $route() {
       switch (this.$route.path) {
         case '/': {
-          this.underlineLobby = false;
-          this.underlineHome = true;
+          this.viewingLobby = false;
+          this.viewingHome = true;
           break;
         }
-        case '/lobby': {
-          this.underlineLobby = true;
-          this.underlineHome = false;
+        case '/Lobby': {
+          this.viewingLobby = true;
+          this.viewingHome = false;
           break;
         }
         default: {

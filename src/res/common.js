@@ -371,8 +371,8 @@ export const getPreferredSite = (championId) => {
 
 export const filterGameModes = (matchHistory) => {
   let filteredGames = matchHistory;
-  if (localStorage.showSoloGames === 'false') { filteredGames = (filteredGames).filter((game) => game.queueId !== 420); }
-  if (localStorage.showFlexGames === 'false') { filteredGames = (filteredGames).filter((game) => game.queueId !== 440); }
-  if (localStorage.showNormalGames === 'false') { filteredGames = (filteredGames).filter((game) => !(game.queueId !== 440 && game.queueId !== 420)); }
+  if (localStorage.showSoloGames === 'false' && filteredGames.length) { filteredGames = (filteredGames).filter((game) => game.queueId !== 420); }
+  if (localStorage.showFlexGames === 'false' && filteredGames.length) { filteredGames = (filteredGames).filter((game) => game.queueId !== 440); }
+  if (localStorage.showNormalGames === 'false' && filteredGames.length) { filteredGames = (filteredGames).filter((game) => !(game.queueId !== 440 && game.queueId !== 420)); }
   return filteredGames;
 };

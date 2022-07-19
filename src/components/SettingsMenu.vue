@@ -32,6 +32,10 @@
                 </tr>
             </table>
         </div>
+        <div>
+          <h3>Error Log</h3>
+          <textarea v-model="errorlog" class="errorLog"></textarea>
+          </div>
     </div>
 </template>
 
@@ -45,9 +49,14 @@ export default {
     if (localStorage.showSoloGames) this.showSoloGames = localStorage.getItem('showSoloGames');
     if (localStorage.showFlexGames) this.showFlexGames = localStorage.getItem('showFlexGames');
     if (localStorage.showNormalGames) this.showNormalGames = localStorage.getItem('showNormalGames');
+    window.onerror = (errorMsg, url, lineNumber) => {
+      this.errorlog += `Error occured: ${errorMsg} on line ${lineNumber} \n`;
+      return false;
+    };
   },
   data() {
     return {
+      errorlog: '',
       autoSwitchLobby: 'true',
       statsSite: 'opgg',
       showSoloGames: 'true',
@@ -77,6 +86,11 @@ export default {
 </script>
 
 <style scoped>
+.errorLog {
+  background-color:#2c3e50;
+  width:50%;
+  color:white;
+}
 .myModal{
     color:#f2ecff;
     height:100vh;
