@@ -61,12 +61,14 @@ export default {
     },
     reload() {
       if (this.viewingHome) {
+        // eslint-disable-next-line no-underscore-dangle
+        const name = this.$router.currentRoute._value.params.summonerSearch || '';
         this.$router.push({
           name: 'Home',
           // Appending a blank space to the end of the username allow the route to update
           // Tried the this.$router.go() but the params got eaten..
           // eslint-disable-next-line no-underscore-dangle
-          params: { summonerSearch: `${this.$router.currentRoute._value.params.summonerSearch} ` },
+          params: { summonerSearch: `${name} ` },
         });
       } else {
         this.$router.go();

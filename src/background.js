@@ -17,9 +17,11 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } },
 ]);
 
+let win;
+
 async function createWindow() {
   // Create the browser window.
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 1200,
     height: 650,
     webPreferences: {
@@ -170,6 +172,18 @@ function getPlayerDataByName(name, auth) {
 
 ipcMain.on('asynchronous-message', (event, req) => {
   console.log('new request: ', req);
+
+  // ipc required requests for debug/versioning
+  if (req.id === 'openDevTools') {
+    win.webContents.openDevTools();
+    return;
+  }
+  if (req.id === 'getVersion') {
+    event.reply('asynchronous-reply', { reply_type: 'appVersion', version: app.getVersion() });
+    return;
+  }
+
+  // LCU related Requests
   lcu.getLCUAuth().then((auth) => {
     switch (req.id) {
       case 'current-summoner': {

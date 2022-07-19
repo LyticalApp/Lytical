@@ -33,13 +33,16 @@
             </table>
         </div>
         <div>
-          <h3>Error Log</h3>
-          <textarea v-model="errorlog" class="errorLog"></textarea>
+          <h3>Debug</h3>
+          <span>Version: {{version}}</span><br>
+          <button @click="openDevTools">Open Dev Tools</button>
           </div>
     </div>
 </template>
 
 <script>
+const { ipcRenderer } = require('electron');
+
 export default {
   name: 'SettingsMenu',
   mounted() {
@@ -49,20 +52,32 @@ export default {
     if (localStorage.showSoloGames) this.showSoloGames = localStorage.getItem('showSoloGames');
     if (localStorage.showFlexGames) this.showFlexGames = localStorage.getItem('showFlexGames');
     if (localStorage.showNormalGames) this.showNormalGames = localStorage.getItem('showNormalGames');
-    window.onerror = (errorMsg, url, lineNumber) => {
-      this.errorlog += `Error occured: ${errorMsg} on line ${lineNumber} \n`;
-      return false;
-    };
+    ipcRenderer.on('asynchronous-reply', (event, data) => {
+      if (data.reply_type === 'appVersion') {
+        this.version = data.version;
+      }
+    });
+    ipcRenderer.send('asynchronous-message', {
+      id: 'getVersion',
+    });
   },
   data() {
     return {
-      errorlog: '',
+      errorLog: [],
+      version: '',
       autoSwitchLobby: 'true',
       statsSite: 'opgg',
       showSoloGames: 'true',
       showFlexGames: 'true',
       showNormalGames: 'true',
     };
+  },
+  methods: {
+    openDevTools() {
+      ipcRenderer.send('asynchronous-message', {
+        id: 'openDevTools',
+      });
+    },
   },
   watch: {
     // Keep local storage in sync
