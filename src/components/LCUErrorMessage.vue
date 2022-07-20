@@ -1,7 +1,7 @@
 <template>
     <div class="errorDiv">
       <h1>{{message}}
-          <i :title="title" class="fa fa-circle-info" aria-hidden="true"></i>
+          <i :title="title" class="icon-question-circle" aria-hidden="true"></i>
       </h1>
     </div>
 </template>

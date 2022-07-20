@@ -117,7 +117,7 @@
             </tbody>
         </table>
         <div :class="`showDetailsTip ${showDetails ? 'flip180' : ''}`" @click="()=>{getGameDetails()}">
-            <i class="fa-solid fa-angle-down"></i>
+            <i class="icon-keyboard_arrow_down"></i>
         </div>
         <!-- Begin Detailed Match History Item -->
         <DetailedMatchInfo
@@ -320,7 +320,7 @@ a {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    font-size:12px;
+    font-size:18px;
     text-align:center;
 }
 

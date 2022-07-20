@@ -21,8 +21,8 @@
         <span>
           {{data.queueMap.RANKED_SOLO_5x5.wins}}W {{data.queueMap.RANKED_SOLO_5x5.losses}}L
           <i v-if="data.flag"
-          title="Info: Only includes latest 200 games" style="color:#797979d9;font-size:12px;"
-      class="fa fa-circle-info" aria-hidden="true"></i>
+          title="Info: Only includes latest 200 games" style="color:#797979d9;font-size:15px;"
+      class="icon-question-circle" aria-hidden="true"></i>
         </span>
         <br>
         <span>
