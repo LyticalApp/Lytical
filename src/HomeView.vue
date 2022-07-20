@@ -174,13 +174,11 @@ export default {
         }
         case 'current-full-ranked-history':
         case 'lol-full-ranked-history': {
+          if (data.games === undefined) return;
           const gamesOnChampions = {};
           const { games } = data.games;
           // substring 12 meaning patch beginning with a 12..
           // there is no official "current season"
-
-          if (!games.length) return;
-
           const thisSeason = (games)
             .filter((game) => game.queueId === 420)
             .filter((game) => game.gameVersion.substring(0, 2) === '12');

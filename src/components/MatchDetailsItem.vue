@@ -210,7 +210,7 @@ import {
 const open = require('open');
 
 export default {
-  name: 'DetailedMatchInfo',
+  name: 'MatchDetailsItem',
   props: {
     matchDetails: {
       // The order of the teams is done in MatchHistoryItem

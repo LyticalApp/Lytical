@@ -131,7 +131,7 @@
 import {
   runeIcons, summonerSpells, CHAMPIONICONURL, ITEMICONURL, RUNEICONURL, queueIds, championIds, getPreferredSite,
 } from '../res/common';
-import DetailedMatchInfo from './DetailedMatchInfo.vue';
+import DetailedMatchInfo from './MatchDetailsItem.vue';
 
 const { ipcRenderer } = require('electron');
 const open = require('open');
@@ -161,25 +161,18 @@ export default {
           if (data.reply_type === 'lol-match-details') {
             if (data.gameId === this.data.gameId) {
               this.matchDetails = data;
-
               // format team order based on whos profile we're on
-
               const team0 = [
-                data.participantIdentities[0].player.summonerName,
-                data.participantIdentities[1].player.summonerName,
-                data.participantIdentities[2].player.summonerName,
-                data.participantIdentities[3].player.summonerName,
-                data.participantIdentities[4].player.summonerName,
+                this.matchDetails.participantIdentities[0].player.summonerName,
+                this.matchDetails.participantIdentities[1].player.summonerName,
+                this.matchDetails.participantIdentities[2].player.summonerName,
+                this.matchDetails.participantIdentities[3].player.summonerName,
+                this.matchDetails.participantIdentities[4].player.summonerName,
               ];
-
-              const tmp = data;
               if (!team0.includes(this.profileSummoner)) {
-                tmp.participantIdentities = tmp.participantIdentities.reverse();
-                tmp.participants = tmp.participants.reverse();
+                this.matchDetails.participantIdentities = this.matchDetails.participantIdentities.reverse();
+                this.matchDetails.participants = this.matchDetails.participants.reverse();
               }
-
-              this.matchDetails = tmp;
-
               ipcRenderer.removeListener('asynchronous-reply', this.matchListener);
             }
           }
@@ -229,6 +222,7 @@ export default {
     return {
       showDetails: false,
       matchListener: null,
+      matchDetails: null,
       queueIds,
       championIds,
       CHAMPIONICONURL,
@@ -236,7 +230,6 @@ export default {
       ITEMICONURL,
       runeIcons,
       summonerSpells,
-      matchDetails: null,
     };
   },
 };
@@ -256,6 +249,7 @@ td {
 span {
   display:block;
 }
+
 .championLevelBulb {
   position:absolute;
   left:115px;
@@ -265,6 +259,7 @@ span {
   margin-top:35px;
   padding:2px;
 }
+
 .matchItem {
   transition: all 3s ease-in-out;
   background-color:#020202;
@@ -277,17 +272,21 @@ span {
 h3 {
   margin: 40px 0 0;
 }
+
 ul {
   list-style-type: none;
   padding: 0;
 }
+
 li {
   display: inline-block;
   margin: 0 10px;
 }
+
 a {
   color: #42b983;
 }
+
 .thumbicon {
   width:22px;
   height:22px;
@@ -303,10 +302,12 @@ a {
   font-weight: normal;
   color: #5cd7e4;
 }
+
 .Defeat b{
   font-weight: normal;
   color: #ba4b45;
 }
+
 .showDetailsTip {
     position: absolute;
     z-index: 0;
@@ -322,6 +323,7 @@ a {
     font-size:12px;
     text-align:center;
 }
+
 .flip180 {
   transform: rotate(180deg);
 }
