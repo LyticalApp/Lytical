@@ -118,7 +118,7 @@ export default {
       if (isScrolledToBottom && this.lockout < currentTime) {
         // Request 20 more games.
         this.lockout = currentTime + 1000;
-        if (this.$route.params.summonerSearch !== undefined && this.$route.params.summonerSearch !== '') {
+        if (this.$route.params.summonerSearch !== undefined && this.$route.params.summonerSearch.trim() !== '') {
           ipcRenderer.send('asynchronous-message', {
             id: 'lol-match-history',
             user: this.$route.params.summonerSearch,
@@ -178,6 +178,9 @@ export default {
           const { games } = data.games;
           // substring 12 meaning patch beginning with a 12..
           // there is no official "current season"
+
+          if (!games.length) return;
+
           const thisSeason = (games)
             .filter((game) => game.queueId === 420)
             .filter((game) => game.gameVersion.substring(0, 2) === '12');
@@ -260,7 +263,9 @@ export default {
           // display player cards for each player
           console.log('DEBUG autoSwitchLobby:', localStorage.autoSwitchLobby);
           if (localStorage.autoSwitchLobby !== 'false') {
-            this.$router.push('lobby');
+            this.$router.push({
+              name: 'Lobby',
+            });
           }
           break;
         }

@@ -171,7 +171,7 @@ function getPlayerDataByName(name, auth) {
 }
 
 ipcMain.on('asynchronous-message', (event, req) => {
-  console.log('new request: ', req);
+  console.log('NEW REQUEST: ', req);
 
   // ipc required requests for debug/versioning
   if (req.id === 'openDevTools') {
