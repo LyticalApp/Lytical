@@ -32,7 +32,9 @@
                 style="height:20px;opacity:.2;">
             </div>
         </div>
+        <Transition>
         <SettingsMenu v-show="showSettings" />
+        </Transition>
     </div>
 </template>
 
@@ -93,22 +95,36 @@ export default {
 </script>
 
 <style scoped>
-
 input[type="search"] {
-    width: 100%;
-    padding: 14px 20px;
-    display: inline-block;
-    border:none;
-    font-size:14px;
-    border-radius: 4px;
-    box-sizing: border-box;
+  position: fixed;
+  top: 6px !important;
+  width: 160px;
+  height: 31px;
+  padding: 14px 20px;
+  transition: width .2s;
+  display: inline-block;
+  border:none;
+  font-size:14px;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
 input:focus {
-    outline: none !important;
-    border-color: #719ECE;
-    box-shadow: 0 0 4px #719ECE;
+  outline: none !important;
+  width: 200px;
+  transition: width .2s;
+  border-color: #719ECE;
+  box-shadow: 0 0 4px #719ECE;
  }
+
+.v-enter-active {
+  transition: opacity 0.2s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 
 input[type="search"]:focus::-webkit-search-cancel-button {
   opacity: .4;
@@ -116,36 +132,36 @@ input[type="search"]:focus::-webkit-search-cancel-button {
 }
 
 .navWrapper {
-    z-index:100;
-    display: flex;
-    top:0px;
-    left:0px;
-    height:42px;
-    position:fixed;
-    background-color:#191a1d;
-    width: 100%;
+  z-index:100;
+  display: flex;
+  top:0px;
+  left:0px;
+  height:42px;
+  position:fixed;
+  background-color:#191a1d;
+  width: 100%;
 }
 .underlined a{
-    text-underline-offset: 10px;
-    text-decoration: underline !important;
-    text-decoration-color: #5a4656 !important;
-    transition: all .2s linear;
+  text-underline-offset: 10px;
+  text-decoration: underline !important;
+  text-decoration-color: #5a4656 !important;
+  transition: all .2s linear;
 }
 .inputbox {
-    color:#f2ecff;
-    height:20px;
-    border-radius:4px;
-    background-color: #080808a3;
+  color:#f2ecff;
+  height:20px;
+  border-radius:4px;
+  background-color: #080808a3;
 }
 .item {
-    font-weight: lighter;
-    padding:10px;
-    padding-right:25px;
-    font-size: 20px;
-    display: flex;
+  font-weight: lighter;
+  padding:10px;
+  padding-left:25px;
+  font-size: 20px;
+  display: flex;
 }
 .item a{
-    text-decoration:none;
-    color:#f2ecff;
+  text-decoration:none;
+  color:#f2ecff;
 }
 </style>
