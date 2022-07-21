@@ -53,11 +53,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 @font-face {
   font-family: 'icomoon';
-  src:  url('./webfonts/icomoon.eot?q5ulf9');
-  src:  url('./webfonts/icomoon.eot?q5ulf9#iefix') format('embedded-opentype'),
-    url('./webfonts/icomoon.ttf?q5ulf9') format('truetype'),
-    url('./webfonts/icomoon.woff?q5ulf9') format('woff'),
-    url('./webfonts/icomoon.svg?q5ulf9#icomoon') format('svg');
+  src: url('./webfonts/icomoon.ttf?q5ulf9') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
