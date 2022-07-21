@@ -50,7 +50,7 @@ import {
 const open = require('open');
 
 export default {
-  name: 'RankedChampionOverview',
+  name: 'MostPlayedChampions',
   props: {
     data: {
       type: Object,

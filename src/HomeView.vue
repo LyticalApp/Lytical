@@ -11,7 +11,7 @@
               <PlayerRank v-if="playerCardInfo != null" :data=playerCardInfo />
             </Transition>
             <Transition>
-              <RankedChampionOverview v-if="rankedOverviewData != null" :data=rankedOverviewData />
+              <MostPlayedChampions v-if="rankedOverviewData != null" :data=rankedOverviewData />
             </Transition>
           </div>
         </td>
@@ -39,7 +39,7 @@ import MatchHistoryItem from './components/MatchHistoryItem.vue';
 import PlayerCard from './components/PlayerCard.vue';
 import PlayerRank from './components/PlayerRank.vue';
 import LCUErrorMessage from './components/LCUErrorMessage.vue';
-import RankedChampionOverview from './components/RankedChampionOverview.vue';
+import MostPlayedChampions from './components/MostPlayedChampions.vue';
 import {
   filterGameModes,
 } from './res/common';
@@ -53,7 +53,7 @@ export default {
     PlayerCard,
     PlayerRank,
     LCUErrorMessage,
-    RankedChampionOverview,
+    MostPlayedChampions,
   },
   data() {
     return {
@@ -179,9 +179,9 @@ export default {
           const { games } = data.games;
           // substring 12 meaning patch beginning with a 12..
           // there is no official "current season"
+          const season = '12';
           const thisSeason = (games)
-            .filter((game) => game.queueId === 420)
-            .filter((game) => game.gameVersion.substring(0, 2) === '12');
+            .filter((game) => game.queueId === 420 && game.gameVersion.substring(0, 2) === season);
 
           // Used to Update PlayerRankedCard
           let totalWins = 0;

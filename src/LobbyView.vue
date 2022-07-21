@@ -317,6 +317,7 @@ export default {
     max-width: 1130px;
 }
 .miniCard {
+    min-height: 232px;
     margin: 10px;
     padding:10px;
     color: #9a96a4;

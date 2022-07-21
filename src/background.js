@@ -241,7 +241,7 @@ ipcMain.on('asynchronous-message', (event, req) => {
               request.requestURL(
                 auth,
                 // eslint-disable-next-line max-len
-                `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=9`,
+                `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=19`,
               ).then(
                 (matchHistory) => {
                   rankedData.teamId = req.teamId;
@@ -270,7 +270,7 @@ ipcMain.on('asynchronous-message', (event, req) => {
             request.requestURL(
               auth,
               // eslint-disable-next-line max-len
-              `/lol-match-history/v1/products/lol/${req.puuid}/matches?begIndex=0&endIndex=9`,
+              `/lol-match-history/v1/products/lol/${req.puuid}/matches?begIndex=0&endIndex=19`,
             ).then(
               (matchHistory) => {
                 rankedData.teamId = req.teamId;
@@ -389,7 +389,6 @@ ipcMain.on('asynchronous-message', (event, req) => {
             `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=200`,
           ).then(
             (matchHistory) => {
-              console.log('test');
               event.reply(
                 'asynchronous-reply',
                 createReply(matchHistory, req.id),
