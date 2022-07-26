@@ -102,7 +102,7 @@ export default {
   watch: {
     $route() {
       // Unregister the listener..
-      console.log('Unregistering Listeners on Pregame');
+      console.log('Unregistering Listeners on Lobby');
       ipcRenderer.removeListener('asynchronous-reply', this.ondata);
       clearInterval(this.polling);
     },
@@ -157,20 +157,23 @@ export default {
 
       // We have diconnected or auth error..
       if (data.reply_type === 'lcu-disonnceted') {
-        console.log('Disconnected..');
         this.showError = true;
         document.title = 'Lytical - Disconnected';
-      } else if (this.showError) {
+        return;
+      }
+
+      if (this.showError) {
         this.showError = false;
         document.title = 'Lytical';
       }
+      this.clearErrorTimeout(this.timeout);
 
       // Valid reply handlers
       switch (data.reply_type) {
         case 'lol-champ-select': {
-          this.clearErrorTimeout(this.timeout);
           document.title = 'Lytical - Champion Select';
           this.lobbyData = data;
+          // We should be setting the gameid on the lobby and checking that instead
           if (!this.lobbyPlayers.length) {
             for (const player of this.lobbyData.myTeam) {
               this.getSummonerById(player.summonerId);
@@ -179,7 +182,6 @@ export default {
           break;
         }
         case 'current-session': {
-          this.clearErrorTimeout(this.timeout);
           if (data.phase === 'InProgress' && (this.gameId !== data.gameData.gameId)) {
             document.title = 'Lytical - Live Game';
             this.lobbyData = data;

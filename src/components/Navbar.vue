@@ -23,7 +23,7 @@
                 </form>
             </div>
             <!-- Settings Menu Button -->
-            <div style="position:absolute;right:12px;top:12px;margin:0 auto;">
+            <div style="position:absolute;right:20px;top:12px;margin:0 auto;">
               <img  @click="reload()"
                 :src='`assets/refresh-svg.svg`'
                 style="height:20px;opacity:.2;padding-right:10px;color:white;">
@@ -135,6 +135,7 @@ input[type="search"]:focus::-webkit-search-cancel-button {
   z-index:100;
   display: flex;
   top:0px;
+  padding-left:5px;
   left:0px;
   height:42px;
   position:fixed;
@@ -156,7 +157,7 @@ input[type="search"]:focus::-webkit-search-cancel-button {
 .item {
   font-weight: lighter;
   padding:10px;
-  padding-left:25px;
+  padding-left:15px;
   font-size: 20px;
   display: flex;
 }
