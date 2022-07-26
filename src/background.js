@@ -182,6 +182,14 @@ ipcMain.on('asynchronous-message', (event, req) => {
     event.reply('asynchronous-reply', { reply_type: 'appVersion', version: app.getVersion() });
     return;
   }
+  if (req.id === 'scaleUp') {
+    win.webContents.setZoomFactor(win.webContents.getZoomFactor() + 0.1);
+    return;
+  }
+  if (req.id === 'scaleDown') {
+    win.webContents.setZoomFactor(win.webContents.getZoomFactor() - 0.1);
+    return;
+  }
 
   // LCU related Requests
   lcu.getLCUAuth().then((auth) => {

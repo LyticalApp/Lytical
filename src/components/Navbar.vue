@@ -65,7 +65,7 @@ export default {
       if (this.viewingHome) {
         // Reload the Profile/HomeView, Append a space to names to force a reload
         // eslint-disable-next-line no-underscore-dangle
-        const name = this.$router.currentRoute._value.params.summonerSearch || '';
+        const name = this.$route.params.summonerSearch || '';
         this.searchSummoner(`${name} `);
       } else {
         this.$router.go();

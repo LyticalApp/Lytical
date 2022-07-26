@@ -30,6 +30,13 @@
                     <input v-model="showNormalGames" :checked="showNormalGames == 'true'" type="checkbox"> ARAM/Normal
                     </td>
                 </tr>
+                <tr>
+                    <td>Scale</td>
+                    <td>
+                      <button @click="scaleUp">+</button>
+                      <button @click="scaleDown">-</button>
+                    </td>
+                </tr>
             </table>
         </div>
         <div>
@@ -76,6 +83,16 @@ export default {
     openDevTools() {
       ipcRenderer.send('asynchronous-message', {
         id: 'openDevTools',
+      });
+    },
+    scaleUp() {
+      ipcRenderer.send('asynchronous-message', {
+        id: 'scaleUp',
+      });
+    },
+    scaleDown() {
+      ipcRenderer.send('asynchronous-message', {
+        id: 'scaleDown',
       });
     },
   },
