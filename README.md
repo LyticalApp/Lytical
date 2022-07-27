@@ -8,7 +8,7 @@ Learn more at [Lytical.app](https://lytical.app)
 
 ## [Download Lytical](https://github.com/LyticalApp/Lytical/releases/latest)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/MISL6xZ09QY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<a href="https://lytical.app/">![Lytical App](https://i.imgur.com/TPzePxj.png "Lytical App")</a>
 
 ## Project setup
 ```
@@ -30,3 +30,8 @@ If you are a native speaker and can help translate Lytical to Chinese/Korean/Tha
 # Contribution Guidelines
 
 Follow the ESLint codestyle provided in the project. No additional `npm` dependencies will be accepted.
+
+
+[![Lytical Promo Video](https://i.ytimg.com/vi/MISL6xZ09QY/hq720.jpg?sqp=-oaymwEcCOgCEMoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCEKVtCvtAEVfGq8wEj1Vy5RH1n6A)](https://www.youtube.com/watch?v=MISL6xZ09QY)
+
+[Lytical Promo Video](https://www.youtube.com/watch?v=MISL6xZ09QY)
