@@ -11,7 +11,6 @@ export default {
   name: 'LCUErrorMessage',
   props: {
     message: {
-      // The order of the teams is done in MatchHistoryItem
       type: String,
       default: 'LCU Disconnected',
     },

@@ -147,7 +147,6 @@ export default {
     },
     profileSummoner: {
       type: String,
-      defeault: 'Faker',
     },
   },
   methods: {
@@ -161,7 +160,7 @@ export default {
           if (data.reply_type === 'lol-match-details') {
             if (data.gameId === this.data.gameId) {
               this.matchDetails = data;
-              // format team order based on whos profile we're on
+              // format team order based on whos profile we're on. They should always in the first half of the list.
               const team0 = [
                 this.matchDetails.participantIdentities[0].player.summonerName,
                 this.matchDetails.participantIdentities[1].player.summonerName,
@@ -235,21 +234,17 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 .thumbround {
   border-radius:4px;
 }
-
 td {
   padding: 10px 10px 10px 10px;
 }
-
 span {
   display:block;
 }
-
 .championLevelBulb {
   position:absolute;
   left:115px;
@@ -259,7 +254,6 @@ span {
   margin-top:35px;
   padding:2px;
 }
-
 .matchItem {
   transition: all 3s ease-in-out;
   background-color:#020202;
@@ -268,25 +262,20 @@ span {
   min-width:575px;
   margin-bottom:8px;
 }
-
 h3 {
   margin: 40px 0 0;
 }
-
 ul {
   list-style-type: none;
   padding: 0;
 }
-
 li {
   display: inline-block;
   margin: 0 10px;
 }
-
 a {
   color: #42b983;
 }
-
 .thumbicon {
   width:22px;
   height:22px;
@@ -297,17 +286,14 @@ a {
 .Defeat {
   filter: drop-shadow(0 0 0.1rem #ba4b45);
 }
-
 .Victory b{
   font-weight: normal;
   color: #5cd7e4;
 }
-
 .Defeat b{
   font-weight: normal;
   color: #ba4b45;
 }
-
 .showDetailsTip {
     position: absolute;
     z-index: 0;
@@ -323,7 +309,6 @@ a {
     font-size:18px;
     text-align:center;
 }
-
 .flip180 {
   transform: rotate(180deg);
 }

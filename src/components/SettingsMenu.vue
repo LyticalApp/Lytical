@@ -59,18 +59,10 @@ export default {
     if (localStorage.showSoloGames) this.showSoloGames = localStorage.getItem('showSoloGames');
     if (localStorage.showFlexGames) this.showFlexGames = localStorage.getItem('showFlexGames');
     if (localStorage.showNormalGames) this.showNormalGames = localStorage.getItem('showNormalGames');
-    ipcRenderer.on('asynchronous-reply', (event, data) => {
-      if (data.reply_type === 'appVersion') {
-        this.version = data.version;
-      }
-    });
-    ipcRenderer.send('asynchronous-message', {
-      id: 'getVersion',
-    });
+    this.getAppVersion();
   },
   data() {
     return {
-      errorLog: [],
       version: '',
       autoSwitchLobby: 'true',
       statsSite: 'opgg',
@@ -85,6 +77,16 @@ export default {
         id: 'openDevTools',
       });
     },
+    getAppVersion() {
+      ipcRenderer.on('asynchronous-reply', (event, data) => {
+        if (data.reply_type === 'appVersion') {
+          this.version = data.version;
+        }
+      });
+      ipcRenderer.send('asynchronous-message', {
+        id: 'getVersion',
+      });
+    },
     scaleUp() {
       ipcRenderer.send('asynchronous-message', {
         id: 'scaleUp',
@@ -97,7 +99,6 @@ export default {
     },
   },
   watch: {
-    // Keep local storage in sync
     autoSwitchLobby(state) {
       localStorage.setItem('autoSwitchLobby', state);
     },
@@ -118,11 +119,6 @@ export default {
 </script>
 
 <style scoped>
-.errorLog {
-  background-color:#2c3e50;
-  width:50%;
-  color:white;
-}
 .myModal{
     color:#f2ecff;
     height:100vh;

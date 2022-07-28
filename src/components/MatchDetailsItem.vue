@@ -213,7 +213,6 @@ export default {
   name: 'MatchDetailsItem',
   props: {
     matchDetails: {
-      // The order of the teams is done in MatchHistoryItem
       type: Object,
     },
     profileSummoner: {

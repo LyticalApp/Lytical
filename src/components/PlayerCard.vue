@@ -26,17 +26,9 @@ import { PROFILEPICONURL } from '../res/common';
 
 export default {
   name: 'PlayerCard',
-
   props: {
     data: {
       type: Object,
-    },
-  },
-  watch: {
-    data() {
-      if (this.data.username) {
-        document.title = `Lytical - ${this.data.username}`;
-      }
     },
   },
   data() {
@@ -65,7 +57,6 @@ export default {
   border-radius:5px;
   margin-bottom: 10px;
 }
-
 .usernameText {
   display: inherit;
   overflow: hidden;
@@ -73,12 +64,10 @@ export default {
   text-overflow: ellipsis;
   font-size: 20px;
 }
-
 span {
   margin-bottom: 4px;
   float:left;
 }
-
 .clip-circle {
   clip-path: circle(40px at center);
 }

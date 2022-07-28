@@ -96,7 +96,8 @@ export default {
       ondata: null,
       romanNumbers,
       lobbyPlayers: [],
-      gameId: 0,
+      selectGameId: 0,
+      progressGameId: 0,
     };
   },
   watch: {
@@ -143,6 +144,14 @@ export default {
         },
       });
     },
+    getLobbyStatus() {
+      ipcRenderer.send('asynchronous-message', {
+        id: 'lol-champ-select',
+      });
+      ipcRenderer.send('asynchronous-message', {
+        id: 'current-session',
+      });
+    },
   },
   created() {
     this.ondata = (event, data) => {
@@ -155,73 +164,72 @@ export default {
         return;
       }
 
-      // We have diconnected or auth error..
-      if (data.reply_type === 'lcu-disonnceted') {
-        this.showError = true;
-        document.title = 'Lytical - Disconnected';
-        return;
-      }
-
-      if (this.showError) {
-        this.showError = false;
-        document.title = 'Lytical';
-      }
-      this.clearErrorTimeout(this.timeout);
-
       // Valid reply handlers
       switch (data.reply_type) {
+        case 'lcu-disonnceted': {
+          document.title = 'Lytical - Disconnected';
+          this.showError = true;
+          break;
+        }
+        case 'lcu-reconnected': {
+          if (this.showError) window.location.reload();
+          break;
+        }
         case 'lol-champ-select': {
+          this.clearErrorTimeout();
+          if (this.selectGameId === data.gameId) return;
           document.title = 'Lytical - Champion Select';
+          this.lobbyPlayers = [];
           this.lobbyData = data;
-          // We should be setting the gameid on the lobby and checking that instead
-          if (!this.lobbyPlayers.length) {
-            for (const player of this.lobbyData.myTeam) {
-              this.getSummonerById(player.summonerId);
-            }
+          this.selectGameId = data.gameId;
+          for (const player of this.lobbyData.myTeam) {
+            this.getSummonerById(player.summonerId);
           }
           break;
         }
         case 'current-session': {
-          if (data.phase === 'InProgress' && (this.gameId !== data.gameData.gameId)) {
-            document.title = 'Lytical - Live Game';
-            this.lobbyData = data;
-            this.gameId = data.gameData.gameId;
-            this.lobbyPlayers = [];
+          this.clearErrorTimeout();
+          if (data.phase !== 'InProgress' || (this.progressGameId === data.gameData.gameId)) return;
+          document.title = 'Lytical - Live Game';
+          this.lobbyPlayers = [];
+          this.lobbyData = data;
+          this.progressGameId = data.gameData.gameId;
 
-            // TeamOne Plyers
-            for (const teamPlayer of data.gameData.teamOne) {
+          // Todo: Make a dictionary of the champion selections by playername so we don't need to loop this 50 times
+
+          // TeamOne Plyers
+          for (const teamPlayer of data.gameData.teamOne) {
             // Get champion id from list
-              let champId = 0;
-              for (const player of data.gameData.playerChampionSelections) {
-                if (player.summonerInternalName === teamPlayer.summonerInternalName) {
-                  champId = player.championId;
-                }
+            let champId = 0;
+            for (const player of data.gameData.playerChampionSelections) {
+              if (player.summonerInternalName === teamPlayer.summonerInternalName) {
+                champId = player.championId;
               }
-              ipcRenderer.send('asynchronous-message', {
-                id: 'lol-lobby-playercard-with-sid',
-                summonerName: teamPlayer.summonerName,
-                puuid: teamPlayer.puuid,
-                championId: champId,
-                teamId: 1,
-              });
             }
-            // TeamTwo Plyers
-            for (const teamPlayer of data.gameData.teamTwo) {
+            ipcRenderer.send('asynchronous-message', {
+              id: 'lol-lobby-playercard-with-sid',
+              summonerName: teamPlayer.summonerName,
+              puuid: teamPlayer.puuid,
+              championId: champId,
+              teamId: 1,
+            });
+          }
+          // TeamTwo Plyers
+          for (const teamPlayer of data.gameData.teamTwo) {
             // Get champion id from list
-              let champId = 0;
-              for (const player of data.gameData.playerChampionSelections) {
-                if (player.summonerInternalName === teamPlayer.summonerInternalName) {
-                  champId = player.championId;
-                }
+            let champId = 0;
+            for (const player of data.gameData.playerChampionSelections) {
+              if (player.summonerInternalName === teamPlayer.summonerInternalName) {
+                champId = player.championId;
               }
-              ipcRenderer.send('asynchronous-message', {
-                id: 'lol-lobby-playercard-with-sid',
-                summonerName: teamPlayer.summonerName,
-                puuid: teamPlayer.puuid,
-                championId: champId,
-                teamId: 2,
-              });
             }
+            ipcRenderer.send('asynchronous-message', {
+              id: 'lol-lobby-playercard-with-sid',
+              summonerName: teamPlayer.summonerName,
+              puuid: teamPlayer.puuid,
+              championId: champId,
+              teamId: 2,
+            });
           }
           break;
         }
@@ -240,28 +248,13 @@ export default {
     };
     ipcRenderer.on('asynchronous-reply', this.ondata);
 
-    // We are already in a champ select because we got navigated here..
-    // just get the data again instead of being passed into this view..
     document.title = 'Lytical';
     if (this.timeout == null) {
       this.timeout = setTimeout(() => { this.showTimeout = true; }, 5000);
     }
 
-    ipcRenderer.send('asynchronous-message', {
-      id: 'lol-champ-select',
-    });
-    ipcRenderer.send('asynchronous-message', {
-      id: 'current-session',
-    });
-
-    this.polling = setInterval(() => {
-      ipcRenderer.send('asynchronous-message', {
-        id: 'lol-champ-select',
-      });
-      ipcRenderer.send('asynchronous-message', {
-        id: 'current-session',
-      });
-    }, 15000);
+    this.getLobbyStatus();
+    this.polling = setInterval(this.getLobbyStatus, 15000);
   },
 
 };

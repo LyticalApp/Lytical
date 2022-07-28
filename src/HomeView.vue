@@ -79,6 +79,11 @@ export default {
         this.searchSummoner(to.params.summonerSearch);
       }
     },
+    playerCardInfo() {
+      if (this.playerCardInfo.username) {
+        document.title = `Lytical - ${this.playerCardInfo.username}`;
+      }
+    },
   },
   methods: {
     filterGameModes,
@@ -147,18 +152,11 @@ export default {
         return;
       }
 
-      // We have diconnected or auth error..
-      if (data.reply_type === 'lcu-disonnceted') {
-        document.title = 'Lytical - Disconnected';
-        this.showError = true;
-        this.showLoading = false;
-        return;
-      }
-      if (data.reply_type === 'lcu-disonnceted') this.showError = false;
-
       // Valid reply handlers
       switch (data.reply_type) {
         case 'lcu-disonnceted': {
+          document.title = 'Lytical - Disconnected';
+          this.showLoading = false;
           this.showError = true;
           break;
         }
