@@ -87,14 +87,14 @@ export default {
   },
   data() {
     return {
-      showError: false,
       CHAMPIONICONURL,
       championIds,
+      romanNumbers,
+      showError: false,
       polling: null,
       timeout: null,
       showTimeout: false,
       ondata: null,
-      romanNumbers,
       lobbyPlayers: [],
       selectGameId: 0,
       progressGameId: 0,
