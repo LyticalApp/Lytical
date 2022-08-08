@@ -270,7 +270,7 @@ export default {
     margin-left:10px;
     padding:0 10px 0px 10px;
     font-size:15px;
-    color:#080808;
+    color: var(--dark-grey);
     text-align:center !important;
     display:inline-block;
     width:55px;
@@ -284,19 +284,19 @@ export default {
   border-radius:50%;
 }
 .Victory {
-    color:#5cd7e4;
-    background-color:rgba(92, 215, 228, 0.5)
+    color: var(--lobby-victory-text);
+    background-color: var(--lobby-victory-background);
 }
 .Defeat {
-    color:#ba4b45;
-    background-color:rgb(186, 75, 69, 0.5);
+    color: var(--lobby-defeat-text);
+    background-color: var(--lobby-defeat-background);
 }
 .sinceGame {
   font-size:15px;
   margin-left:4px;
   width:28px;
   display:inline-block;
-  background-color:#5d4e73;
+  background-color: var(--minicard-since-background);
   border-radius:4px;
   padding-left:4px;
   padding-right:4px;
@@ -315,9 +315,9 @@ export default {
     min-height: 232px;
     margin: 10px;
     padding:10px;
-    color: #9a96a4;
+    color: var(--minicard-text);
     border-radius: 5px;
-    background-color: #020202;
+    background-color: var(--minicard-background);
     filter: drop-shadow(0 0 0.1rem #5cd7e4);
 }
 .wrapper {

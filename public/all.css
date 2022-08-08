@@ -3,8 +3,20 @@
   src: url('./webfonts/Roboto-Regular.ttf');
 }
 
+:root {
+  --dark-grey:#080808;
+  --accent-grey: #787878;
+  --lobby-victory-text: #5cd7e4;
+  --lobby-defeat-text: #ba4b45;
+  --lobby-victory-background: rgba(92, 215, 228, 0.5);
+  --lobby-defeat-background: rgb(186, 75, 69, 0.5);
+  --minicard-text: #9a96a4;
+  --minicard-background: #020202;
+  --minicard-since-background: #5d4e73;
+}
+
 html{
-  background-color:#080808;
+  background-color: var(--dark-grey);
 }
 
 body {
@@ -19,10 +31,10 @@ body {
     height: 5px !important;
 }
 .wrapper::-webkit-scrollbar-track {
-    background: #080808 !important;
+    background: var(--dark-grey) !important;
 }
 .wrapper::-webkit-scrollbar-thumb {
-    background-color: #787878 !important;
+    background-color: var(--accent-grey) !important;
     border: none;
     border-radius: 10px !important;
 }
