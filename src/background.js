@@ -190,6 +190,10 @@ ipcMain.on('asynchronous-message', (event, req) => {
     win.webContents.setZoomFactor(win.webContents.getZoomFactor() - 0.1);
     return;
   }
+  if (req.id === 'getRunLevel') {
+    event.reply('asynchronous-reply', { reply_type: 'runLevel', isAdmin: lcu.getRunLevel() });
+    return;
+  }
 
   // LCU related Requests
   lcu.getLCUAuth().then((auth) => {

@@ -291,7 +291,6 @@ export default {
     height:calc(100vh - 42px);
 }
 
-/* we will explain what these classes do next! */
 .v-enter-active,
 .v-leave-active {
   transition: opacity 0.5s ease;
@@ -300,12 +299,6 @@ export default {
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
-}
-.errorDiv {
-  background-color:#e84057;
-  width:100%;
-  position:fixed;
-  z-index: 999;
 }
 
 #leftSideBar {

@@ -1,6 +1,6 @@
 const fs = require('fs');
 const os = require('os');
-const { exec } = require('child_process');
+const { exec, execFileSync } = require('child_process');
 
 let auth = null;
 
@@ -55,6 +55,15 @@ exports.getAuthFromProcess = async () => {
 
 exports.setAuth = function setAuth(val) {
   auth = val;
+};
+
+exports.getRunLevel = function getRunLevel() {
+  try {
+    execFileSync('net', ['session'], { stdio: 'ignore' });
+    return true;
+  } catch (e) {
+    return false;
+  }
 };
 
 exports.getLCUAuth = async () => {
