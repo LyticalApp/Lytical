@@ -18,6 +18,7 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 let win;
+const puuidStore = {};
 
 async function createWindow() {
   // Create the browser window.
@@ -160,12 +161,18 @@ function errorHandler(errorCode, event) {
 // Used to get PUUID for many differet requests.
 function getPlayerDataByName(name, auth) {
   const summonerName = encodeURI(name.replace(/\s/g, ''));
+  if (puuidStore[name]) {
+    return new Promise((resolve) => {
+      resolve(puuidStore[name]);
+    });
+  }
   return new Promise((resolve, reject) => {
     request.requestURL(
       auth,
       `/lol-summoner/v1/summoners?name=${summonerName}`,
     ).then((userData) => {
-      resolve(JSON.parse(userData));
+      puuidStore[name] = JSON.parse(userData);
+      resolve(puuidStore[name]);
     }).catch((error) => { reject(error); });
   });
 }
