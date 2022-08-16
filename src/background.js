@@ -177,6 +177,23 @@ function getPlayerDataByName(name, auth) {
   });
 }
 
+function getSummonerCurrent(auth) {
+  if (puuidStore['summoner.current']) {
+    return new Promise((resolve) => {
+      resolve(puuidStore['summoner.current']);
+    });
+  }
+  return new Promise((resolve, reject) => {
+    request.requestURL(
+      auth,
+      '/lol-summoner/v1/current-summoner',
+    ).then((userData) => {
+      puuidStore['summoner.current'] = JSON.parse(userData);
+      resolve(puuidStore['summoner.current']);
+    }).catch((error) => { reject(error); });
+  });
+}
+
 ipcMain.on('asynchronous-message', (event, req) => {
   console.log('NEW REQUEST: ', req);
 
@@ -217,11 +234,7 @@ ipcMain.on('asynchronous-message', (event, req) => {
       }
       case 'current-ranked-stats': {
         event.reply('asynchronous-reply', createReply({}, 'clear-profile'));
-        request.requestURL(
-          auth,
-          '/lol-summoner/v1/current-summoner',
-        ).then((summonerD) => {
-          const summoner = JSON.parse(summonerD);
+        getSummonerCurrent(auth).then((summoner) => {
           request.requestURL(
             auth,
             '/lol-ranked/v1/current-ranked-stats',
@@ -342,19 +355,20 @@ ipcMain.on('asynchronous-message', (event, req) => {
       }
       case 'lol-ranked-stats': {
         event.reply('asynchronous-reply', createReply({}, 'clear-profile'));
-        getPlayerDataByName(req.user, auth).then((summoner) => {
-          request.requestURL(
-            auth,
-            `/lol-ranked/v1/ranked-stats/${summoner.puuid}`,
-          ).then(
-            (rankedD) => {
-              const rankData = JSON.parse(rankedD);
-              rankData.summonerData = summoner;
-              rankData.username = summoner.displayName;
-              event.reply('asynchronous-reply', createReply(rankData, req.id));
-            },
-          );
-        }).catch((error) => errorHandler(error, event));
+        getPlayerDataByName(req.user, auth)
+          .then((summoner) => {
+            request.requestURL(
+              auth,
+              `/lol-ranked/v1/ranked-stats/${summoner.puuid}`,
+            ).then(
+              (rankedD) => {
+                const rankData = JSON.parse(rankedD);
+                rankData.summonerData = summoner;
+                rankData.username = summoner.displayName;
+                event.reply('asynchronous-reply', createReply(rankData, req.id));
+              },
+            );
+          }).catch((error) => errorHandler(error, event));
         break;
       }
       case 'lol-match-history': {
@@ -375,28 +389,25 @@ ipcMain.on('asynchronous-message', (event, req) => {
         break;
       }
       case 'current-full-ranked-history': {
-        request.requestURL(
-          auth,
-          '/lol-summoner/v1/current-summoner',
-        ).then((summonerD) => {
-          const summoner = JSON.parse(summonerD);
-          request.requestURL(
-            auth,
-            // eslint-disable-next-line max-len
-            //
-            // This is capped at 200 Games internally. If the player refreshes late into the season we
-            // Could iterate backwards with an older start index but I don't really care..
-            // Timing: Takes 2345.318800000474ms
-            `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=200`,
-          ).then(
-            (matchHistory) => {
-              event.reply(
-                'asynchronous-reply',
-                createReply(matchHistory, req.id),
-              );
-            },
-          );
-        }).catch((error) => errorHandler(error, event));
+        getSummonerCurrent(auth)
+          .then((summoner) => {
+            request.requestURL(
+              auth,
+              // eslint-disable-next-line max-len
+              //
+              // This is capped at 200 Games internally. If the player refreshes late into the season we
+              // Could iterate backwards with an older start index but I don't really care..
+              // Timing: Takes 2345.318800000474ms
+              `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=200`,
+            ).then(
+              (matchHistory) => {
+                event.reply(
+                  'asynchronous-reply',
+                  createReply(matchHistory, req.id),
+                );
+              },
+            );
+          }).catch((error) => errorHandler(error, event));
         break;
       }
       case 'lol-full-ranked-history': {
