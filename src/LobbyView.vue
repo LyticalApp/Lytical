@@ -149,7 +149,7 @@ export default {
         id: 'lol-champ-select',
       });
       ipcRenderer.send('asynchronous-message', {
-        id: 'current-session',
+        id: 'lol-gameflow-session',
       });
     },
   },
@@ -187,7 +187,7 @@ export default {
           }
           break;
         }
-        case 'current-session': {
+        case 'lol-gameflow-session': {
           this.clearErrorTimeout();
           if (data.phase !== 'InProgress' || (this.progressGameId === data.gameData.gameId)) return;
           document.title = 'Lytical - Live Game';

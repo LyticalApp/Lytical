@@ -104,14 +104,14 @@ export default {
       } else {
         // Current summoner from LCU
         ipcRenderer.send('asynchronous-message', {
-          id: 'current-ranked-stats',
+          id: 'lol-ranked-stats-current',
         });
         ipcRenderer.send('asynchronous-message', {
           id: 'lol-match-history-current',
           begIndex: 0,
           endIndex: this.matchHistoryMax,
         });
-        ipcRenderer.send('asynchronous-message', { id: 'current-full-ranked-history' });
+        ipcRenderer.send('asynchronous-message', { id: 'lol-full-ranked-history-current' });
       }
     },
   },
@@ -170,7 +170,7 @@ export default {
           this.showLoading = false;
           break;
         }
-        case 'current-full-ranked-history':
+        case 'lol-full-ranked-history-current':
         case 'lol-full-ranked-history': {
           if (data.games === undefined) return;
           const gamesOnChampions = {};
@@ -248,7 +248,7 @@ export default {
           this.matchHistoryMax = 19;
           break;
         }
-        case 'current-ranked-stats':
+        case 'lol-ranked-stats-current':
         case 'lol-ranked-stats': {
           this.playerCardInfo = data;
           break;
