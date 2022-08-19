@@ -1,4 +1,4 @@
-# <a href="https://lytical.app/"><img src="https://lyticalapp.github.io/images/Logo.png" width="36" alt="Lytical Logo" title="Lyitcal Logo"></a> Lytical
+# <a href="https://lytical.app/"><img src="https://lytical.app/images/Logo.png" width="36" alt="Lytical Logo" title="Lyitcal Logo"></a> Lytical
 
 Lytical is an open source League of Legends statistics and profile analytics tool for all regions including Garena & WeGame
 
