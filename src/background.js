@@ -103,14 +103,14 @@ if (isDevelopment) {
 // In main process.
 
 function createReply(dataD, id) {
-  let data = {};
+  let reply = {};
   try {
-    data = JSON.parse(dataD);
+    reply = JSON.parse(dataD);
   } catch {
-    data = dataD;
+    reply = dataD;
   }
-  data.reply_type = id;
-  return data;
+  reply.reply_type = id;
+  return reply;
 }
 /**
 const WebSocket = require('ws');
@@ -159,7 +159,7 @@ function errorHandler(errorCode, event) {
 }
 
 // Used to get PUUID for many differet requests.
-function getPlayerDataByName(name, auth) {
+function getSummonerByName(name, auth) {
   const summonerName = encodeURI(name.replace(/\s/g, ''));
   if (puuidStore[name]) {
     return new Promise((resolve) => {
@@ -170,9 +170,26 @@ function getPlayerDataByName(name, auth) {
     request.requestURL(
       auth,
       `/lol-summoner/v1/summoners?name=${summonerName}`,
-    ).then((userData) => {
-      puuidStore[name] = JSON.parse(userData);
+    ).then((summoner) => {
+      puuidStore[name] = JSON.parse(summoner);
       resolve(puuidStore[name]);
+    }).catch((error) => { reject(error); });
+  });
+}
+
+function getSummonerById(id, auth) {
+  if (puuidStore[id]) {
+    return new Promise((resolve) => {
+      resolve(puuidStore[id]);
+    });
+  }
+  return new Promise((resolve, reject) => {
+    request.requestURL(
+      auth,
+      `/lol-summoner/v1/summoners/${id}`,
+    ).then((summoner) => {
+      puuidStore[id] = JSON.parse(summoner);
+      resolve(puuidStore[id]);
     }).catch((error) => { reject(error); });
   });
 }
@@ -187,8 +204,8 @@ function getSummonerCurrent(auth) {
     request.requestURL(
       auth,
       '/lol-summoner/v1/current-summoner',
-    ).then((userData) => {
-      puuidStore['summoner.current'] = JSON.parse(userData);
+    ).then((summoner) => {
+      puuidStore['summoner.current'] = JSON.parse(summoner);
       resolve(puuidStore['summoner.current']);
     }).catch((error) => { reject(error); });
   });
@@ -222,7 +239,7 @@ ipcMain.on('asynchronous-message', (event, req) => {
   // LCU related Requests
   lcu.getLCUAuth().then((auth) => {
     switch (req.id) {
-      case 'current-summoner': {
+      case 'lol-match-history-current': {
         request.requestURL(
           auth,
           // eslint-disable-next-line max-len
@@ -258,16 +275,12 @@ ipcMain.on('asynchronous-message', (event, req) => {
       }
       case 'lol-lobby-playercard': {
         let rankedData = null;
-        request.requestURL(
-          auth,
-          `/lol-summoner/v1/summoners/${req.summonerId}`,
-        ).then((summonerD) => {
-          const summoner = JSON.parse(summonerD);
-          request.requestURL(
-            auth,
-            `/lol-ranked/v1/ranked-stats/${summoner.puuid}`,
-          ).then(
-            (rankedD) => {
+        getSummonerById(req.summonerId, auth)
+          .then((summoner) => {
+            request.requestURL(
+              auth,
+              `/lol-ranked/v1/ranked-stats/${summoner.puuid}`,
+            ).then((rankedD) => {
               rankedData = JSON.parse(rankedD);
               rankedData.username = summoner.displayName;
               request.requestURL(
@@ -284,9 +297,8 @@ ipcMain.on('asynchronous-message', (event, req) => {
                   );
                 },
               );
-            },
-          );
-        }).catch((error) => errorHandler(error, event));
+            });
+          }).catch((error) => errorHandler(error, event));
         break;
       }
       case 'lol-lobby-playercard-with-sid': {
@@ -317,15 +329,6 @@ ipcMain.on('asynchronous-message', (event, req) => {
         ).catch((error) => errorHandler(error, event));
         break;
       }
-      case 'get-auth-token': {
-        // Used for keepalive / check the status of auth data
-        // because it's a fast request.
-        request.requestURL(
-          auth,
-          '/riotclient/auth-token',
-        ).catch((error) => errorHandler(error, event));
-        break;
-      }
       case 'lol-champ-select': {
         request.requestURL(
           auth,
@@ -345,17 +348,16 @@ ipcMain.on('asynchronous-message', (event, req) => {
         break;
       }
       case 'lol-summoner-name': {
-        getPlayerDataByName(req.user, auth).then(
-          (data) => event.reply(
+        getSummonerByName(req.user, auth)
+          .then((summoner) => event.reply(
             'asynchronous-reply',
-            createReply(data, req.id),
-          ),
-        ).catch((error) => errorHandler(error, event));
+            createReply(summoner, req.id),
+          )).catch((error) => errorHandler(error, event));
         break;
       }
       case 'lol-ranked-stats': {
         event.reply('asynchronous-reply', createReply({}, 'clear-profile'));
-        getPlayerDataByName(req.user, auth)
+        getSummonerByName(req.user, auth)
           .then((summoner) => {
             request.requestURL(
               auth,
@@ -372,20 +374,21 @@ ipcMain.on('asynchronous-message', (event, req) => {
         break;
       }
       case 'lol-match-history': {
-        getPlayerDataByName(req.user, auth).then((summoner) => {
-          request.requestURL(
-            auth,
-            // eslint-disable-next-line max-len
-            `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`,
-          ).then(
-            (matchHistory) => {
-              event.reply(
-                'asynchronous-reply',
-                createReply(matchHistory, req.id),
-              );
-            },
-          );
-        }).catch((error) => errorHandler(error, event));
+        getSummonerByName(req.user, auth)
+          .then((summoner) => {
+            request.requestURL(
+              auth,
+              // eslint-disable-next-line max-len
+              `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`,
+            ).then(
+              (matchHistory) => {
+                event.reply(
+                  'asynchronous-reply',
+                  createReply(matchHistory, req.id),
+                );
+              },
+            );
+          }).catch((error) => errorHandler(error, event));
         break;
       }
       case 'current-full-ranked-history': {
@@ -411,21 +414,22 @@ ipcMain.on('asynchronous-message', (event, req) => {
         break;
       }
       case 'lol-full-ranked-history': {
-        getPlayerDataByName(req.user, auth).then((summoner) => {
-          request.requestURL(
-            auth,
-            // eslint-disable-next-line max-len
-            // Timing: Takes 2345.318800000474ms
-            `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=200`,
-          ).then(
-            (matchHistory) => {
-              event.reply(
-                'asynchronous-reply',
-                createReply(matchHistory, req.id),
-              );
-            },
-          );
-        }).catch((error) => errorHandler(error, event));
+        getSummonerByName(req.user, auth)
+          .then((summoner) => {
+            request.requestURL(
+              auth,
+              // eslint-disable-next-line max-len
+              // Timing: Takes 2345.318800000474ms
+              `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=200`,
+            ).then(
+              (matchHistory) => {
+                event.reply(
+                  'asynchronous-reply',
+                  createReply(matchHistory, req.id),
+                );
+              },
+            );
+          }).catch((error) => errorHandler(error, event));
         break;
       }
       default: {

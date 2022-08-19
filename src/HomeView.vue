@@ -107,7 +107,7 @@ export default {
           id: 'current-ranked-stats',
         });
         ipcRenderer.send('asynchronous-message', {
-          id: 'current-summoner',
+          id: 'lol-match-history-current',
           begIndex: 0,
           endIndex: this.matchHistoryMax,
         });
@@ -132,7 +132,7 @@ export default {
           });
         } else {
           ipcRenderer.send('asynchronous-message', {
-            id: 'current-summoner',
+            id: 'lol-match-history-current',
             begIndex: this.matchHistoryMax - 1,
             endIndex: this.matchHistoryMax += 20,
           });
@@ -164,7 +164,7 @@ export default {
           if (this.showError) window.location.reload();
           break;
         }
-        case 'current-summoner':
+        case 'lol-match-history-current':
         case 'lol-match-history': {
           this.matches = this.matches.concat(this.filterGameModes(data.games.games));
           this.showLoading = false;
