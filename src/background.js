@@ -251,7 +251,6 @@ ipcMain.on('asynchronous-message', (event, req) => {
               rankedData.username = summoner.displayName;
               request.requestURL(
                 auth,
-                // eslint-disable-next-line max-len
                 `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=9`,
               ).then(
                 (matchHistory) => {
@@ -279,7 +278,6 @@ ipcMain.on('asynchronous-message', (event, req) => {
             rankedData.championId = req.championId;
             request.requestURL(
               auth,
-              // eslint-disable-next-line max-len
               `/lol-match-history/v1/products/lol/${req.puuid}/matches?begIndex=0&endIndex=9`,
             ).then(
               (matchHistory) => {
@@ -295,7 +293,7 @@ ipcMain.on('asynchronous-message', (event, req) => {
         ).catch((error) => errorHandler(error, event));
         break;
       }
-      case 'lol-current-session': {
+      case 'lol-gameflow-session': {
         request.requestURL(
           auth,
           '/lol-gameflow/v1/session',
@@ -388,8 +386,6 @@ ipcMain.on('asynchronous-message', (event, req) => {
           .then((summoner) => {
             request.requestURL(
               auth,
-              // eslint-disable-next-line max-len
-              //
               // This is capped at 200 Games internally. If the player refreshes late into the season we
               // Could iterate backwards with an older start index but I don't really care..
               // Timing: Takes 2345.318800000474ms
@@ -410,8 +406,6 @@ ipcMain.on('asynchronous-message', (event, req) => {
           .then((summoner) => {
             request.requestURL(
               auth,
-              // eslint-disable-next-line max-len
-              // Timing: Takes 2345.318800000474ms
               `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=200`,
             ).then(
               (matchHistory) => {

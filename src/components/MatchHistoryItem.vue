@@ -249,14 +249,14 @@ span {
   position:absolute;
   left:115px;
   font-size:14px;
-  background-color:#080808;
+  background-color:var(--minicard-background);
   border-radius:50%;
   margin-top:35px;
   padding:2px;
 }
 .matchItem {
   transition: all 3s ease-in-out;
-  background-color:#020202;
+  background-color:var(--minicard-background);
   color: #9a96a4;
   border-radius: 5px;
   min-width:575px;

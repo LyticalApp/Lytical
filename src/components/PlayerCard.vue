@@ -53,7 +53,6 @@ export default {
   vertical-align:top;
   padding:10px;
   color: #f2ecff;
-  background-color:#080808;
   border-radius:5px;
   margin-bottom: 10px;
 }
