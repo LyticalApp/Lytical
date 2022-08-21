@@ -1,7 +1,7 @@
 <template>
    <div v-if="matchDetails != null" className="detailed-match-history">
       <div className="divTable">
-         <table cellspacing=0 style="padding:2px;">
+         <table cellspacing=0 style="padding: 0px 2px 2px 3px;">
             <tbody className="divTableCell">
                <!-- Team 0 title bar/column labels -->
                <div class="roundedTopItem header-bar">
@@ -119,6 +119,10 @@
                               <span style="font-size:12px;color:#f2ecff;"
                               @click="searchPlayer(matchDetails.participantIdentities[index].player.summonerName)">
                               {{matchDetails.participantIdentities[index].player.summonerName}}</span><br>
+                              <span v-if="summonerRanks[index] != 'Nundefined' && summonerRanks[index] != undefined"
+                              class="inline-rank" :style="{ backgroundColor:
+                              getRankStyle(summonerRanks[index]) }">
+                                 {{summonerRanks[index]}}</span>
                               <span style="font-size:11px;">{{participant.timeline.lane}}</span>
                            </div>
                         </td>
@@ -204,10 +208,12 @@
 
 <script>
 import {
-  championIds, runeIcons, summonerSpells, CHAMPIONICONURL, ITEMICONURL, RUNEICONURL, getPreferredSite,
+  championIds, runeIcons, summonerSpells, CHAMPIONICONURL, ITEMICONURL, RUNEICONURL, romanNumbers, getPreferredSite,
 } from '../res/common';
 
 const open = require('open');
+
+const { ipcRenderer } = require('electron');
 
 export default {
   name: 'MatchDetailsItem',
@@ -217,6 +223,20 @@ export default {
     },
     profileSummoner: {
       type: String,
+    },
+  },
+  watch: {
+    matchDetails() {
+      let i = 0;
+      for (const player of this.matchDetails.participantIdentities) {
+        ipcRenderer.send('asynchronous-message', {
+          id: 'lol-ranked-stats-match-details',
+          user: player.player.summonerName,
+          index: i,
+          gameId: this.matchDetails.gameId,
+        });
+        i += 1;
+      }
     },
   },
   methods: {
@@ -280,6 +300,19 @@ export default {
       if (kda >= 3) { return '#00bba3'; }
       return '#9a96a4';
     },
+    getRankStyle(rank) {
+      const rankL = rank.charAt(0);
+      if (rankL === 'I') { return '#9E9EB1'; }
+      if (rankL === 'B') { return '#7C6750'; }
+      if (rankL === 'S') { return '#515163'; }
+      if (rankL === 'G') { return '#EB9C00'; }
+      if (rankL === 'P') { return '#00BBA3'; }
+      if (rankL === 'D') { return '#0093FF'; }
+      if (rankL === 'M') { return '#E537A2'; }
+      if (rankL === 'G') { return '#00bba3'; } // umm.. Gold and GM both start with G...
+      if (rankL === 'C') { return '#00bba3'; }
+      return '#9E9EB1';
+    },
     getAccentStyle(index, isWin) {
       if (this.matchDetails.participantIdentities[index].player.summonerName
       === this.profileSummoner) {
@@ -302,9 +335,22 @@ export default {
       ITEMICONURL,
       RUNEICONURL,
       championIds,
+      romanNumbers,
       runeIcons,
       summonerSpells,
+      summonerRanks: {},
     };
+  },
+  created() {
+    ipcRenderer.on('asynchronous-reply', (event, data) => {
+      if (data.reply_type === 'lol-ranked-stats-match-details') {
+        if (this.matchDetails == null || data.gameId !== this.matchDetails.gameId) return;
+        const tier = data.queueMap.RANKED_SOLO_5x5.tier.charAt(0).toUpperCase();
+        const div = this.romanNumbers[data.queueMap.RANKED_SOLO_5x5.division];
+        this.summonerRanks[data.index] = data.index;
+        this.summonerRanks[data.index] = `${tier}${div}`;
+      }
+    });
   },
 };
 
@@ -324,7 +370,7 @@ export default {
    font-size:12px;
    background-color:#080808;
    border-radius:50%;
-   margin-top:30px;
+   margin-top:28px;
    padding:1px;
 }
 .header-bar {
@@ -345,6 +391,15 @@ export default {
 }
 .w3-border {
    background-color: #31313c;
+}
+.inline-rank {
+   background-color:#e4b91e;
+   font-size:11px;
+   padding-left:2px;
+   padding-right:2px;
+   margin-right:2px;
+   text-shadow: 1px 1px black;
+   color:white;
 }
 .middle-icon{
    height:15px !important;
@@ -382,9 +437,8 @@ td{
    line-height:.9;
 }
 .normalScoreboard {
-
-   padding-left:3px;
-  padding-right:3px;
+   padding-left:4px;
+   padding-right:4px;
 }
 .Victory {
   background-color:#28344e;

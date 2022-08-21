@@ -265,6 +265,12 @@ export default {
           }
           break;
         }
+        // Cases to Ignore
+        case 'appVersion':
+        case 'lol-match-details':
+        case 'lol-ranked-stats-match-details': {
+          break;
+        }
         default: {
           console.warn('Handling for', data.reply_type, 'is not implemented in ', this.$route.name);
           break;

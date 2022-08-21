@@ -8,7 +8,7 @@
                             <!-- Gamemode and Preview -->
                             <span style="font-size:14px;"><b>{{queueIds[data.queueId]}}</b></span>
                             <span style="font-size:10px;">{{sinceGame(Date.now()-data.gameCreation)}}</span>
-                            <div style="width:40px;border-top: 1px solid #5a4656;margin-top:6px;margin-bottom:6px;">
+                            <div style="width:40px;border-top: 1px solid #5a4656;margin-top:4px;margin-bottom:4px;">
                             </div>
                             <span style="font-size:12px;font-weight:bold;">{{data.participants[0].stats.win ? "Victory"
                                 : "Defeat"}}</span>
@@ -240,7 +240,7 @@ export default {
   border-radius:4px;
 }
 td {
-  padding: 10px 10px 10px 10px;
+  padding: 8px 10px 8px 10px;
 }
 span {
   display:block;
@@ -255,11 +255,10 @@ span {
   padding:2px;
 }
 .matchItem {
-  transition: all 3s ease-in-out;
   background-color:var(--minicard-background);
   color: #9a96a4;
   border-radius: 5px;
-  min-width:575px;
+  min-width:579px;
   margin-bottom:8px;
 }
 h3 {
@@ -298,8 +297,8 @@ a {
     position: absolute;
     z-index: 0;
     width: fit-content;
-    right: 18px;
-    top: 70px;
+    right: 15px;
+    top: 64px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;

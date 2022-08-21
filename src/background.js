@@ -381,6 +381,25 @@ ipcMain.on('asynchronous-message', (event, req) => {
           }).catch((error) => errorHandler(error, event));
         break;
       }
+      case 'lol-ranked-stats-match-details': {
+        getSummonerByName(req.user, auth)
+          .then((summoner) => {
+            request.requestURL(
+              auth,
+              `/lol-ranked/v1/ranked-stats/${summoner.puuid}`,
+            ).then(
+              (rankedD) => {
+                const rankData = JSON.parse(rankedD);
+                rankData.summonerData = summoner;
+                rankData.username = summoner.displayName;
+                rankData.index = req.index;
+                rankData.gameId = req.gameId;
+                event.reply('asynchronous-reply', createReply(rankData, req.id));
+              },
+            );
+          }).catch((error) => errorHandler(error, event));
+        break;
+      }
       case 'lol-full-ranked-history-current': {
         getSummonerCurrent(auth)
           .then((summoner) => {
