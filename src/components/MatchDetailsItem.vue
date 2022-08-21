@@ -119,10 +119,12 @@
                               <span style="font-size:12px;color:#f2ecff;"
                               @click="searchPlayer(matchDetails.participantIdentities[index].player.summonerName)">
                               {{matchDetails.participantIdentities[index].player.summonerName}}</span><br>
-                              <span v-if="summonerRanks[index] != 'Nundefined' && summonerRanks[index] != undefined"
+                              <Transition>
+                              <span v-if="summonerRanks[index] != 'N' && summonerRanks[index] != undefined"
                               class="inline-rank" :style="{ backgroundColor:
                               getRankStyle(summonerRanks[index]) }">
                                  {{summonerRanks[index]}}</span>
+                              </Transition>
                               <span style="font-size:11px;">{{participant.timeline.lane}}</span>
                            </div>
                         </td>
@@ -302,6 +304,8 @@ export default {
     },
     getRankStyle(rank) {
       const rankL = rank.charAt(0);
+      // GM is first so we exit early for gold players..
+      if (rank.substring(0, 2) === 'GM') { return '#E537A2'; }
       if (rankL === 'I') { return '#9E9EB1'; }
       if (rankL === 'B') { return '#7C6750'; }
       if (rankL === 'S') { return '#515163'; }
@@ -309,8 +313,7 @@ export default {
       if (rankL === 'P') { return '#00BBA3'; }
       if (rankL === 'D') { return '#0093FF'; }
       if (rankL === 'M') { return '#E537A2'; }
-      if (rankL === 'G') { return '#00bba3'; } // umm.. Gold and GM both start with G...
-      if (rankL === 'C') { return '#00bba3'; }
+      if (rankL === 'C') { return '#FFB900'; }
       return '#9E9EB1';
     },
     getAccentStyle(index, isWin) {
@@ -345,8 +348,14 @@ export default {
     ipcRenderer.on('asynchronous-reply', (event, data) => {
       if (data.reply_type === 'lol-ranked-stats-match-details') {
         if (this.matchDetails == null || data.gameId !== this.matchDetails.gameId) return;
-        const tier = data.queueMap.RANKED_SOLO_5x5.tier.charAt(0).toUpperCase();
-        const div = this.romanNumbers[data.queueMap.RANKED_SOLO_5x5.division];
+        let tier = data.queueMap.RANKED_SOLO_5x5.tier.charAt(0).toUpperCase();
+        let div = this.romanNumbers[data.queueMap.RANKED_SOLO_5x5.division];
+        if (data.queueMap.RANKED_SOLO_5x5.tier === 'GRANDMASTER') {
+          tier = 'GM';
+        }
+        if (div === undefined) {
+          div = '';
+        }
         this.summonerRanks[data.index] = data.index;
         this.summonerRanks[data.index] = `${tier}${div}`;
       }
@@ -356,6 +365,15 @@ export default {
 
 </script>
 <style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 .totalKillsLabel {
    font-size:10px;
    line-height: 120%;
