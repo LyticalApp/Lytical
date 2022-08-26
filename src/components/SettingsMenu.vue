@@ -9,6 +9,13 @@
                     <input v-model="autoSwitchLobby" type="checkbox"
                      :checked="autoSwitchLobby == 'true'">
                     </td>
+                    </tr>
+                    <tr>
+                    <td>Show ranks in match details</td>
+                    <td>
+                    <input v-model="showRanksInDetails" type="checkbox"
+                     :checked="showRanksInDetails == 'true'">
+                    </td>
                 </tr>
                 <tr>
                     <td>Stats/Champion Website</td>
@@ -59,6 +66,7 @@ export default {
     if (localStorage.showSoloGames) this.showSoloGames = localStorage.getItem('showSoloGames');
     if (localStorage.showFlexGames) this.showFlexGames = localStorage.getItem('showFlexGames');
     if (localStorage.showNormalGames) this.showNormalGames = localStorage.getItem('showNormalGames');
+    if (localStorage.showRanksInDetails) this.showRanksInDetails = localStorage.getItem('showRanksInDetails');
     this.getAppVersion();
   },
   data() {
@@ -69,6 +77,7 @@ export default {
       showSoloGames: 'true',
       showFlexGames: 'true',
       showNormalGames: 'true',
+      showRanksInDetails: 'true',
     };
   },
   methods: {
@@ -113,6 +122,9 @@ export default {
     },
     statsSite(state) {
       localStorage.setItem('statsSite', state);
+    },
+    showRanksInDetails(state) {
+      localStorage.setItem('showRanksInDetails', state);
     },
   },
 };

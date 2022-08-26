@@ -230,6 +230,7 @@ export default {
   watch: {
     matchDetails() {
       let i = 0;
+      if (this.showRanksInDetails === 'false') return;
       for (const player of this.matchDetails.participantIdentities) {
         ipcRenderer.send('asynchronous-message', {
           id: 'lol-ranked-stats-match-details',
@@ -340,6 +341,7 @@ export default {
       championIds,
       romanNumbers,
       runeIcons,
+      showRanksInDetails: localStorage.showRanksInDetails,
       summonerSpells,
       summonerRanks: {},
     };
