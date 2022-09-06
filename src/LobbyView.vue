@@ -17,6 +17,8 @@
                         {{romanNumbers[teammate.queueMap.RANKED_SOLO_5x5.division]}}
                         ({{teammate.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP)</span>
                     <br>
+                    <span style="font-size:12px;">{{capitalize(teammate.position)}}</span>
+                    <br>
                     <div v-for="(match,index) in teammate.matchHistory.games.games" :key="match.gameId"
                         class="matchItem">
                         <div v-if="!(teammate.teamId == 1 && index > 4)">
@@ -112,10 +114,11 @@ export default {
     getPreferredSite,
     filterGameModes,
     open,
-    getSummonerById(id, teamId) {
+    getSummonerById(id, teamId, position) {
       ipcRenderer.send('asynchronous-message', {
         id: 'lol-lobby-playercard',
         summonerId: id,
+        pos: position,
         teamId,
       });
     },
@@ -183,7 +186,7 @@ export default {
           this.lobbyData = data;
           this.selectGameId = data.gameId;
           for (const player of this.lobbyData.myTeam) {
-            this.getSummonerById(player.summonerId);
+            this.getSummonerById(player.summonerId, undefined, player.assignedPosition);
           }
           break;
         }

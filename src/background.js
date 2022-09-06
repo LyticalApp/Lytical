@@ -255,6 +255,7 @@ ipcMain.on('asynchronous-message', (event, req) => {
               ).then(
                 (matchHistory) => {
                   rankedData.teamId = req.teamId;
+                  rankedData.position = req.pos;
                   rankedData.matchHistory = JSON.parse(matchHistory);
                   event.reply(
                     'asynchronous-reply',
