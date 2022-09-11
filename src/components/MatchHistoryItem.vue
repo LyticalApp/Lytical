@@ -1,5 +1,5 @@
 <template>
-    <div :class='`matchItem ${data.participants[0].stats.win ? "Victory" : "Defeat"}`'>
+    <div :class='`matchItem ${matchResult()}`'>
         <table>
             <tbody>
                 <tr>
@@ -10,8 +10,7 @@
                             <span style="font-size:10px;">{{sinceGame(Date.now()-data.gameCreation)}}</span>
                             <div style="width:40px;border-top: 1px solid #5a4656;margin-top:4px;margin-bottom:4px;">
                             </div>
-                            <span style="font-size:12px;font-weight:bold;">{{data.participants[0].stats.win ? "Victory"
-                                : "Defeat"}}</span>
+                            <span style="font-size:12px;font-weight:bold;">{{matchResult()}}</span>
                             <span style="font-size:12px;">{{gameLengthHR(data.gameDuration)}}</span>
                         </div>
                     </td>
@@ -190,6 +189,13 @@ export default {
       return (this.data.participants[0].stats.totalMinionsKilled
       + this.data.participants[0].stats.neutralMinionsKilled);
     },
+    matchResult() {
+      const SIX_MINUTES = 6 * 60;
+      if (this.data.gameDuration < SIX_MINUTES) {
+        return 'Remake';
+      }
+      return this.data.participants[0].stats.win ? 'Victory' : 'Defeat';
+    },
     gameLengthHR(lengthInSeconds) {
       const seconds = Number(lengthInSeconds);
       const d = Math.floor(seconds / (3600 * 24));
@@ -285,6 +291,9 @@ a {
 .Defeat {
   filter: drop-shadow(0 0 0.1rem #ba4b45);
 }
+.Remake {
+  filter: drop-shadow(0 0 0.1rem #6b6b6b);
+}
 .Victory b{
   font-weight: normal;
   color: #5cd7e4;
@@ -292,6 +301,10 @@ a {
 .Defeat b{
   font-weight: normal;
   color: #ba4b45;
+}
+.Remake b{
+  font-weight: normal;
+  color: #6b6b6b;
 }
 .showDetailsTip {
     position: absolute;
