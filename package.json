@@ -15,8 +15,9 @@
   },
   "main": "background.js",
   "dependencies": {
-    "electron": "^13.0.0",
     "core-js": "^3.8.3",
+    "electron": "^13.0.0",
+    "electron-store": "^8.1.0",
     "fs": "0.0.1-security",
     "open": "^8.4.0",
     "vue": "^3.2.13",

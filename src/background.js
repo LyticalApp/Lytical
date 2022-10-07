@@ -5,6 +5,9 @@ import {
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 
+const Store = require('electron-store');
+const store = new Store();
+
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const { ipcMain } = require('electron');
 
@@ -22,7 +25,8 @@ const puuidStore = {};
 
 async function createWindow() {
   // Create the browser window.
-  win = new BrowserWindow({
+  const options = {
+    show: false,
     width: 1200,
     height: 650,
     webPreferences: {
@@ -34,7 +38,9 @@ async function createWindow() {
       contextIsolation: false,
     },
     icon: './public/favicon.ico',
-  });
+  }
+  Object.assign(options, store.get('winBounds'))
+  win = new BrowserWindow(options);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -46,6 +52,7 @@ async function createWindow() {
     win.loadURL('app://./index.html');
   }
   win.on('close', () => {
+    store.set('winBounds', win.getBounds())
     win.destroy();
   });
 }
@@ -79,7 +86,9 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString());
     }
   }
+  
   createWindow();
+  win.once('ready-to-show', win.show)
 });
 
 // Exit cleanly on request from parent process in development mode.
@@ -312,15 +321,6 @@ ipcMain.on('asynchronous-message', (event, req) => {
               );
             });
           }).catch((error) => errorHandler(error, event));
-        break;
-      }
-      case 'lol-gameflow-session': {
-        request.requestURL(
-          auth,
-          '/lol-gameflow/v1/session',
-        ).then((data) => {
-          event.reply('asynchronous-reply', createReply(data, req.id));
-        }).catch((error) => errorHandler(error, event));
         break;
       }
       case 'lol-champ-select': {
