@@ -119,7 +119,7 @@ export default {
     document.getElementsByClassName('wrapper')[0].addEventListener('scroll', (e) => {
       const d = new Date();
       const currentTime = d.getTime();
-      const isScrolledToBottom = (e.target.scrollHeight - e.target.clientHeight) === e.target.scrollTop;
+      const isScrolledToBottom = (e.target.scrollHeight - e.target.clientHeight) === parseInt(e.target.scrollTop + 1);
       if (isScrolledToBottom && this.lockout < currentTime) {
         // Request 20 more games.
         this.lockout = currentTime + 1000;
