@@ -239,6 +239,24 @@ ipcMain.on('asynchronous-message', (event, req) => {
   // LCU related Requests
   lcu.getLCUAuth().then((auth) => {
     switch (req.id) {
+      case 'liveclientdata-playerlist': {
+        const url = "/liveclientdata/playerlist"
+        const config = {
+          protocol: 'https',
+          port: 2999
+        }
+        request.requestURL(config,url).then((data) => {
+          event.reply(
+            'asynchronous-reply',
+            createReply(data,req.id),
+          );
+        }).catch((error) => {
+          if(String(error) != 'ECONNREFUSED'){
+            console.log(error)
+          }
+        }); 
+        break;
+      }
       case 'lol-lobby-playercard': {
         let rankedData = null;
         getSummonerById(req.summonerId, auth)
@@ -267,31 +285,33 @@ ipcMain.on('asynchronous-message', (event, req) => {
           }).catch((error) => errorHandler(error, event));
         break;
       }
-      case 'lol-lobby-playercard-with-sid': {
+      case 'lol-match-playercard': {
         let rankedData = null;
-        request.requestURL(
-          auth,
-          `/lol-ranked/v1/ranked-stats/${req.puuid}`,
-        ).then(
-          (rankedD) => {
-            rankedData = JSON.parse(rankedD);
-            rankedData.username = req.summonerName;
-            rankedData.championId = req.championId;
+        getSummonerByName(req.summonerName, auth)
+          .then((summoner) => {
             request.requestURL(
               auth,
-              `/lol-match-history/v1/products/lol/${req.puuid}/matches?begIndex=0&endIndex=9`,
-            ).then(
-              (matchHistory) => {
-                rankedData.teamId = req.teamId;
-                rankedData.matchHistory = JSON.parse(matchHistory);
-                event.reply(
-                  'asynchronous-reply',
-                  createReply(rankedData, req.id),
-                );
-              },
-            );
-          },
-        ).catch((error) => errorHandler(error, event));
+              `/lol-ranked/v1/ranked-stats/${summoner.puuid}`,
+            ).then((rankedD) => {
+              rankedData = JSON.parse(rankedD);
+              rankedData.username = summoner.displayName;
+              request.requestURL(
+                auth,
+                `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=9`,
+              ).then(
+                (matchHistory) => {
+                  rankedData.teamId = req.teamId;
+                  rankedData.championId = req.championId;
+                  rankedData.position = req.position;
+                  rankedData.matchHistory = JSON.parse(matchHistory);
+                  event.reply(
+                    'asynchronous-reply',
+                    createReply(rankedData, req.id),
+                  );
+                },
+              );
+            });
+          }).catch((error) => errorHandler(error, event));
         break;
       }
       case 'lol-gameflow-session': {
