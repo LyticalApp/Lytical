@@ -51,6 +51,8 @@
                         {{romanNumbers[teammate.queueMap.RANKED_SOLO_5x5.division]}}
                         ({{teammate.queueMap.RANKED_SOLO_5x5.leaguePoints}}LP)</span>
                     <br>
+                    <span style="font-size:12px;">{{capitalize(teammate.position)}}</span>
+                    <br>
                     <div v-for="(match,index) in teammate.matchHistory.games.games" :key="match.gameId"
                         class="matchItem">
                         <div v-if="index < 5">
@@ -152,7 +154,7 @@ export default {
         id: 'lol-champ-select',
       });
       ipcRenderer.send('asynchronous-message', {
-        id: 'lol-gameflow-session',
+        id: 'liveclientdata-playerlist',
       });
     },
   },
@@ -183,60 +185,32 @@ export default {
           if (this.selectGameId === data.gameId) return;
           document.title = 'Lytical - Champion Select';
           this.lobbyPlayers = [];
-          this.lobbyData = data;
           this.selectGameId = data.gameId;
-          for (const player of this.lobbyData.myTeam) {
+          for (const player of data.myTeam) {
             this.getSummonerById(player.summonerId, undefined, player.assignedPosition);
           }
           break;
         }
-        case 'lol-gameflow-session': {
+        case 'liveclientdata-playerlist': {
           this.clearErrorTimeout();
-          if (data.phase !== 'InProgress' || (this.progressGameId === data.gameData.gameId)) return;
+          if (this.lobbyPlayers.length > 5) return;
           document.title = 'Lytical - Live Game';
+          const flipKeys = (obj) => Object.fromEntries(Object.entries(obj).map(([k, v]) => [v, k]));
+          const namesToId = flipKeys(this.championIds);
+
+          for (const player of data) {
+            ipcRenderer.send('asynchronous-message', {
+              id: 'lol-match-playercard',
+              position: player.position,
+              summonerName: player.summonerName,
+              championId: namesToId[player.championName.replace(/\s/g, '')],
+              teamId: (player.team === 'ORDER') ? 1 : 2,
+            });
+          }
           this.lobbyPlayers = [];
-          this.lobbyData = data;
-          this.progressGameId = data.gameData.gameId;
-
-          // Todo: Make a dictionary of the champion selections by playername so we don't need to loop this 50 times
-
-          // TeamOne Plyers
-          for (const teamPlayer of data.gameData.teamOne) {
-            // Get champion id from list
-            let champId = 0;
-            for (const player of data.gameData.playerChampionSelections) {
-              if (player.summonerInternalName === teamPlayer.summonerInternalName) {
-                champId = player.championId;
-              }
-            }
-            ipcRenderer.send('asynchronous-message', {
-              id: 'lol-lobby-playercard-with-sid',
-              summonerName: teamPlayer.summonerName,
-              puuid: teamPlayer.puuid,
-              championId: champId,
-              teamId: 1,
-            });
-          }
-          // TeamTwo Plyers
-          for (const teamPlayer of data.gameData.teamTwo) {
-            // Get champion id from list
-            let champId = 0;
-            for (const player of data.gameData.playerChampionSelections) {
-              if (player.summonerInternalName === teamPlayer.summonerInternalName) {
-                champId = player.championId;
-              }
-            }
-            ipcRenderer.send('asynchronous-message', {
-              id: 'lol-lobby-playercard-with-sid',
-              summonerName: teamPlayer.summonerName,
-              puuid: teamPlayer.puuid,
-              championId: champId,
-              teamId: 2,
-            });
-          }
           break;
         }
-        case 'lol-lobby-playercard-with-sid':
+        case 'lol-match-playercard':
         case 'lol-lobby-playercard': {
           const filteredData = data;
           filteredData.matchHistory.games.games = filterGameModes(filteredData.matchHistory.games.games);
