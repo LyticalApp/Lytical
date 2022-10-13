@@ -1,8 +1,9 @@
 {
   "name": "Lytical",
   "author": "downthecrop",
-  "description": "Lytical is an open source League of Legends statistics and profile analytics tool for all regions including Garena & WeGame",
-  "version": "1.2.3",
+  "description": "Lytical is an open source League of Legends statistics and profile analytics tool for all regions including Garena and WeGame",
+  "version": "1.2.4",
+  "repository": "https://github.com/LyticalApp/Lytical/",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -17,9 +18,12 @@
   "dependencies": {
     "core-js": "^3.8.3",
     "electron": "^13.0.0",
+    "electron-builder-squirrel-windows": "^23.6.0",
+    "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
     "fs": "0.0.1-security",
     "open": "^8.4.0",
+    "update-electron-app": "^2.0.1",
     "vue": "^3.2.13",
     "vue-router": "^4.0.15"
   },
