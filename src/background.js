@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import {
   app, protocol, Menu, BrowserWindow,
 } from 'electron';
@@ -88,7 +87,8 @@ app.on('ready', async () => {
   }
   
   createWindow();
-  win.once('ready-to-show', win.show)
+  if(require('electron-squirrel-startup')) return;
+  win.once('ready-to-show', win.show);
 });
 
 // Exit cleanly on request from parent process in development mode.

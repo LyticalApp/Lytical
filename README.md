@@ -22,7 +22,7 @@ npm run electron:serve
 ```
 Create installer for distribution
 ```
-npm run electron:build -- --win nsis
+npm run electron:build -- --win squirrel
 ```
 
 If you are a native speaker and can help translate Lytical to Chinese/Korean/Thai/ect please make a GitHub Issue!
