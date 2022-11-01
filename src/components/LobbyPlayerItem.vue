@@ -1,18 +1,18 @@
 <template>
     <div class="miniCard">
-        <img v-if="player.championId" class="selectedChampion emblem"
-            :src="CHAMPIONICONURL + player.championId + '.png'">
-        <img class="emblem" :src='`assets/Emblem_${player.queueMap.RANKED_SOLO_5x5.tier}.webp`'>
+        <img v-if="teammate.championId" class="selectedChampion emblem"
+            :src="CHAMPIONICONURL + teammate.championId + '.png'">
+        <img class="emblem" :src='`assets/Emblem_${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`'>
         <br>
-        <span @click="searchSummoner(player.username)">{{ player.username }}</span>
+        <span @click="searchSummoner(teammate.username)">{{ teammate.username }}</span>
         <br>
-        <span style="font-size:12px;">{{ capitalize(player.queueMap.RANKED_SOLO_5x5.tier) }}
-            {{ romanNumbers[player.queueMap.RANKED_SOLO_5x5.division] }}
-            ({{ player.queueMap.RANKED_SOLO_5x5.leaguePoints }}LP)</span>
+        <span style="font-size:12px;">{{ capitalize(teammate.queueMap.RANKED_SOLO_5x5.tier) }}
+            {{ romanNumbers[teammate.queueMap.RANKED_SOLO_5x5.division] }}
+            ({{ teammate.queueMap.RANKED_SOLO_5x5.leaguePoints }}LP)</span>
         <br>
-        <span style="font-size:12px;">{{ capitalize(player.position) }}</span>
+        <span style="font-size:12px;">{{ capitalize(teammate.position) }}</span>
         <br>
-        <div v-for="(match, index) in player.matchHistory.games.games" :key="match.gameId" class="matchItem">
+        <div v-for="(match, index) in teammate.matchHistory.games.games" :key="match.gameId" class="matchItem">
             <div v-if="index < 5">
                 <img @click="open(getPreferredSite(match.participants[0].championId))"
                     :src="CHAMPIONICONURL + match.participants[0].championId + '.png'" class="championIcon">
@@ -42,7 +42,7 @@ const open = require('open');
 export default {
   name: 'LobbyPlayerItem',
   props: {
-    player: Object,
+    teammate: Object,
   },
   data() {
     return {
@@ -139,23 +139,12 @@ export default {
 }
 
 .miniCard {
-  min-height: 232px;
+  min-height: 260px;
   margin: 10px;
   padding: 10px;
   color: var(--minicard-text);
   border-radius: 5px;
   background-color: var(--minicard-background);
   filter: drop-shadow(0 0 0.1rem #5cd7e4);
-}
-
-.wrapper {
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow-y: scroll;
-  height: calc(100vh - 42px);
-  flex-wrap: wrap;
-  justify-content: center;
 }
 </style>

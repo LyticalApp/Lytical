@@ -6,15 +6,12 @@
     </div>
     <div class="team">
       <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
-          <LobbyPlayerItem
-            v-if="teammate.teamId == undefined || teammate.teamId == 1"
-            :player=teammate>
-          </LobbyPlayerItem>
+          <LobbyPlayerItem v-if="teammate.teamId == 1" :teammate=teammate></LobbyPlayerItem>
       </div>
     </div>
     <div class="team">
       <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
-        <LobbyPlayerItem v-if="teammate.teamId == 2" :player=teammate></LobbyPlayerItem>
+        <LobbyPlayerItem v-if="teammate.teamId == 2" :teammate=teammate></LobbyPlayerItem>
       </div>
     </div>
   </div>
@@ -112,7 +109,7 @@ export default {
           this.lobbyPlayers = [];
           this.selectGameId = data.gameId;
           for (const player of data.myTeam) {
-            this.getSummonerById(player.summonerId, undefined, player.assignedPosition);
+            this.getSummonerById(player.summonerId, 1, player.assignedPosition);
           }
           break;
         }
@@ -129,7 +126,7 @@ export default {
               position: player.position,
               summonerName: player.summonerName,
               championId: namesToId[player.rawChampionName.replace('game_character_displayname_', '')],
-              teamId: (player.team === 'ORDER') ? 1 : 2,
+              teamId: (player.team === 'ORDER') ? 1 : 2, // ORDER and CHAOS are the internal names.
             });
           }
           this.lobbyPlayers = [];
@@ -163,73 +160,9 @@ export default {
 </script>
 
 <style scoped>
-.championIcon {
-  border-radius: 10px;
-  width: 20px;
-  height: 20px;
-}
-
-.kda {
-  margin-left: 10px;
-  padding: 0 10px 0px 10px;
-  font-size: 15px;
-  color: var(--dark-grey);
-  text-align: center !important;
-  display: inline-block;
-  width: 55px;
-  border-radius: 4px;
-  font-weight: 400;
-}
-
-.emblem {
-  height: 70px;
-}
-
-.selectedChampion {
-  border-radius: 50%;
-}
-
-.Victory {
-  color: var(--lobby-victory-text);
-  background-color: var(--lobby-victory-background);
-}
-
-.Defeat {
-  color: var(--lobby-defeat-text);
-  background-color: var(--lobby-defeat-background);
-}
-
-.sinceGame {
-  font-size: 15px;
-  margin-left: 4px;
-  width: 28px;
-  display: inline-block;
-  background-color: var(--minicard-since-background);
-  border-radius: 4px;
-  padding-left: 4px;
-  padding-right: 4px;
-  text-align: center;
-}
-
-.matchItem {
-  margin: auto;
-  width: 150px;
-  text-align: left;
-}
-
 .team {
   display: flex;
   max-width: 1130px;
-}
-
-.miniCard {
-  min-height: 232px;
-  margin: 10px;
-  padding: 10px;
-  color: var(--minicard-text);
-  border-radius: 5px;
-  background-color: var(--minicard-background);
-  filter: drop-shadow(0 0 0.1rem #5cd7e4);
 }
 
 .wrapper {

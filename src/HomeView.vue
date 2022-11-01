@@ -95,7 +95,10 @@ export default {
           user: summonerName,
         });
         ipcRenderer.send('asynchronous-message', {
-          id: 'lol-match-history', user: summonerName, begIndex: 0, endIndex: this.matchHistoryMax,
+          id: 'lol-match-history',
+          user: summonerName,
+          begIndex: 0,
+          endIndex: this.matchHistoryMax,
         });
         // Hack
         ipcRenderer.send('asynchronous-message', {
@@ -111,7 +114,9 @@ export default {
           begIndex: 0,
           endIndex: this.matchHistoryMax,
         });
-        ipcRenderer.send('asynchronous-message', { id: 'lol-full-ranked-history-current' });
+        ipcRenderer.send('asynchronous-message', {
+          id: 'lol-full-ranked-history-current',
+        });
       }
     },
   },
@@ -124,7 +129,8 @@ export default {
       if (isScrolledToBottom && this.lockout < currentTime) {
         // Request 20 more games.
         this.lockout = currentTime + 1000;
-        if (this.$route.params.summonerSearch !== undefined && this.$route.params.summonerSearch.trim() !== '') {
+        if (this.$route.params.summonerSearch !== undefined
+        && this.$route.params.summonerSearch.trim() !== '') {
           ipcRenderer.send('asynchronous-message', {
             id: 'lol-match-history',
             user: this.$route.params.summonerSearch,
