@@ -6,7 +6,6 @@ try {
   const data = fs.readFileSync('./games.json', 'utf8');
   const rankedGames = JSON.parse(data).filter((game) => game.queueId === 420);
   const thisSeason = rankedGames.filter((game) => game.gameVersion.substring(0, 2) === '12');
-  // eslint-disable-next-line guard-for-in
   for (const game of thisSeason) {
     const player = game.participants[0];
     const tempObj = {

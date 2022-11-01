@@ -1,10 +1,13 @@
 import {
   app, protocol, Menu, BrowserWindow,
 } from 'electron';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 
 const Store = require('electron-store');
+
 const store = new Store();
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -37,8 +40,8 @@ async function createWindow() {
       contextIsolation: false,
     },
     icon: './public/favicon.ico',
-  }
-  Object.assign(options, store.get('winBounds'))
+  };
+  Object.assign(options, store.get('winBounds'));
   win = new BrowserWindow(options);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -51,7 +54,7 @@ async function createWindow() {
     win.loadURL('app://./index.html');
   }
   win.on('close', () => {
-    store.set('winBounds', win.getBounds())
+    store.set('winBounds', win.getBounds());
     win.destroy();
   });
 }
@@ -85,9 +88,10 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString());
     }
   }
-  
+
   createWindow();
-  if(require('electron-squirrel-startup')) return;
+  // eslint-disable-next-line global-require
+  if (require('electron-squirrel-startup')) return;
   win.once('ready-to-show', win.show);
 });
 
@@ -249,21 +253,21 @@ ipcMain.on('asynchronous-message', (event, req) => {
   lcu.getLCUAuth().then((auth) => {
     switch (req.id) {
       case 'liveclientdata-playerlist': {
-        const url = "/liveclientdata/playerlist"
+        const url = '/liveclientdata/playerlist';
         const config = {
           protocol: 'https',
-          port: 2999
-        }
-        request.requestURL(config,url).then((data) => {
+          port: 2999,
+        };
+        request.requestURL(config, url).then((data) => {
           event.reply(
             'asynchronous-reply',
-            createReply(data,req.id),
+            createReply(data, req.id),
           );
         }).catch((error) => {
-          if(String(error) != 'ECONNREFUSED'){
-            console.log(error)
+          if (String(error) !== 'ECONNREFUSED') {
+            console.log(error);
           }
-        }); 
+        });
         break;
       }
       case 'lol-lobby-playercard': {
