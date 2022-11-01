@@ -6,7 +6,7 @@
     </div>
     <div class="team">
       <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
-          <LobbyPlayerItem v-if="teammate.teamId == 1" :teammate=teammate></LobbyPlayerItem>
+        <LobbyPlayerItem v-if="teammate.teamId == 1" :teammate=teammate></LobbyPlayerItem>
       </div>
     </div>
     <div class="team">
@@ -47,9 +47,6 @@ export default {
     };
   },
   watch: {
-    lobbyPlayers() {
-      console.log(this.lobbyPlayers);
-    },
     $route() {
       // Unregister the listener..
       console.log('Unregistering Listeners on Lobby');
