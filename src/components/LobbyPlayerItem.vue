@@ -2,8 +2,8 @@
   <div class="miniCard">
   <div v-if="teammate.championId">
      <img v-if="teammate.championId"  :src="CHAMPIONICONURL + teammate.championId + '.png'" class="portrait">
-     <div class="orb">
-        <img :src='`assets/positions/icon-position-mid.svg`' class="roleicon">
+     <div v-if="teammate.position && teammate.position != 'NONE'" class="orb">
+        <img :src="`assets/positions/${teammate.position}.svg`" class="roleicon">
      </div>
   </div>
     <img v-else class="emblem" :src='`assets/Emblem_${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`'>
@@ -13,8 +13,6 @@
     <span style="font-size:12px;">{{ capitalize(teammate.queueMap.RANKED_SOLO_5x5.tier) }}
     {{ romanNumbers[teammate.queueMap.RANKED_SOLO_5x5.division] }}
     ({{ teammate.queueMap.RANKED_SOLO_5x5.leaguePoints }}LP)</span>
-    <br>
-    <span style="font-size:12px;">{{ capitalize(teammate.position) }}</span>
     <br>
     <div v-for="(match, index) in teammate.matchHistory.games.games" :key="match.gameId" class="matchItem">
       <div v-if="index < 5">
@@ -169,6 +167,7 @@ body {
 
 .miniCard {
   min-height: 260px;
+  min-width:160px;
   margin: 10px;
   padding: 10px;
   color: var(--minicard-text);
