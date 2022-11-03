@@ -1,33 +1,35 @@
 <template>
-    <div class="miniCard">
-        <img v-if="teammate.championId" class="selectedChampion emblem"
-            :src="CHAMPIONICONURL + teammate.championId + '.png'">
-        <img class="emblem" :src='`assets/Emblem_${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`'>
-        <br>
-        <span @click="searchSummoner(teammate.username)">{{ teammate.username }}</span>
-        <br>
-        <span style="font-size:12px;">{{ capitalize(teammate.queueMap.RANKED_SOLO_5x5.tier) }}
-            {{ romanNumbers[teammate.queueMap.RANKED_SOLO_5x5.division] }}
-            ({{ teammate.queueMap.RANKED_SOLO_5x5.leaguePoints }}LP)</span>
-        <br>
-        <span style="font-size:12px;">{{ capitalize(teammate.position) }}</span>
-        <br>
-        <div v-for="(match, index) in teammate.matchHistory.games.games" :key="match.gameId" class="matchItem">
-            <div v-if="index < 5">
-                <img @click="open(getPreferredSite(match.participants[0].championId))"
-                    :src="CHAMPIONICONURL + match.participants[0].championId + '.png'" class="championIcon">
-                <div :class='`kda ${match.participants[0].stats.win ? "Victory" : "Defeat"}`'>
-                    <span style="white-space:nowrap">
-                        {{ match.participants[0].stats.kills + "/"
-                                + match.participants[0].stats.deaths + "/"
-                                + match.participants[0].stats.assists
-                        }}
-                    </span>
-                </div>
-                <span class="sinceGame">{{ sinceGame(Date.now() - match.gameCreation) }}</span>
-            </div>
+  <div class="miniCard">
+  <div v-if="teammate.championId">
+     <img v-if="teammate.championId"  :src="CHAMPIONICONURL + teammate.championId + '.png'" class="portrait">
+     <div v-if="teammate.position && teammate.position != 'NONE'" class="orb">
+        <img :src="`assets/positions/${teammate.position}.svg`" class="roleicon">
+     </div>
+  </div>
+    <img v-else class="emblem" :src='`assets/ranks/${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`'>
+    <br>
+    <span @click="searchSummoner(teammate.username)">{{ teammate.username }}</span>
+    <br>
+    <span style="font-size:12px;">{{ capitalize(teammate.queueMap.RANKED_SOLO_5x5.tier) }}
+    {{ romanNumbers[teammate.queueMap.RANKED_SOLO_5x5.division] }}
+    ({{ teammate.queueMap.RANKED_SOLO_5x5.leaguePoints }}LP)</span>
+    <br>
+    <div v-for="(match, index) in teammate.matchHistory.games.games" :key="match.gameId" class="matchItem">
+      <div v-if="index < 5">
+        <img @click="open(getPreferredSite(match.participants[0].championId))"
+          :src="CHAMPIONICONURL + match.participants[0].championId + '.png'" class="championIcon">
+        <div :class='`kda ${match.participants[0].stats.win ? "Victory" : "Defeat"}`'>
+          <span style="white-space:nowrap">
+          {{ match.participants[0].stats.kills + "/"
+          + match.participants[0].stats.deaths + "/"
+          + match.participants[0].stats.assists
+          }}
+          </span>
         </div>
+        <span class="sinceGame">{{ sinceGame(Date.now() - match.gameCreation) }}</span>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -79,6 +81,31 @@ export default {
 </script>
 
 <style scoped>
+body {
+  padding: 0px;
+  margin: 0px;
+}
+.portrait {
+    left:0px;
+    width:var(--portrait-size);
+    border-radius: 100%;
+    z-index: 0;
+}
+.orb {
+    position: absolute;
+    left:calc(50% - var(--orb-size)/2);
+    top:calc(var(--portrait-size) - calc(var(--orb-size)/4));
+    background-color: var(--minicard-background);
+    width:var(--orb-size);
+    height:var(--orb-size);
+    border-radius: 100%;
+    z-index: 1;
+}
+.roleicon {
+    padding-top:calc(50% - var(--role-icon-size));
+    left:calc(50% - var(--role-icon-size));
+    width:calc(var(--role-icon-size)*2);
+}
 .championIcon {
   border-radius: 10px;
   width: 20px;
@@ -140,6 +167,7 @@ export default {
 
 .miniCard {
   min-height: 260px;
+  min-width:160px;
   margin: 10px;
   padding: 10px;
   color: var(--minicard-text);

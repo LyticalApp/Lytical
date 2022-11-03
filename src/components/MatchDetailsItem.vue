@@ -96,10 +96,10 @@
                            <table style="display:inline;">
                               <td style="padding:0px;">
                                  <!-- Summoner Spells -->
-                                 <img :src='`assets/${summonerSpells[participant.spell1Id]}.webp`'
+                                 <img :src='`assets/spells/${summonerSpells[participant.spell1Id]}.webp`'
                                  class='thumbicon thumbround' style="height:15px;width:15px;">
                                  <br>
-                                 <img :src='`assets/${summonerSpells[participant.spell2Id]}.webp`'
+                                 <img :src='`assets/spells/${summonerSpells[participant.spell2Id]}.webp`'
                                  class='thumbicon thumbround' style="height:15px;width:15px;">
                               </td>
                               <td style="padding:0px;">

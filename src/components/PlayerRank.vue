@@ -5,7 +5,7 @@
     <table style="width:100%;    padding-top: 10px;">
       <td>
         <img
-        :src='`assets/Emblem_${data.queueMap.RANKED_SOLO_5x5.tier}.webp`'
+        :src='`assets/ranks/${data.queueMap.RANKED_SOLO_5x5.tier}.webp`'
         class="backgroundImg" style="height:60px;"
         />
       </td>
