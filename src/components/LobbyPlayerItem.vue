@@ -6,7 +6,7 @@
         <img :src="`assets/positions/${teammate.position}.svg`" class="roleicon">
      </div>
   </div>
-    <img v-else class="emblem" :src='`assets/Emblem_${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`'>
+    <img v-else class="emblem" :src='`assets/ranks/${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`'>
     <br>
     <span @click="searchSummoner(teammate.username)">{{ teammate.username }}</span>
     <br>

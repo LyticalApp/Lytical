@@ -4,7 +4,7 @@
             <h1>Settings</h1>
             <table style="left:50%;margin:auto;">
                 <tr>
-                    <td>Automaticly switch to lobby</td>
+                    <td>Automatically switch to lobby</td>
                     <td>
                     <input v-model="autoSwitchLobby" type="checkbox"
                      :checked="autoSwitchLobby == 'true'">

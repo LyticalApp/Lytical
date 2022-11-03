@@ -30,11 +30,13 @@
                                     </td>
                                     <td style="padding:0px;">
                                         <!-- Summoner Spells -->
-                                        <img :src='`assets/${summonerSpells[data.participants[0].spell1Id]}.webp`'
-                                            class='thumbicon thumbround'>
+                                        <img
+                                          :src='`assets/spells/${summonerSpells[data.participants[0].spell1Id]}.webp`'
+                                          class='thumbicon thumbround'>
                                         <br>
-                                        <img :src='`assets/${summonerSpells[data.participants[0].spell2Id]}.webp`'
-                                            class='thumbicon thumbround'>
+                                        <img
+                                          :src='`assets/spells/${summonerSpells[data.participants[0].spell2Id]}.webp`'
+                                          class='thumbicon thumbround'>
                                     </td>
                                     <td style="padding:0px;">
                                         <!-- Runes -->
