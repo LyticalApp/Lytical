@@ -2,7 +2,7 @@
   "name": "Lytical",
   "author": "downthecrop",
   "description": "Lytical is an open source League of Legends statistics and profile analytics tool for all regions including Garena and WeGame",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "repository": "https://github.com/LyticalApp/Lytical/",
   "private": true,
   "scripts": {
