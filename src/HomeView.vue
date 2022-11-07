@@ -16,14 +16,7 @@
           </div>
         </td>
         <td>
-          <div v-if="showLoading" class="loadingFrame">
-            <div class="lds-ellipsis">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
+          <LoadingDots v-if="showLoading" />
           <MatchHistoryItem v-for="match in matches"
             :key=match.gameId
             :data=match
@@ -39,6 +32,7 @@ import MatchHistoryItem from './components/MatchHistoryItem.vue';
 import PlayerCard from './components/PlayerCard.vue';
 import PlayerRank from './components/PlayerRank.vue';
 import LCUErrorMessage from './components/LCUErrorMessage.vue';
+import LoadingDots from './components/LoadingDots.vue';
 import MostPlayedChampions from './components/MostPlayedChampions.vue';
 import {
   filterGameModes,
@@ -54,6 +48,7 @@ export default {
     PlayerRank,
     LCUErrorMessage,
     MostPlayedChampions,
+    LoadingDots,
   },
   data() {
     return {
