@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="navWrapper">
-            <div :class='`item ${ viewingHome ? "underlined" : ""}`'>
+            <div :class='`item ${ viewingHome ? "underlined" : ""}`' @click="this.showSettings = false">
                 <router-link
                 :to="{
                   name: 'Home',
@@ -9,7 +9,7 @@
                     Profile
                 </router-link>
             </div>
-            <div :class='`item ${ viewingLobby ? "underlined" : ""}`'>
+            <div :class='`item ${ viewingLobby ? "underlined" : ""}` ' @click="this.showSettings = false">
                 <router-link to="Lobby">
                     Lobby
                 </router-link>
@@ -27,7 +27,7 @@
               <img  @click="reload()"
                 :src='`assets/refresh-svg.svg`'
                 style="height:20px;opacity:.2;padding-right:10px;color:white;">
-                <img  @click="this.showSettings = !this.showSettings"
+                <img  @click="this.showSettings = true"
                 :src='`assets/settings.svg`'
                 style="height:20px;opacity:.2;">
             </div>

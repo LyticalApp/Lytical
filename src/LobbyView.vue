@@ -4,6 +4,9 @@
     <div v-if="showTimeout">
       <h1>Unable to connect to lobby</h1>
     </div>
+    <div v-else>
+      <h1>Loading...</h1>
+    </div>
     <div class="team">
       <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
         <LobbyPlayerItem v-if="teammate.teamId == 1" :teammate=teammate></LobbyPlayerItem>
