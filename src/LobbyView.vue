@@ -164,12 +164,10 @@ export default {
 
 .wrapper {
   margin: auto;
-  display: flex;
-  flex-direction: column;
+  display: grid;
   align-items: center;
   overflow-y: scroll;
   height: calc(100vh - 42px);
-  flex-wrap: wrap;
   justify-content: center;
 }
 </style>
