@@ -1,12 +1,12 @@
 <template>
   <div class="miniCard">
-  <div v-if="teammate.championId">
+  <div>
      <img v-if="teammate.championId"  :src="CHAMPIONICONURL + teammate.championId + '.png'" class="portrait">
+     <img v-else class="emblem" :src='`assets/ranks/${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`'>
      <div v-if="teammate.position && teammate.position != 'NONE'" class="orb">
         <img :src="`assets/positions/${teammate.position}.svg`" class="roleicon">
      </div>
   </div>
-    <img v-else class="emblem" :src='`assets/ranks/${teammate.queueMap.RANKED_SOLO_5x5.tier}.webp`'>
     <br>
     <span @click="searchSummoner(teammate.username)">{{ teammate.username }}</span>
     <br>
