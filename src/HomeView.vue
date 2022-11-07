@@ -17,18 +17,18 @@
         </td>
         <td>
           <div v-if="showLoading" class="loadingFrame">
-              <div class="lds-ellipsis">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-              </div>
+            <div class="lds-ellipsis">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           </div>
           <MatchHistoryItem v-for="match in matches"
-              :key=match.gameId
-              :data=match
-              :profileSummoner=playerCardInfo.username
-              />
+            :key=match.gameId
+            :data=match
+            :profileSummoner=playerCardInfo.username
+          />
         </td>
     </table>
   </div>
