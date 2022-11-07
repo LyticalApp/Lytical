@@ -4,7 +4,7 @@
     <div v-if="showTimeout">
       <h1>Unable to connect to lobby</h1>
     </div>
-    <div v-if="loading" class="loadingFrame">
+    <div v-if="loading && !showTimeout" class="loadingFrame">
       <div class="lds-ellipsis">
         <div></div>
         <div></div>
