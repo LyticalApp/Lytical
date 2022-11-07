@@ -4,22 +4,17 @@
     <div v-if="showTimeout">
       <h1>Unable to connect to lobby</h1>
     </div>
-    <div v-if="loading && !showTimeout" class="loadingFrame">
-      <div class="lds-ellipsis">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+    <LoadingDots v-if="loading && !showTimeout" />
+    <div v-if="!loading">
+      <div class="team">
+        <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
+          <LobbyPlayerItem v-if="teammate.teamId == 1" :teammate=teammate />
+        </div>
       </div>
-    </div>
-    <div class="team" v-if="!loading">
-      <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
-        <LobbyPlayerItem v-if="teammate.teamId == 1" :teammate=teammate></LobbyPlayerItem>
-      </div>
-    </div>
-    <div class="team" v-if="!loading">
-      <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
-        <LobbyPlayerItem v-if="teammate.teamId == 2" :teammate=teammate></LobbyPlayerItem>
+      <div class="team">
+        <div v-for="teammate in lobbyPlayers" :key="teammate.displayName">
+          <LobbyPlayerItem v-if="teammate.teamId == 2" :teammate=teammate />
+        </div>
       </div>
     </div>
   </div>
@@ -32,6 +27,7 @@ import {
 } from './res/common';
 import LCUErrorMessage from './components/LCUErrorMessage.vue';
 import LobbyPlayerItem from './components/LobbyPlayerItem.vue';
+import LoadingDots from './components/LoadingDots.vue';
 
 const { ipcRenderer } = require('electron');
 
@@ -40,6 +36,7 @@ export default {
   components: {
     LCUErrorMessage,
     LobbyPlayerItem,
+    LoadingDots,
   },
   data() {
     return {
@@ -143,8 +140,7 @@ export default {
           const filteredData = data;
           filteredData.matchHistory.games.games = filterGameModes(filteredData.matchHistory.games.games);
           if (this.lobbyPlayers.findIndex((p) => p.username === data.username) === -1) this.lobbyPlayers.push(data);
-          if (this.lobbyPlayers.length === 10) this.loading = false;
-
+          if (this.lobbyPlayers.length > 0) this.loading = false;
           break;
         }
         default: {
@@ -180,66 +176,5 @@ export default {
   overflow-y: scroll;
   height: calc(100vh - 42px);
   justify-content: center;
-}
-
-.loadingFrame{
-  margin:auto;
-  width:576px;
-  position:relative;
-}
-.lds-ellipsis {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-}
-.lds-ellipsis div {
-  position: absolute;
-  top: 33px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #5a4656;
-  animation-timing-function: cubic-bezier(0, 1, 1, 0);
-}
-.lds-ellipsis div:nth-child(1) {
-  left: 8px;
-  animation: lds-ellipsis1 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(2) {
-  left: 8px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(3) {
-  left: 32px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(4) {
-  left: 56px;
-  animation: lds-ellipsis3 0.6s infinite;
-}
-@keyframes lds-ellipsis1 {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-@keyframes lds-ellipsis3 {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0);
-  }
-}
-@keyframes lds-ellipsis2 {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(24px, 0);
-  }
 }
 </style>

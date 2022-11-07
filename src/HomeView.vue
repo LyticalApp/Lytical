@@ -16,14 +16,7 @@
           </div>
         </td>
         <td>
-          <div v-if="showLoading" class="loadingFrame">
-            <div class="lds-ellipsis">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
+          <LoadingDots v-if="showLoading" />
           <MatchHistoryItem v-for="match in matches"
             :key=match.gameId
             :data=match
@@ -39,6 +32,7 @@ import MatchHistoryItem from './components/MatchHistoryItem.vue';
 import PlayerCard from './components/PlayerCard.vue';
 import PlayerRank from './components/PlayerRank.vue';
 import LCUErrorMessage from './components/LCUErrorMessage.vue';
+import LoadingDots from './components/LoadingDots.vue';
 import MostPlayedChampions from './components/MostPlayedChampions.vue';
 import {
   filterGameModes,
@@ -54,6 +48,7 @@ export default {
     PlayerRank,
     LCUErrorMessage,
     MostPlayedChampions,
+    LoadingDots,
   },
   data() {
     return {
@@ -303,79 +298,16 @@ export default {
     overflow-y:scroll;
     height:calc(100vh - 42px);
 }
-
 .v-enter-active,
 .v-leave-active {
   transition: opacity 0.5s ease;
 }
-
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
 }
-
 #leftSideBar {
   padding:10px;
   width: 300px;
-}
-.loadingFrame{
-  margin:auto;
-  width:576px;
-  position:relative;
-}
-.lds-ellipsis {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-}
-.lds-ellipsis div {
-  position: absolute;
-  top: 33px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #5a4656;
-  animation-timing-function: cubic-bezier(0, 1, 1, 0);
-}
-.lds-ellipsis div:nth-child(1) {
-  left: 8px;
-  animation: lds-ellipsis1 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(2) {
-  left: 8px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(3) {
-  left: 32px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(4) {
-  left: 56px;
-  animation: lds-ellipsis3 0.6s infinite;
-}
-@keyframes lds-ellipsis1 {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-@keyframes lds-ellipsis3 {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0);
-  }
-}
-@keyframes lds-ellipsis2 {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(24px, 0);
-  }
 }
 </style>
