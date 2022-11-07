@@ -138,13 +138,19 @@ export default {
           this.lobbyPlayers = [];
           break;
         }
-        case 'lol-match-playercard':
-        case 'lol-lobby-playercard': {
+        case 'lol-match-playercard': {
           const filteredData = data;
           filteredData.matchHistory.games.games = filterGameModes(filteredData.matchHistory.games.games);
           if (this.lobbyPlayers.findIndex((p) => p.username === data.username) === -1) this.lobbyPlayers.push(data);
           if (this.lobbyPlayers.length === 10) this.loading = false;
-
+          break;
+        }
+        case 'lol-lobby-playercard': {
+          const filteredData = data;
+          filteredData.matchHistory.games.games = filterGameModes(filteredData.matchHistory.games.games);
+          if (this.lobbyPlayers.findIndex((p) => p.username === data.username) === -1) this.lobbyPlayers.push(data);
+          console.log(this.lobbyPlayers.length);
+          if (this.lobbyPlayers.length === 5) this.loading = false;
           break;
         }
         default: {
