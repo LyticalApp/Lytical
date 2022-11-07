@@ -168,6 +168,7 @@ export const championIds = {
   887: 'Gwen',
   888: 'Renata',
   895: 'Nilah',
+  897: 'KSante',
 };
 
 export const romanNumbers = {

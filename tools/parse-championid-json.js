@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const request = require('request');
 
-const champions = 'http://ddragon.leagueoflegends.com/cdn/12.13.1/data/en_US/champion.json';
+const champions = 'http://ddragon.leagueoflegends.com/cdn/12.21.1/data/en_US/champion.json';
 
 const j = {};
 
