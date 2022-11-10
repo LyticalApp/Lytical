@@ -74,6 +74,22 @@ export default {
       this.showTimeout = false;
       clearTimeout(this.timeout);
     },
+    sortTeamsByRole() {
+      const order = [
+        'TOP',
+        'JUNGLE',
+        'MIDDLE',
+        'BOTTOM',
+        'UTILITY',
+      ];
+      this.lobbyPlayers.sort((a, b) => {
+        console.log('comparing', a.position, b.position);
+        if (order.indexOf(a.position) < order.indexOf(b.position)) {
+          return -1;
+        }
+        return 1;
+      });
+    },
     getLobbyStatus() {
       ipcRenderer.send('asynchronous-message', {
         id: 'lol-champ-select',
@@ -85,7 +101,6 @@ export default {
   },
   created() {
     this.ondata = (event, data) => {
-      // Dug
       console.log('DEBUG: Async Reply: ', data);
 
       // All replies should have a reply_type set.
@@ -141,6 +156,9 @@ export default {
           filteredData.matchHistory.games.games = filterGameModes(filteredData.matchHistory.games.games);
           if (this.lobbyPlayers.findIndex((p) => p.username === data.username) === -1) this.lobbyPlayers.push(data);
           if (this.lobbyPlayers.length > 0) this.loading = false;
+          if (this.lobbyPlayers.length > 5) {
+            this.sortTeamsByRole();
+          }
           break;
         }
         default: {
