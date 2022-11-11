@@ -23,6 +23,14 @@ html{
   background-color: var(--dark-grey);
 }
 
+.wrapper {
+  margin:auto;
+  display: flex;
+  justify-content: center;
+  overflow-y:scroll;
+  height:calc(100vh - 42px);
+}
+
 body {
   margin:0px;
   font-family: Roboto;
