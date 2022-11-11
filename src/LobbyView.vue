@@ -152,13 +152,11 @@ export default {
         }
         case 'lol-match-playercard':
         case 'lol-lobby-playercard': {
+          this.loading = false;
           const filteredData = data;
           filteredData.matchHistory.games.games = filterGameModes(filteredData.matchHistory.games.games);
           if (this.lobbyPlayers.findIndex((p) => p.username === data.username) === -1) this.lobbyPlayers.push(data);
-          if (this.lobbyPlayers.length > 0) this.loading = false;
-          if (this.lobbyPlayers.length > 5) {
-            this.sortTeamsByRole();
-          }
+          if (this.lobbyPlayers.length > 4) { this.sortTeamsByRole(); }
           break;
         }
         default: {
