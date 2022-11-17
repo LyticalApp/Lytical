@@ -92,6 +92,8 @@ app.on('ready', async () => {
   createWindow();
   // eslint-disable-next-line global-require
   if (require('electron-squirrel-startup')) return;
+  // eslint-disable-next-line global-require
+  require('update-electron-app')();
   win.once('ready-to-show', win.show);
 });
 
@@ -286,7 +288,7 @@ ipcMain.on('asynchronous-message', (event, req) => {
               ).then(
                 (matchHistory) => {
                   rankedData.teamId = req.teamId;
-                  rankedData.position = req.pos;
+                  rankedData.position = req.pos.toUpperCase();
                   rankedData.matchHistory = JSON.parse(matchHistory);
                   event.reply(
                     'asynchronous-reply',
@@ -315,7 +317,7 @@ ipcMain.on('asynchronous-message', (event, req) => {
                 (matchHistory) => {
                   rankedData.teamId = req.teamId;
                   rankedData.championId = req.championId;
-                  rankedData.position = req.position;
+                  rankedData.position = req.position.toUpperCase();
                   rankedData.matchHistory = JSON.parse(matchHistory);
                   event.reply(
                     'asynchronous-reply',
