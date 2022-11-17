@@ -1,4 +1,4 @@
-const patch = '12.13.1';
+const patch = '12.22.1';
 
 /* eslint-disable max-len */
 export const ITEMICONURL = `http://ddragon.leagueoflegends.com/cdn/${patch}/img/item/`;
