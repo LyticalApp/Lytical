@@ -4,8 +4,7 @@ const badStatusCodes = [400, 403, 404];
 
 exports.requestURL = async (auth, path, postData = null) => new Promise((resolve, reject) => {
   if (auth == null) {
-    // eslint-disable-next-line prefer-promise-reject-errors
-    reject('0');
+    reject(new Error('NULLAUTH'));
   }
 
   const options = {

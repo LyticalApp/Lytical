@@ -24,6 +24,10 @@ protocol.registerSchemesAsPrivileged([
 
 let win;
 const puuidStore = {};
+const asyncReply = 'asynchronous-reply';
+
+const MATCH_HISTORY_V1 = '/lol-match-history/v1/products/lol/';
+const RANKED_STATS_V1 = '/lol-ranked/v1/ranked-stats/';
 
 async function createWindow() {
   // Create the browser window.
@@ -74,7 +78,7 @@ app.on('activate', () => {
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+// Some APIs can only be used after this e occurs.
 app.on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
@@ -124,7 +128,7 @@ function createReply(dataD, id) {
   return reply;
 }
 
-function errorHandler(errorCode, event) {
+function errorHandler(errorCode, e, req) {
   console.log('ERRORCODE: ', errorCode);
   switch (String(errorCode)) {
     case '400':
@@ -132,23 +136,27 @@ function errorHandler(errorCode, event) {
       // GOOD REQUEST. BAD RESPONSE
       // e.g. checking lobby status when
       // no lobby exists. Just do nothing..
-      event.reply('asynchronous-reply', { reply_type: 'lcu-reconnected' });
+      e.reply(asyncReply, { reply_type: 'lcu-reconnected' });
       break;
     }
-    case '403':
     case 'ECONNREFUSED':
+    case '403':
     case '0':
     default: {
+      if (req.id === 'liveclientdata-playerlist') {
+        // Allow polling for live game can refuse connection
+        break;
+      }
       // Unhadled Error..
       lcu.setAuth(null);
-      event.reply('asynchronous-reply', { reply_type: 'lcu-disonnceted' });
+      e.reply(asyncReply, { reply_type: 'lcu-disonnceted' });
       break;
     }
   }
 }
 
 // Used to get PUUID for many differet requests.
-function getSummonerByName(name, auth) {
+async function getSummonerByName(name, auth) {
   const summonerName = encodeURI(name.replace(/\s/g, ''));
   if (puuidStore[name]) {
     return new Promise((resolve) => {
@@ -166,7 +174,7 @@ function getSummonerByName(name, auth) {
   });
 }
 
-function getSummonerById(id, auth) {
+async function getSummonerById(id, auth) {
   if (puuidStore[id]) {
     return new Promise((resolve) => {
       resolve(puuidStore[id]);
@@ -183,7 +191,15 @@ function getSummonerById(id, auth) {
   });
 }
 
-function getSummonerCurrent(auth) {
+const clearProfile = (e) => {
+  e.reply(asyncReply, createReply({}, 'clear-profile'));
+};
+
+const reqURL = async (auth, url) => JSON.parse(
+  await request.requestURL(auth, url),
+);
+
+async function getSummonerCurrent(auth) {
   if (puuidStore['summoner.current']) {
     return new Promise((resolve) => {
       resolve(puuidStore['summoner.current']);
@@ -200,29 +216,34 @@ function getSummonerCurrent(auth) {
   });
 }
 
-ipcMain.on('asynchronous-message', (event, req) => {
+ipcMain.on('asynchronous-message', (e, req) => {
   console.log('NEW REQUEST: ', req);
 
   // ipc required requests for debug/versioning
-  if (req.id === 'openDevTools') {
-    win.webContents.openDevTools();
-    return;
-  }
-  if (req.id === 'getVersion') {
-    event.reply('asynchronous-reply', { reply_type: 'appVersion', version: app.getVersion() });
-    return;
-  }
-  if (req.id === 'scaleUp') {
-    win.webContents.setZoomFactor(win.webContents.getZoomFactor() + 0.1);
-    return;
-  }
-  if (req.id === 'scaleDown') {
-    win.webContents.setZoomFactor(win.webContents.getZoomFactor() - 0.1);
-    return;
-  }
-  if (req.id === 'getRunLevel') {
-    event.reply('asynchronous-reply', { reply_type: 'runLevel', isAdmin: lcu.getRunLevel() });
-    return;
+  switch (req.id) {
+    case 'openDevTools': {
+      win.webContents.openDevTools();
+      return;
+    }
+    case 'getVersion': {
+      e.reply(asyncReply, { reply_type: 'appVersion', version: app.getVersion() });
+      return;
+    }
+    case 'scaleUp': {
+      win.webContents.setZoomFactor(win.webContents.getZoomFactor() + 0.1);
+      return;
+    }
+    case 'scaleDown': {
+      win.webContents.setZoomFactor(win.webContents.getZoomFactor() - 0.1);
+      return;
+    }
+    case 'getRunLevel': {
+      e.reply(asyncReply, { reply_type: 'runLevel', isAdmin: lcu.getRunLevel() });
+      return;
+    }
+    default: {
+      break;
+    }
   }
 
   // LCU related Requests
@@ -235,158 +256,124 @@ ipcMain.on('asynchronous-message', (event, req) => {
             protocol: 'https',
             port: 2999,
           };
-          event.reply(
-            'asynchronous-reply',
+          e.reply(
+            asyncReply,
             createReply(await request.requestURL(config, '/liveclientdata/playerlist'), req.id),
           );
           break;
         }
         case 'lol-lobby-playercard': {
-          const summoner = JSON.parse(await getSummonerById(req.summonerId, auth));
-          const rankedData = JSON.parse(await request.requestURL(
+          const summoner = await getSummonerById(req.summonerId, auth);
+          const response = await reqURL(auth, `${RANKED_STATS_V1}${summoner.puuid}`);
+          response.matchHistory = await reqURL(
             auth,
-            `/lol-ranked/v1/ranked-stats/${summoner.puuid}`,
-          ));
-          rankedData.matchHistory = JSON.parse(await request.requestURL(
-            auth,
-            `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=9`,
-          ));
-          rankedData.username = summoner.displayName;
-          rankedData.teamId = req.teamId;
-          rankedData.position = req.pos.toUpperCase();
-          event.reply('asynchronous-reply', createReply(rankedData, req.id));
+            `${MATCH_HISTORY_V1}${summoner.puuid}/matches?begIndex=0&endIndex=9`,
+          );
+          response.username = summoner.displayName;
+          response.teamId = req.teamId;
+          response.position = req.pos.toUpperCase();
+          e.reply(asyncReply, createReply(response, req.id));
           break;
         }
         case 'lol-match-playercard': {
           const summoner = await getSummonerByName(req.summonerName, auth);
-          const rankedData = JSON.parse(await request.requestURL(
-            auth,
-            `/lol-ranked/v1/ranked-stats/${summoner.puuid}`,
-          ));
+          const response = await reqURL(auth, `${RANKED_STATS_V1}${summoner.puuid}`);
 
-          rankedData.matchHistory = JSON.parse(await request.requestURL(
+          response.matchHistory = await reqURL(
             auth,
-            `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=9`,
-          ));
-          rankedData.username = summoner.displayName;
-          rankedData.teamId = req.teamId;
-          rankedData.championId = req.championId;
-          rankedData.position = req.position.toUpperCase();
-          event.reply('asynchronous-reply', createReply(rankedData, req.id));
+            `${MATCH_HISTORY_V1}${summoner.puuid}/matches?begIndex=0&endIndex=9`,
+          );
+
+          response.username = summoner.displayName;
+          response.teamId = req.teamId;
+          response.championId = req.championId;
+          response.position = req.position.toUpperCase();
+          e.reply(asyncReply, createReply(response, req.id));
           break;
         }
         case 'lol-champ-select': {
-          event.reply(
-            'asynchronous-reply',
-            createReply(await request.requestURL(
-              auth,
-              '/lol-champ-select/v1/session',
-            ), req.id),
-          );
+          e.reply(asyncReply, createReply(await reqURL(auth, '/lol-champ-select/v1/session'), req.id));
           break;
         }
         case 'lol-match-history-current': {
-          event.reply(
-            'asynchronous-reply',
-            createReply(await request.requestURL(
+          e.reply(
+            asyncReply,
+            createReply(await reqURL(
               auth,
-              // eslint-disable-next-line max-len
-              `/lol-match-history/v1/products/lol/current-summoner/matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`,
+              `${MATCH_HISTORY_V1}current-summoner/matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`,
             ), req.id),
           );
           break;
         }
         case 'lol-match-history': {
           const summoner = await getSummonerByName(req.user, auth);
-          event.reply(
-            'asynchronous-reply',
-            createReply(await request.requestURL(
+          e.reply(
+            asyncReply,
+            createReply(await reqURL(
               auth,
-              // eslint-disable-next-line max-len
-              `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`,
+              `${MATCH_HISTORY_V1}${summoner.puuid}/matches?begIndex=${req.begIndex}&endIndex=${req.endIndex}`,
             ), req.id),
           );
           break;
         }
         case 'lol-match-details': {
-          event.reply(
-            'asynchronous-reply',
-            createReply(await request.requestURL(
-              auth,
-              `/lol-match-history/v1/games/${req.gameId}`,
-            ), req.id),
-          );
+          e.reply(asyncReply, createReply(await reqURL(auth, `/lol-match-history/v1/games/${req.gameId}`), req.id));
           break;
         }
         case 'lol-ranked-stats-current': {
-          event.reply('asynchronous-reply', createReply({}, 'clear-profile'));
+          clearProfile(e);
           const summoner = await getSummonerCurrent(auth);
-          const rankedData = JSON.parse(await request.requestURL(
-            auth,
-            '/lol-ranked/v1/current-ranked-stats',
-          ));
-          rankedData.summonerData = summoner;
-          rankedData.username = summoner.displayName;
-          event.reply('asynchronous-reply', createReply(rankedData, req.id));
+          const response = await reqURL(auth, '/lol-ranked/v1/current-ranked-stats');
+          response.summonerData = summoner;
+          response.username = summoner.displayName;
+          e.reply(asyncReply, createReply(response, req.id));
           break;
         }
         case 'lol-ranked-stats': {
-          event.reply('asynchronous-reply', createReply({}, 'clear-profile'));
           const summoner = await getSummonerByName(req.user, auth);
-          const rankedData = JSON.parse(await request.requestURL(
-            auth,
-            `/lol-ranked/v1/ranked-stats/${summoner.puuid}`,
-          ));
-          rankedData.summonerData = summoner;
-          rankedData.username = summoner.displayName;
-          event.reply('asynchronous-reply', createReply(rankedData, req.id));
+          const response = await reqURL(auth, `${RANKED_STATS_V1}${summoner.puuid}`);
+          response.summonerData = summoner;
+          response.username = summoner.displayName;
+          e.reply(asyncReply, createReply(response, req.id));
           break;
         }
         case 'lol-ranked-stats-match-details': {
           const summoner = await getSummonerByName(req.user, auth);
-          const rankedData = JSON.parse(await request.requestURL(
-            auth,
-            `/lol-ranked/v1/ranked-stats/${summoner.puuid}`,
-          ));
-          rankedData.summonerData = summoner;
-          rankedData.username = summoner.displayName;
-          rankedData.index = req.index;
-          rankedData.gameId = req.gameId;
-          event.reply('asynchronous-reply', createReply(rankedData, req.id));
+          const response = await reqURL(auth, `${RANKED_STATS_V1}${summoner.puuid}`);
+          response.summonerData = summoner;
+          response.username = summoner.displayName;
+          response.index = req.index;
+          response.gameId = req.gameId;
+          e.reply(asyncReply, createReply(response, req.id));
           break;
         }
         case 'lol-full-ranked-history-current': {
           const summoner = await getSummonerCurrent(auth);
-          const matchHistory = JSON.parse(await request.requestURL(
+          const matchHistory = await reqURL(
             auth,
-            // This is capped at 200 Games internally. If the player refreshes late into the season we
-            // Could iterate backwards with an older start index but I don't really care..
-            // Timing: Takes 2345.318800000474ms
-            `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=200`,
-          ));
-          event.reply(
-            'asynchronous-reply',
-            createReply(matchHistory, req.id),
+            `${MATCH_HISTORY_V1}${summoner.puuid}/matches?begIndex=0&endIndex=200`,
           );
+          e.reply(asyncReply, createReply(matchHistory, req.id));
           break;
         }
         case 'lol-full-ranked-history': {
           const summoner = await getSummonerByName(req.user, auth);
-          event.reply(
-            'asynchronous-reply',
-            createReply(await request.requestURL(
-              auth,
-              `/lol-match-history/v1/products/lol/${summoner.puuid}/matches?begIndex=0&endIndex=200`,
-            ), req.id),
+          const matchHistory = await request.requestURL(
+            auth,
+            `${MATCH_HISTORY_V1}${summoner.puuid}/matches?begIndex=0&endIndex=200`,
+          );
+          e.reply(
+            asyncReply,
+            createReply(matchHistory, req.id),
           );
           break;
         }
         default: {
-          event.reply('asynchronous-reply', createReply(null, req.id));
+          e.reply(asyncReply, createReply(null, req.id));
         }
       }
-    } catch (e) {
-      errorHandler(e, event);
+    } catch (error) {
+      errorHandler(error, e, req);
     }
   });
 });
