@@ -179,7 +179,7 @@ export default {
           const { games } = data.games;
           // substring 12 meaning patch beginning with a 12..
           // there is no official "current season"
-          const season = '12';
+          const season = '13';
           const thisSeason = (games)
             .filter((game) => game.queueId === 420 && game.gameVersion.substring(0, 2) === season);
 
