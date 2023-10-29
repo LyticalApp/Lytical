@@ -83,6 +83,13 @@ export default {
   methods: {
     filterGameModes,
     searchSummoner(summonerName) {
+      // Manual clear..
+      this.showLoading = true;
+      this.matches = [];
+      this.playerCardInfo = {};
+      this.rankedOverviewData = [];
+      this.matchHistoryMax = 19;
+
       if (summonerName !== undefined && summonerName.trim() !== '') {
         // Searchbar name
         ipcRenderer.send('asynchronous-message', {
