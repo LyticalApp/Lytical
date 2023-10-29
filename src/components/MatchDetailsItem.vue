@@ -311,6 +311,7 @@ export default {
       if (rankL === 'B') { return '#7C6750'; }
       if (rankL === 'S') { return '#515163'; }
       if (rankL === 'G') { return '#EB9C00'; }
+      if (rankL === 'E') { return '#00A766'; }
       if (rankL === 'P') { return '#00BBA3'; }
       if (rankL === 'D') { return '#0093FF'; }
       if (rankL === 'M') { return '#E537A2'; }
