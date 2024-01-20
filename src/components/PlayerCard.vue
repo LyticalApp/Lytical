@@ -7,7 +7,7 @@
         class="clip-circle" style="height:80px;margin-right:10px;max-width:280px;">
       </td>
       <td style="vertical-align:middle; align:left;">
-        <span class="usernameText">{{data.username}}</span>
+        <span class="usernameText">{{data.username ? data.username : data.summonerData.gameName}}</span>
         <br>
         <span style="font-size:14px;">Level {{data.summonerData.summonerLevel}}</span>
         <br>

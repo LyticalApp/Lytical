@@ -36,6 +36,7 @@ import LoadingDots from './components/LoadingDots.vue';
 import MostPlayedChampions from './components/MostPlayedChampions.vue';
 import {
   filterGameModes,
+  CURRENT_SEASON,
 } from './res/common';
 
 const { ipcRenderer } = require('electron');
@@ -186,7 +187,7 @@ export default {
           const { games } = data.games;
           // substring 12 meaning patch beginning with a 12..
           // there is no official "current season"
-          const season = '13';
+          const season = CURRENT_SEASON;
           const thisSeason = (games)
             .filter((game) => game.queueId === 420 && game.gameVersion.substring(0, 2) === season);
 
