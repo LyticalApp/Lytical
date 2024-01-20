@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const request = require('request');
 
-const runesURL = 'https://ddragon.leagueoflegends.com/cdn/12.11.1/data/en_US/runesReforged.json';
+const runesURL = 'https://ddragon.leagueoflegends.com/cdn/13.21.1/data/en_US/runesReforged.json';
 
 const j = {};
 

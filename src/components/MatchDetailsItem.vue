@@ -115,10 +115,10 @@
                            {{formatLevelBulb(participant.stats.champLevel)}}
                            </span>
                            <div style="display:inline-block;width:75px;text-align:left;padding-top:4px;"
-                           class="summonername" :title="matchDetails.participantIdentities[index].player.summonerName">
+                           class="summonername" :title="matchDetails.participantIdentities[index].player.gameName">
                               <span style="font-size:12px;color:#f2ecff;"
-                              @click="searchPlayer(matchDetails.participantIdentities[index].player.summonerName)">
-                              {{matchDetails.participantIdentities[index].player.summonerName}}</span><br>
+                              @click="searchPlayer(matchDetails.participantIdentities[index].player)">
+                              {{matchDetails.participantIdentities[index].player.gameName}}</span><br>
                               <Transition>
                               <span v-if="summonerRanks[index] != 'N' && summonerRanks[index] != undefined"
                               class="inline-rank" :style="{ backgroundColor:
@@ -325,11 +325,11 @@ export default {
       }
       return isWin ? 'Victory' : 'Defeat';
     },
-    searchPlayer(username) {
+    searchPlayer({ gameName, tagLine }) {
       this.$router.push({
         name: 'Home',
         params: {
-          summonerSearch: username,
+          summonerSearch: `${gameName}#${tagLine}`,
         },
       });
     },
